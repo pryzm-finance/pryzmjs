@@ -2,7 +2,7 @@ import { Pool, PoolAmino, PoolSDKType } from "./pool";
 import { PoolToken, PoolTokenAmino, PoolTokenSDKType } from "./pool_token";
 import { Params, ParamsAmino, ParamsSDKType } from "./params";
 import { WeightedPoolProperties, WeightedPoolPropertiesAmino, WeightedPoolPropertiesSDKType } from "./weighted_token";
-import { VirtualBalancePoolToken, VirtualBalancePoolTokenAmino, VirtualBalancePoolTokenSDKType } from "./virtual_balance_pool_token";
+import { TemporalVirtualBalancePoolToken, TemporalVirtualBalancePoolTokenAmino, TemporalVirtualBalancePoolTokenSDKType, PermanentVirtualBalancePoolToken, PermanentVirtualBalancePoolTokenAmino, PermanentVirtualBalancePoolTokenSDKType } from "./virtual_balance_pool_token";
 import { YammConfiguration, YammConfigurationAmino, YammConfigurationSDKType } from "./yamm_configuration";
 import { WhitelistedRoute, WhitelistedRouteAmino, WhitelistedRouteSDKType } from "./whitelisted_route";
 import { Order, OrderAmino, OrderSDKType, DisabledOrderPair, DisabledOrderPairAmino, DisabledOrderPairSDKType } from "./order";
@@ -61,8 +61,8 @@ export interface GenesisState {
   poolList: GenesisPoolData[];
   weightedPoolPropertiesList: WeightedPoolProperties[];
   yammPoolAssetIdList: YammPoolAssetId[];
-  introducingPoolTokenList: VirtualBalancePoolToken[];
-  expiringPoolTokenList: VirtualBalancePoolToken[];
+  introducingPoolTokenList: TemporalVirtualBalancePoolToken[];
+  expiringPoolTokenList: TemporalVirtualBalancePoolToken[];
   yammConfigurationList: YammConfiguration[];
   whitelistedRouteList: WhitelistedRoute[];
   orderList: Order[];
@@ -74,6 +74,7 @@ export interface GenesisState {
   pendingTokenIntroductionList: PendingTokenIntroduction[];
   disabledOrderPairList: DisabledOrderPair[];
   nextExecutableOrderKey: Uint8Array;
+  permanentVirtualBalancePoolTokenList: PermanentVirtualBalancePoolToken[];
 }
 export interface GenesisStateProtoMsg {
   typeUrl: "/pryzm.amm.v1.GenesisState";
@@ -85,8 +86,8 @@ export interface GenesisStateAmino {
   pool_list?: GenesisPoolDataAmino[];
   weighted_pool_properties_list?: WeightedPoolPropertiesAmino[];
   yamm_pool_asset_id_list?: YammPoolAssetIdAmino[];
-  introducing_pool_token_list?: VirtualBalancePoolTokenAmino[];
-  expiring_pool_token_list?: VirtualBalancePoolTokenAmino[];
+  introducing_pool_token_list?: TemporalVirtualBalancePoolTokenAmino[];
+  expiring_pool_token_list?: TemporalVirtualBalancePoolTokenAmino[];
   yamm_configuration_list?: YammConfigurationAmino[];
   whitelisted_route_list?: WhitelistedRouteAmino[];
   order_list?: OrderAmino[];
@@ -98,6 +99,7 @@ export interface GenesisStateAmino {
   pending_token_introduction_list?: PendingTokenIntroductionAmino[];
   disabled_order_pair_list?: DisabledOrderPairAmino[];
   next_executable_order_key?: string;
+  permanent_virtual_balance_pool_token_list?: PermanentVirtualBalancePoolTokenAmino[];
 }
 export interface GenesisStateAminoMsg {
   type: "/pryzm.amm.v1.GenesisState";
@@ -109,8 +111,8 @@ export interface GenesisStateSDKType {
   pool_list: GenesisPoolDataSDKType[];
   weighted_pool_properties_list: WeightedPoolPropertiesSDKType[];
   yamm_pool_asset_id_list: YammPoolAssetIdSDKType[];
-  introducing_pool_token_list: VirtualBalancePoolTokenSDKType[];
-  expiring_pool_token_list: VirtualBalancePoolTokenSDKType[];
+  introducing_pool_token_list: TemporalVirtualBalancePoolTokenSDKType[];
+  expiring_pool_token_list: TemporalVirtualBalancePoolTokenSDKType[];
   yamm_configuration_list: YammConfigurationSDKType[];
   whitelisted_route_list: WhitelistedRouteSDKType[];
   order_list: OrderSDKType[];
@@ -122,6 +124,7 @@ export interface GenesisStateSDKType {
   pending_token_introduction_list: PendingTokenIntroductionSDKType[];
   disabled_order_pair_list: DisabledOrderPairSDKType[];
   next_executable_order_key: Uint8Array;
+  permanent_virtual_balance_pool_token_list: PermanentVirtualBalancePoolTokenSDKType[];
 }
 function createBaseGenesisPoolData(): GenesisPoolData {
   return {
@@ -355,19 +358,20 @@ function createBaseGenesisState(): GenesisState {
     oraclePricePairList: [],
     pendingTokenIntroductionList: [],
     disabledOrderPairList: [],
-    nextExecutableOrderKey: new Uint8Array()
+    nextExecutableOrderKey: new Uint8Array(),
+    permanentVirtualBalancePoolTokenList: []
   };
 }
 export const GenesisState = {
   typeUrl: "/pryzm.amm.v1.GenesisState",
   is(o: any): o is GenesisState {
-    return o && (o.$typeUrl === GenesisState.typeUrl || Params.is(o.params) && Array.isArray(o.poolList) && (!o.poolList.length || GenesisPoolData.is(o.poolList[0])) && Array.isArray(o.weightedPoolPropertiesList) && (!o.weightedPoolPropertiesList.length || WeightedPoolProperties.is(o.weightedPoolPropertiesList[0])) && Array.isArray(o.yammPoolAssetIdList) && (!o.yammPoolAssetIdList.length || YammPoolAssetId.is(o.yammPoolAssetIdList[0])) && Array.isArray(o.introducingPoolTokenList) && (!o.introducingPoolTokenList.length || VirtualBalancePoolToken.is(o.introducingPoolTokenList[0])) && Array.isArray(o.expiringPoolTokenList) && (!o.expiringPoolTokenList.length || VirtualBalancePoolToken.is(o.expiringPoolTokenList[0])) && Array.isArray(o.yammConfigurationList) && (!o.yammConfigurationList.length || YammConfiguration.is(o.yammConfigurationList[0])) && Array.isArray(o.whitelistedRouteList) && (!o.whitelistedRouteList.length || WhitelistedRoute.is(o.whitelistedRouteList[0])) && Array.isArray(o.orderList) && (!o.orderList.length || Order.is(o.orderList[0])) && typeof o.orderCount === "bigint" && Array.isArray(o.executableOrderList) && (!o.executableOrderList.length || typeof o.executableOrderList[0] === "bigint") && Array.isArray(o.scheduleOrderList) && (!o.scheduleOrderList.length || ScheduleOrder.is(o.scheduleOrderList[0])) && typeof o.vaultPaused === "boolean" && Array.isArray(o.oraclePricePairList) && (!o.oraclePricePairList.length || OraclePricePair.is(o.oraclePricePairList[0])) && Array.isArray(o.pendingTokenIntroductionList) && (!o.pendingTokenIntroductionList.length || PendingTokenIntroduction.is(o.pendingTokenIntroductionList[0])) && Array.isArray(o.disabledOrderPairList) && (!o.disabledOrderPairList.length || DisabledOrderPair.is(o.disabledOrderPairList[0])) && (o.nextExecutableOrderKey instanceof Uint8Array || typeof o.nextExecutableOrderKey === "string"));
+    return o && (o.$typeUrl === GenesisState.typeUrl || Params.is(o.params) && Array.isArray(o.poolList) && (!o.poolList.length || GenesisPoolData.is(o.poolList[0])) && Array.isArray(o.weightedPoolPropertiesList) && (!o.weightedPoolPropertiesList.length || WeightedPoolProperties.is(o.weightedPoolPropertiesList[0])) && Array.isArray(o.yammPoolAssetIdList) && (!o.yammPoolAssetIdList.length || YammPoolAssetId.is(o.yammPoolAssetIdList[0])) && Array.isArray(o.introducingPoolTokenList) && (!o.introducingPoolTokenList.length || TemporalVirtualBalancePoolToken.is(o.introducingPoolTokenList[0])) && Array.isArray(o.expiringPoolTokenList) && (!o.expiringPoolTokenList.length || TemporalVirtualBalancePoolToken.is(o.expiringPoolTokenList[0])) && Array.isArray(o.yammConfigurationList) && (!o.yammConfigurationList.length || YammConfiguration.is(o.yammConfigurationList[0])) && Array.isArray(o.whitelistedRouteList) && (!o.whitelistedRouteList.length || WhitelistedRoute.is(o.whitelistedRouteList[0])) && Array.isArray(o.orderList) && (!o.orderList.length || Order.is(o.orderList[0])) && typeof o.orderCount === "bigint" && Array.isArray(o.executableOrderList) && (!o.executableOrderList.length || typeof o.executableOrderList[0] === "bigint") && Array.isArray(o.scheduleOrderList) && (!o.scheduleOrderList.length || ScheduleOrder.is(o.scheduleOrderList[0])) && typeof o.vaultPaused === "boolean" && Array.isArray(o.oraclePricePairList) && (!o.oraclePricePairList.length || OraclePricePair.is(o.oraclePricePairList[0])) && Array.isArray(o.pendingTokenIntroductionList) && (!o.pendingTokenIntroductionList.length || PendingTokenIntroduction.is(o.pendingTokenIntroductionList[0])) && Array.isArray(o.disabledOrderPairList) && (!o.disabledOrderPairList.length || DisabledOrderPair.is(o.disabledOrderPairList[0])) && (o.nextExecutableOrderKey instanceof Uint8Array || typeof o.nextExecutableOrderKey === "string") && Array.isArray(o.permanentVirtualBalancePoolTokenList) && (!o.permanentVirtualBalancePoolTokenList.length || PermanentVirtualBalancePoolToken.is(o.permanentVirtualBalancePoolTokenList[0])));
   },
   isSDK(o: any): o is GenesisStateSDKType {
-    return o && (o.$typeUrl === GenesisState.typeUrl || Params.isSDK(o.params) && Array.isArray(o.pool_list) && (!o.pool_list.length || GenesisPoolData.isSDK(o.pool_list[0])) && Array.isArray(o.weighted_pool_properties_list) && (!o.weighted_pool_properties_list.length || WeightedPoolProperties.isSDK(o.weighted_pool_properties_list[0])) && Array.isArray(o.yamm_pool_asset_id_list) && (!o.yamm_pool_asset_id_list.length || YammPoolAssetId.isSDK(o.yamm_pool_asset_id_list[0])) && Array.isArray(o.introducing_pool_token_list) && (!o.introducing_pool_token_list.length || VirtualBalancePoolToken.isSDK(o.introducing_pool_token_list[0])) && Array.isArray(o.expiring_pool_token_list) && (!o.expiring_pool_token_list.length || VirtualBalancePoolToken.isSDK(o.expiring_pool_token_list[0])) && Array.isArray(o.yamm_configuration_list) && (!o.yamm_configuration_list.length || YammConfiguration.isSDK(o.yamm_configuration_list[0])) && Array.isArray(o.whitelisted_route_list) && (!o.whitelisted_route_list.length || WhitelistedRoute.isSDK(o.whitelisted_route_list[0])) && Array.isArray(o.order_list) && (!o.order_list.length || Order.isSDK(o.order_list[0])) && typeof o.order_count === "bigint" && Array.isArray(o.executable_order_list) && (!o.executable_order_list.length || typeof o.executable_order_list[0] === "bigint") && Array.isArray(o.schedule_order_list) && (!o.schedule_order_list.length || ScheduleOrder.isSDK(o.schedule_order_list[0])) && typeof o.vault_paused === "boolean" && Array.isArray(o.oracle_price_pair_list) && (!o.oracle_price_pair_list.length || OraclePricePair.isSDK(o.oracle_price_pair_list[0])) && Array.isArray(o.pending_token_introduction_list) && (!o.pending_token_introduction_list.length || PendingTokenIntroduction.isSDK(o.pending_token_introduction_list[0])) && Array.isArray(o.disabled_order_pair_list) && (!o.disabled_order_pair_list.length || DisabledOrderPair.isSDK(o.disabled_order_pair_list[0])) && (o.next_executable_order_key instanceof Uint8Array || typeof o.next_executable_order_key === "string"));
+    return o && (o.$typeUrl === GenesisState.typeUrl || Params.isSDK(o.params) && Array.isArray(o.pool_list) && (!o.pool_list.length || GenesisPoolData.isSDK(o.pool_list[0])) && Array.isArray(o.weighted_pool_properties_list) && (!o.weighted_pool_properties_list.length || WeightedPoolProperties.isSDK(o.weighted_pool_properties_list[0])) && Array.isArray(o.yamm_pool_asset_id_list) && (!o.yamm_pool_asset_id_list.length || YammPoolAssetId.isSDK(o.yamm_pool_asset_id_list[0])) && Array.isArray(o.introducing_pool_token_list) && (!o.introducing_pool_token_list.length || TemporalVirtualBalancePoolToken.isSDK(o.introducing_pool_token_list[0])) && Array.isArray(o.expiring_pool_token_list) && (!o.expiring_pool_token_list.length || TemporalVirtualBalancePoolToken.isSDK(o.expiring_pool_token_list[0])) && Array.isArray(o.yamm_configuration_list) && (!o.yamm_configuration_list.length || YammConfiguration.isSDK(o.yamm_configuration_list[0])) && Array.isArray(o.whitelisted_route_list) && (!o.whitelisted_route_list.length || WhitelistedRoute.isSDK(o.whitelisted_route_list[0])) && Array.isArray(o.order_list) && (!o.order_list.length || Order.isSDK(o.order_list[0])) && typeof o.order_count === "bigint" && Array.isArray(o.executable_order_list) && (!o.executable_order_list.length || typeof o.executable_order_list[0] === "bigint") && Array.isArray(o.schedule_order_list) && (!o.schedule_order_list.length || ScheduleOrder.isSDK(o.schedule_order_list[0])) && typeof o.vault_paused === "boolean" && Array.isArray(o.oracle_price_pair_list) && (!o.oracle_price_pair_list.length || OraclePricePair.isSDK(o.oracle_price_pair_list[0])) && Array.isArray(o.pending_token_introduction_list) && (!o.pending_token_introduction_list.length || PendingTokenIntroduction.isSDK(o.pending_token_introduction_list[0])) && Array.isArray(o.disabled_order_pair_list) && (!o.disabled_order_pair_list.length || DisabledOrderPair.isSDK(o.disabled_order_pair_list[0])) && (o.next_executable_order_key instanceof Uint8Array || typeof o.next_executable_order_key === "string") && Array.isArray(o.permanent_virtual_balance_pool_token_list) && (!o.permanent_virtual_balance_pool_token_list.length || PermanentVirtualBalancePoolToken.isSDK(o.permanent_virtual_balance_pool_token_list[0])));
   },
   isAmino(o: any): o is GenesisStateAmino {
-    return o && (o.$typeUrl === GenesisState.typeUrl || Params.isAmino(o.params) && Array.isArray(o.pool_list) && (!o.pool_list.length || GenesisPoolData.isAmino(o.pool_list[0])) && Array.isArray(o.weighted_pool_properties_list) && (!o.weighted_pool_properties_list.length || WeightedPoolProperties.isAmino(o.weighted_pool_properties_list[0])) && Array.isArray(o.yamm_pool_asset_id_list) && (!o.yamm_pool_asset_id_list.length || YammPoolAssetId.isAmino(o.yamm_pool_asset_id_list[0])) && Array.isArray(o.introducing_pool_token_list) && (!o.introducing_pool_token_list.length || VirtualBalancePoolToken.isAmino(o.introducing_pool_token_list[0])) && Array.isArray(o.expiring_pool_token_list) && (!o.expiring_pool_token_list.length || VirtualBalancePoolToken.isAmino(o.expiring_pool_token_list[0])) && Array.isArray(o.yamm_configuration_list) && (!o.yamm_configuration_list.length || YammConfiguration.isAmino(o.yamm_configuration_list[0])) && Array.isArray(o.whitelisted_route_list) && (!o.whitelisted_route_list.length || WhitelistedRoute.isAmino(o.whitelisted_route_list[0])) && Array.isArray(o.order_list) && (!o.order_list.length || Order.isAmino(o.order_list[0])) && typeof o.order_count === "bigint" && Array.isArray(o.executable_order_list) && (!o.executable_order_list.length || typeof o.executable_order_list[0] === "bigint") && Array.isArray(o.schedule_order_list) && (!o.schedule_order_list.length || ScheduleOrder.isAmino(o.schedule_order_list[0])) && typeof o.vault_paused === "boolean" && Array.isArray(o.oracle_price_pair_list) && (!o.oracle_price_pair_list.length || OraclePricePair.isAmino(o.oracle_price_pair_list[0])) && Array.isArray(o.pending_token_introduction_list) && (!o.pending_token_introduction_list.length || PendingTokenIntroduction.isAmino(o.pending_token_introduction_list[0])) && Array.isArray(o.disabled_order_pair_list) && (!o.disabled_order_pair_list.length || DisabledOrderPair.isAmino(o.disabled_order_pair_list[0])) && (o.next_executable_order_key instanceof Uint8Array || typeof o.next_executable_order_key === "string"));
+    return o && (o.$typeUrl === GenesisState.typeUrl || Params.isAmino(o.params) && Array.isArray(o.pool_list) && (!o.pool_list.length || GenesisPoolData.isAmino(o.pool_list[0])) && Array.isArray(o.weighted_pool_properties_list) && (!o.weighted_pool_properties_list.length || WeightedPoolProperties.isAmino(o.weighted_pool_properties_list[0])) && Array.isArray(o.yamm_pool_asset_id_list) && (!o.yamm_pool_asset_id_list.length || YammPoolAssetId.isAmino(o.yamm_pool_asset_id_list[0])) && Array.isArray(o.introducing_pool_token_list) && (!o.introducing_pool_token_list.length || TemporalVirtualBalancePoolToken.isAmino(o.introducing_pool_token_list[0])) && Array.isArray(o.expiring_pool_token_list) && (!o.expiring_pool_token_list.length || TemporalVirtualBalancePoolToken.isAmino(o.expiring_pool_token_list[0])) && Array.isArray(o.yamm_configuration_list) && (!o.yamm_configuration_list.length || YammConfiguration.isAmino(o.yamm_configuration_list[0])) && Array.isArray(o.whitelisted_route_list) && (!o.whitelisted_route_list.length || WhitelistedRoute.isAmino(o.whitelisted_route_list[0])) && Array.isArray(o.order_list) && (!o.order_list.length || Order.isAmino(o.order_list[0])) && typeof o.order_count === "bigint" && Array.isArray(o.executable_order_list) && (!o.executable_order_list.length || typeof o.executable_order_list[0] === "bigint") && Array.isArray(o.schedule_order_list) && (!o.schedule_order_list.length || ScheduleOrder.isAmino(o.schedule_order_list[0])) && typeof o.vault_paused === "boolean" && Array.isArray(o.oracle_price_pair_list) && (!o.oracle_price_pair_list.length || OraclePricePair.isAmino(o.oracle_price_pair_list[0])) && Array.isArray(o.pending_token_introduction_list) && (!o.pending_token_introduction_list.length || PendingTokenIntroduction.isAmino(o.pending_token_introduction_list[0])) && Array.isArray(o.disabled_order_pair_list) && (!o.disabled_order_pair_list.length || DisabledOrderPair.isAmino(o.disabled_order_pair_list[0])) && (o.next_executable_order_key instanceof Uint8Array || typeof o.next_executable_order_key === "string") && Array.isArray(o.permanent_virtual_balance_pool_token_list) && (!o.permanent_virtual_balance_pool_token_list.length || PermanentVirtualBalancePoolToken.isAmino(o.permanent_virtual_balance_pool_token_list[0])));
   },
   encode(message: GenesisState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
@@ -383,10 +387,10 @@ export const GenesisState = {
       YammPoolAssetId.encode(v!, writer.uint32(34).fork()).ldelim();
     }
     for (const v of message.introducingPoolTokenList) {
-      VirtualBalancePoolToken.encode(v!, writer.uint32(42).fork()).ldelim();
+      TemporalVirtualBalancePoolToken.encode(v!, writer.uint32(42).fork()).ldelim();
     }
     for (const v of message.expiringPoolTokenList) {
-      VirtualBalancePoolToken.encode(v!, writer.uint32(50).fork()).ldelim();
+      TemporalVirtualBalancePoolToken.encode(v!, writer.uint32(50).fork()).ldelim();
     }
     for (const v of message.yammConfigurationList) {
       YammConfiguration.encode(v!, writer.uint32(58).fork()).ldelim();
@@ -423,6 +427,9 @@ export const GenesisState = {
     if (message.nextExecutableOrderKey.length !== 0) {
       writer.uint32(138).bytes(message.nextExecutableOrderKey);
     }
+    for (const v of message.permanentVirtualBalancePoolTokenList) {
+      PermanentVirtualBalancePoolToken.encode(v!, writer.uint32(146).fork()).ldelim();
+    }
     return writer;
   },
   decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): GenesisState {
@@ -445,10 +452,10 @@ export const GenesisState = {
           message.yammPoolAssetIdList.push(YammPoolAssetId.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 5:
-          message.introducingPoolTokenList.push(VirtualBalancePoolToken.decode(reader, reader.uint32(), useInterfaces));
+          message.introducingPoolTokenList.push(TemporalVirtualBalancePoolToken.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 6:
-          message.expiringPoolTokenList.push(VirtualBalancePoolToken.decode(reader, reader.uint32(), useInterfaces));
+          message.expiringPoolTokenList.push(TemporalVirtualBalancePoolToken.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 7:
           message.yammConfigurationList.push(YammConfiguration.decode(reader, reader.uint32(), useInterfaces));
@@ -490,6 +497,9 @@ export const GenesisState = {
         case 17:
           message.nextExecutableOrderKey = reader.bytes();
           break;
+        case 18:
+          message.permanentVirtualBalancePoolTokenList.push(PermanentVirtualBalancePoolToken.decode(reader, reader.uint32(), useInterfaces));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -503,8 +513,8 @@ export const GenesisState = {
       poolList: Array.isArray(object?.poolList) ? object.poolList.map((e: any) => GenesisPoolData.fromJSON(e)) : [],
       weightedPoolPropertiesList: Array.isArray(object?.weightedPoolPropertiesList) ? object.weightedPoolPropertiesList.map((e: any) => WeightedPoolProperties.fromJSON(e)) : [],
       yammPoolAssetIdList: Array.isArray(object?.yammPoolAssetIdList) ? object.yammPoolAssetIdList.map((e: any) => YammPoolAssetId.fromJSON(e)) : [],
-      introducingPoolTokenList: Array.isArray(object?.introducingPoolTokenList) ? object.introducingPoolTokenList.map((e: any) => VirtualBalancePoolToken.fromJSON(e)) : [],
-      expiringPoolTokenList: Array.isArray(object?.expiringPoolTokenList) ? object.expiringPoolTokenList.map((e: any) => VirtualBalancePoolToken.fromJSON(e)) : [],
+      introducingPoolTokenList: Array.isArray(object?.introducingPoolTokenList) ? object.introducingPoolTokenList.map((e: any) => TemporalVirtualBalancePoolToken.fromJSON(e)) : [],
+      expiringPoolTokenList: Array.isArray(object?.expiringPoolTokenList) ? object.expiringPoolTokenList.map((e: any) => TemporalVirtualBalancePoolToken.fromJSON(e)) : [],
       yammConfigurationList: Array.isArray(object?.yammConfigurationList) ? object.yammConfigurationList.map((e: any) => YammConfiguration.fromJSON(e)) : [],
       whitelistedRouteList: Array.isArray(object?.whitelistedRouteList) ? object.whitelistedRouteList.map((e: any) => WhitelistedRoute.fromJSON(e)) : [],
       orderList: Array.isArray(object?.orderList) ? object.orderList.map((e: any) => Order.fromJSON(e)) : [],
@@ -515,7 +525,8 @@ export const GenesisState = {
       oraclePricePairList: Array.isArray(object?.oraclePricePairList) ? object.oraclePricePairList.map((e: any) => OraclePricePair.fromJSON(e)) : [],
       pendingTokenIntroductionList: Array.isArray(object?.pendingTokenIntroductionList) ? object.pendingTokenIntroductionList.map((e: any) => PendingTokenIntroduction.fromJSON(e)) : [],
       disabledOrderPairList: Array.isArray(object?.disabledOrderPairList) ? object.disabledOrderPairList.map((e: any) => DisabledOrderPair.fromJSON(e)) : [],
-      nextExecutableOrderKey: isSet(object.nextExecutableOrderKey) ? bytesFromBase64(object.nextExecutableOrderKey) : new Uint8Array()
+      nextExecutableOrderKey: isSet(object.nextExecutableOrderKey) ? bytesFromBase64(object.nextExecutableOrderKey) : new Uint8Array(),
+      permanentVirtualBalancePoolTokenList: Array.isArray(object?.permanentVirtualBalancePoolTokenList) ? object.permanentVirtualBalancePoolTokenList.map((e: any) => PermanentVirtualBalancePoolToken.fromJSON(e)) : []
     };
   },
   toJSON(message: GenesisState): unknown {
@@ -537,12 +548,12 @@ export const GenesisState = {
       obj.yammPoolAssetIdList = [];
     }
     if (message.introducingPoolTokenList) {
-      obj.introducingPoolTokenList = message.introducingPoolTokenList.map(e => e ? VirtualBalancePoolToken.toJSON(e) : undefined);
+      obj.introducingPoolTokenList = message.introducingPoolTokenList.map(e => e ? TemporalVirtualBalancePoolToken.toJSON(e) : undefined);
     } else {
       obj.introducingPoolTokenList = [];
     }
     if (message.expiringPoolTokenList) {
-      obj.expiringPoolTokenList = message.expiringPoolTokenList.map(e => e ? VirtualBalancePoolToken.toJSON(e) : undefined);
+      obj.expiringPoolTokenList = message.expiringPoolTokenList.map(e => e ? TemporalVirtualBalancePoolToken.toJSON(e) : undefined);
     } else {
       obj.expiringPoolTokenList = [];
     }
@@ -589,6 +600,11 @@ export const GenesisState = {
       obj.disabledOrderPairList = [];
     }
     message.nextExecutableOrderKey !== undefined && (obj.nextExecutableOrderKey = base64FromBytes(message.nextExecutableOrderKey !== undefined ? message.nextExecutableOrderKey : new Uint8Array()));
+    if (message.permanentVirtualBalancePoolTokenList) {
+      obj.permanentVirtualBalancePoolTokenList = message.permanentVirtualBalancePoolTokenList.map(e => e ? PermanentVirtualBalancePoolToken.toJSON(e) : undefined);
+    } else {
+      obj.permanentVirtualBalancePoolTokenList = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<GenesisState>): GenesisState {
@@ -597,8 +613,8 @@ export const GenesisState = {
     message.poolList = object.poolList?.map(e => GenesisPoolData.fromPartial(e)) || [];
     message.weightedPoolPropertiesList = object.weightedPoolPropertiesList?.map(e => WeightedPoolProperties.fromPartial(e)) || [];
     message.yammPoolAssetIdList = object.yammPoolAssetIdList?.map(e => YammPoolAssetId.fromPartial(e)) || [];
-    message.introducingPoolTokenList = object.introducingPoolTokenList?.map(e => VirtualBalancePoolToken.fromPartial(e)) || [];
-    message.expiringPoolTokenList = object.expiringPoolTokenList?.map(e => VirtualBalancePoolToken.fromPartial(e)) || [];
+    message.introducingPoolTokenList = object.introducingPoolTokenList?.map(e => TemporalVirtualBalancePoolToken.fromPartial(e)) || [];
+    message.expiringPoolTokenList = object.expiringPoolTokenList?.map(e => TemporalVirtualBalancePoolToken.fromPartial(e)) || [];
     message.yammConfigurationList = object.yammConfigurationList?.map(e => YammConfiguration.fromPartial(e)) || [];
     message.whitelistedRouteList = object.whitelistedRouteList?.map(e => WhitelistedRoute.fromPartial(e)) || [];
     message.orderList = object.orderList?.map(e => Order.fromPartial(e)) || [];
@@ -610,6 +626,7 @@ export const GenesisState = {
     message.pendingTokenIntroductionList = object.pendingTokenIntroductionList?.map(e => PendingTokenIntroduction.fromPartial(e)) || [];
     message.disabledOrderPairList = object.disabledOrderPairList?.map(e => DisabledOrderPair.fromPartial(e)) || [];
     message.nextExecutableOrderKey = object.nextExecutableOrderKey ?? new Uint8Array();
+    message.permanentVirtualBalancePoolTokenList = object.permanentVirtualBalancePoolTokenList?.map(e => PermanentVirtualBalancePoolToken.fromPartial(e)) || [];
     return message;
   },
   fromAmino(object: GenesisStateAmino): GenesisState {
@@ -620,8 +637,8 @@ export const GenesisState = {
     message.poolList = object.pool_list?.map(e => GenesisPoolData.fromAmino(e)) || [];
     message.weightedPoolPropertiesList = object.weighted_pool_properties_list?.map(e => WeightedPoolProperties.fromAmino(e)) || [];
     message.yammPoolAssetIdList = object.yamm_pool_asset_id_list?.map(e => YammPoolAssetId.fromAmino(e)) || [];
-    message.introducingPoolTokenList = object.introducing_pool_token_list?.map(e => VirtualBalancePoolToken.fromAmino(e)) || [];
-    message.expiringPoolTokenList = object.expiring_pool_token_list?.map(e => VirtualBalancePoolToken.fromAmino(e)) || [];
+    message.introducingPoolTokenList = object.introducing_pool_token_list?.map(e => TemporalVirtualBalancePoolToken.fromAmino(e)) || [];
+    message.expiringPoolTokenList = object.expiring_pool_token_list?.map(e => TemporalVirtualBalancePoolToken.fromAmino(e)) || [];
     message.yammConfigurationList = object.yamm_configuration_list?.map(e => YammConfiguration.fromAmino(e)) || [];
     message.whitelistedRouteList = object.whitelisted_route_list?.map(e => WhitelistedRoute.fromAmino(e)) || [];
     message.orderList = object.order_list?.map(e => Order.fromAmino(e)) || [];
@@ -639,6 +656,7 @@ export const GenesisState = {
     if (object.next_executable_order_key !== undefined && object.next_executable_order_key !== null) {
       message.nextExecutableOrderKey = bytesFromBase64(object.next_executable_order_key);
     }
+    message.permanentVirtualBalancePoolTokenList = object.permanent_virtual_balance_pool_token_list?.map(e => PermanentVirtualBalancePoolToken.fromAmino(e)) || [];
     return message;
   },
   toAmino(message: GenesisState, useInterfaces: boolean = true): GenesisStateAmino {
@@ -660,12 +678,12 @@ export const GenesisState = {
       obj.yamm_pool_asset_id_list = message.yammPoolAssetIdList;
     }
     if (message.introducingPoolTokenList) {
-      obj.introducing_pool_token_list = message.introducingPoolTokenList.map(e => e ? VirtualBalancePoolToken.toAmino(e, useInterfaces) : undefined);
+      obj.introducing_pool_token_list = message.introducingPoolTokenList.map(e => e ? TemporalVirtualBalancePoolToken.toAmino(e, useInterfaces) : undefined);
     } else {
       obj.introducing_pool_token_list = message.introducingPoolTokenList;
     }
     if (message.expiringPoolTokenList) {
-      obj.expiring_pool_token_list = message.expiringPoolTokenList.map(e => e ? VirtualBalancePoolToken.toAmino(e, useInterfaces) : undefined);
+      obj.expiring_pool_token_list = message.expiringPoolTokenList.map(e => e ? TemporalVirtualBalancePoolToken.toAmino(e, useInterfaces) : undefined);
     } else {
       obj.expiring_pool_token_list = message.expiringPoolTokenList;
     }
@@ -712,6 +730,11 @@ export const GenesisState = {
       obj.disabled_order_pair_list = message.disabledOrderPairList;
     }
     obj.next_executable_order_key = message.nextExecutableOrderKey ? base64FromBytes(message.nextExecutableOrderKey) : undefined;
+    if (message.permanentVirtualBalancePoolTokenList) {
+      obj.permanent_virtual_balance_pool_token_list = message.permanentVirtualBalancePoolTokenList.map(e => e ? PermanentVirtualBalancePoolToken.toAmino(e, useInterfaces) : undefined);
+    } else {
+      obj.permanent_virtual_balance_pool_token_list = message.permanentVirtualBalancePoolTokenList;
+    }
     return obj;
   },
   fromAminoMsg(object: GenesisStateAminoMsg): GenesisState {

@@ -64,4 +64,5 @@ message Pool {
   repeated string admins = 13;
   repeated string pause_allow_list = 14;
   SwapFeeUpdateParams swap_fee_update_params = 15 [(gogoproto.nullable) = true];
+  bool join_blocked = 16;
 }

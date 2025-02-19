@@ -2,12 +2,12 @@ import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageRe
 import { Swap, SwapAmino, SwapSDKType, SwapType, SwapStep, SwapStepAmino, SwapStepSDKType, swapTypeFromJSON, swapTypeToJSON } from "./operations";
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { Params, ParamsAmino, ParamsSDKType } from "./params";
-import { PoolToken, PoolTokenAmino, PoolTokenSDKType } from "./pool_token";
+import { PoolToken, PoolTokenAmino, PoolTokenSDKType, TokenInfo, TokenInfoAmino, TokenInfoSDKType } from "./pool_token";
 import { TokenWeight, TokenWeightAmino, TokenWeightSDKType } from "./token_weight";
 import { Pool, PoolAmino, PoolSDKType } from "./pool";
 import { WeightedToken, WeightedTokenAmino, WeightedTokenSDKType } from "./weighted_token";
 import { WeightUpdateTiming, WeightUpdateTimingAmino, WeightUpdateTimingSDKType } from "./weight_update_timing";
-import { VirtualBalancePoolToken, VirtualBalancePoolTokenAmino, VirtualBalancePoolTokenSDKType } from "./virtual_balance_pool_token";
+import { TemporalVirtualBalancePoolToken, TemporalVirtualBalancePoolTokenAmino, TemporalVirtualBalancePoolTokenSDKType, PermanentVirtualBalancePoolToken, PermanentVirtualBalancePoolTokenAmino, PermanentVirtualBalancePoolTokenSDKType } from "./virtual_balance_pool_token";
 import { YammConfiguration, YammConfigurationAmino, YammConfigurationSDKType } from "./yamm_configuration";
 import { WhitelistedRoute, WhitelistedRouteAmino, WhitelistedRouteSDKType } from "./whitelisted_route";
 import { Order, OrderAmino, OrderSDKType, DisabledOrderPair, DisabledOrderPairAmino, DisabledOrderPairSDKType } from "./order";
@@ -265,6 +265,107 @@ export interface QueryGetPoolTokenWeightResponseAminoMsg {
 }
 export interface QueryGetPoolTokenWeightResponseSDKType {
   token_weight: TokenWeightSDKType;
+}
+/**
+ * computing normalized weights requires reading all tokens from the context
+ * and computing weight for all of them
+ * therefore, this query is not paginated
+ */
+export interface QueryAllPoolTokenInfoRequest {
+  poolId: bigint;
+}
+export interface QueryAllPoolTokenInfoRequestProtoMsg {
+  typeUrl: "/pryzm.amm.v1.QueryAllPoolTokenInfoRequest";
+  value: Uint8Array;
+}
+/**
+ * computing normalized weights requires reading all tokens from the context
+ * and computing weight for all of them
+ * therefore, this query is not paginated
+ */
+export interface QueryAllPoolTokenInfoRequestAmino {
+  pool_id?: string;
+}
+export interface QueryAllPoolTokenInfoRequestAminoMsg {
+  type: "/pryzm.amm.v1.QueryAllPoolTokenInfoRequest";
+  value: QueryAllPoolTokenInfoRequestAmino;
+}
+/**
+ * computing normalized weights requires reading all tokens from the context
+ * and computing weight for all of them
+ * therefore, this query is not paginated
+ */
+export interface QueryAllPoolTokenInfoRequestSDKType {
+  pool_id: bigint;
+}
+/**
+ * computing normalized weights requires reading all tokens from the context
+ * and computing weight for all of them
+ * therefore, this query is not paginated
+ */
+export interface QueryAllPoolTokenInfoResponse {
+  tokenInfo: TokenInfo[];
+}
+export interface QueryAllPoolTokenInfoResponseProtoMsg {
+  typeUrl: "/pryzm.amm.v1.QueryAllPoolTokenInfoResponse";
+  value: Uint8Array;
+}
+/**
+ * computing normalized weights requires reading all tokens from the context
+ * and computing weight for all of them
+ * therefore, this query is not paginated
+ */
+export interface QueryAllPoolTokenInfoResponseAmino {
+  token_info?: TokenInfoAmino[];
+}
+export interface QueryAllPoolTokenInfoResponseAminoMsg {
+  type: "/pryzm.amm.v1.QueryAllPoolTokenInfoResponse";
+  value: QueryAllPoolTokenInfoResponseAmino;
+}
+/**
+ * computing normalized weights requires reading all tokens from the context
+ * and computing weight for all of them
+ * therefore, this query is not paginated
+ */
+export interface QueryAllPoolTokenInfoResponseSDKType {
+  token_info: TokenInfoSDKType[];
+}
+export interface QueryGetPoolTokenInfoRequest {
+  poolId: bigint;
+  denom: string;
+}
+export interface QueryGetPoolTokenInfoRequestProtoMsg {
+  typeUrl: "/pryzm.amm.v1.QueryGetPoolTokenInfoRequest";
+  value: Uint8Array;
+}
+export interface QueryGetPoolTokenInfoRequestAmino {
+  pool_id?: string;
+  denom?: string;
+}
+export interface QueryGetPoolTokenInfoRequestAminoMsg {
+  type: "/pryzm.amm.v1.QueryGetPoolTokenInfoRequest";
+  value: QueryGetPoolTokenInfoRequestAmino;
+}
+export interface QueryGetPoolTokenInfoRequestSDKType {
+  pool_id: bigint;
+  denom: string;
+}
+export interface QueryGetPoolTokenInfoResponse {
+  tokenInfo: TokenInfo;
+}
+export interface QueryGetPoolTokenInfoResponseProtoMsg {
+  typeUrl: "/pryzm.amm.v1.QueryGetPoolTokenInfoResponse";
+  value: Uint8Array;
+}
+export interface QueryGetPoolTokenInfoResponseAmino {
+  token_info?: TokenInfoAmino;
+}
+export interface QueryGetPoolTokenInfoResponseAminoMsg {
+  type: "/pryzm.amm.v1.QueryGetPoolTokenInfoResponse";
+  value: QueryGetPoolTokenInfoResponseAmino;
+}
+export interface QueryGetPoolTokenInfoResponseSDKType {
+  token_info: TokenInfoSDKType;
 }
 export interface QueryGetPoolRequest {
   id: bigint;
@@ -536,6 +637,7 @@ export interface QuerySimulateSingleSwapResponseSDKType {
 export interface QuerySimulateInitializePoolRequest {
   poolId: bigint;
   amountsIn: Coin[];
+  permanentVirtualBalances: Coin[];
 }
 export interface QuerySimulateInitializePoolRequestProtoMsg {
   typeUrl: "/pryzm.amm.v1.QuerySimulateInitializePoolRequest";
@@ -544,6 +646,7 @@ export interface QuerySimulateInitializePoolRequestProtoMsg {
 export interface QuerySimulateInitializePoolRequestAmino {
   pool_id?: string;
   amounts_in?: CoinAmino[];
+  permanent_virtual_balances?: CoinAmino[];
 }
 export interface QuerySimulateInitializePoolRequestAminoMsg {
   type: "/pryzm.amm.v1.QuerySimulateInitializePoolRequest";
@@ -552,6 +655,7 @@ export interface QuerySimulateInitializePoolRequestAminoMsg {
 export interface QuerySimulateInitializePoolRequestSDKType {
   pool_id: bigint;
   amounts_in: CoinSDKType[];
+  permanent_virtual_balances: CoinSDKType[];
 }
 export interface QuerySimulateInitializePoolResponse {
   lptOut: Coin;
@@ -962,21 +1066,21 @@ export interface QueryGetIntroducingPoolTokenRequestSDKType {
   denom: string;
 }
 export interface QueryGetIntroducingPoolTokenResponse {
-  introducingPoolToken: VirtualBalancePoolToken;
+  introducingPoolToken: TemporalVirtualBalancePoolToken;
 }
 export interface QueryGetIntroducingPoolTokenResponseProtoMsg {
   typeUrl: "/pryzm.amm.v1.QueryGetIntroducingPoolTokenResponse";
   value: Uint8Array;
 }
 export interface QueryGetIntroducingPoolTokenResponseAmino {
-  introducing_pool_token?: VirtualBalancePoolTokenAmino;
+  introducing_pool_token?: TemporalVirtualBalancePoolTokenAmino;
 }
 export interface QueryGetIntroducingPoolTokenResponseAminoMsg {
   type: "/pryzm.amm.v1.QueryGetIntroducingPoolTokenResponse";
   value: QueryGetIntroducingPoolTokenResponseAmino;
 }
 export interface QueryGetIntroducingPoolTokenResponseSDKType {
-  introducing_pool_token: VirtualBalancePoolTokenSDKType;
+  introducing_pool_token: TemporalVirtualBalancePoolTokenSDKType;
 }
 export interface QueryAllIntroducingPoolTokenRequest {
   pagination?: PageRequest;
@@ -996,7 +1100,7 @@ export interface QueryAllIntroducingPoolTokenRequestSDKType {
   pagination?: PageRequestSDKType;
 }
 export interface QueryAllIntroducingPoolTokenResponse {
-  introducingPoolToken: VirtualBalancePoolToken[];
+  introducingPoolToken: TemporalVirtualBalancePoolToken[];
   pagination?: PageResponse;
 }
 export interface QueryAllIntroducingPoolTokenResponseProtoMsg {
@@ -1004,7 +1108,7 @@ export interface QueryAllIntroducingPoolTokenResponseProtoMsg {
   value: Uint8Array;
 }
 export interface QueryAllIntroducingPoolTokenResponseAmino {
-  introducing_pool_token?: VirtualBalancePoolTokenAmino[];
+  introducing_pool_token?: TemporalVirtualBalancePoolTokenAmino[];
   pagination?: PageResponseAmino;
 }
 export interface QueryAllIntroducingPoolTokenResponseAminoMsg {
@@ -1012,7 +1116,81 @@ export interface QueryAllIntroducingPoolTokenResponseAminoMsg {
   value: QueryAllIntroducingPoolTokenResponseAmino;
 }
 export interface QueryAllIntroducingPoolTokenResponseSDKType {
-  introducing_pool_token: VirtualBalancePoolTokenSDKType[];
+  introducing_pool_token: TemporalVirtualBalancePoolTokenSDKType[];
+  pagination?: PageResponseSDKType;
+}
+export interface QueryGetPermanentVirtualBalancePoolTokenRequest {
+  poolId: bigint;
+  denom: string;
+}
+export interface QueryGetPermanentVirtualBalancePoolTokenRequestProtoMsg {
+  typeUrl: "/pryzm.amm.v1.QueryGetPermanentVirtualBalancePoolTokenRequest";
+  value: Uint8Array;
+}
+export interface QueryGetPermanentVirtualBalancePoolTokenRequestAmino {
+  pool_id?: string;
+  denom?: string;
+}
+export interface QueryGetPermanentVirtualBalancePoolTokenRequestAminoMsg {
+  type: "/pryzm.amm.v1.QueryGetPermanentVirtualBalancePoolTokenRequest";
+  value: QueryGetPermanentVirtualBalancePoolTokenRequestAmino;
+}
+export interface QueryGetPermanentVirtualBalancePoolTokenRequestSDKType {
+  pool_id: bigint;
+  denom: string;
+}
+export interface QueryGetPermanentVirtualBalancePoolTokenResponse {
+  permanentVirtualBalancePoolToken: PermanentVirtualBalancePoolToken;
+}
+export interface QueryGetPermanentVirtualBalancePoolTokenResponseProtoMsg {
+  typeUrl: "/pryzm.amm.v1.QueryGetPermanentVirtualBalancePoolTokenResponse";
+  value: Uint8Array;
+}
+export interface QueryGetPermanentVirtualBalancePoolTokenResponseAmino {
+  permanent_virtual_balance_pool_token?: PermanentVirtualBalancePoolTokenAmino;
+}
+export interface QueryGetPermanentVirtualBalancePoolTokenResponseAminoMsg {
+  type: "/pryzm.amm.v1.QueryGetPermanentVirtualBalancePoolTokenResponse";
+  value: QueryGetPermanentVirtualBalancePoolTokenResponseAmino;
+}
+export interface QueryGetPermanentVirtualBalancePoolTokenResponseSDKType {
+  permanent_virtual_balance_pool_token: PermanentVirtualBalancePoolTokenSDKType;
+}
+export interface QueryAllPermanentVirtualBalancePoolTokenRequest {
+  pagination?: PageRequest;
+}
+export interface QueryAllPermanentVirtualBalancePoolTokenRequestProtoMsg {
+  typeUrl: "/pryzm.amm.v1.QueryAllPermanentVirtualBalancePoolTokenRequest";
+  value: Uint8Array;
+}
+export interface QueryAllPermanentVirtualBalancePoolTokenRequestAmino {
+  pagination?: PageRequestAmino;
+}
+export interface QueryAllPermanentVirtualBalancePoolTokenRequestAminoMsg {
+  type: "/pryzm.amm.v1.QueryAllPermanentVirtualBalancePoolTokenRequest";
+  value: QueryAllPermanentVirtualBalancePoolTokenRequestAmino;
+}
+export interface QueryAllPermanentVirtualBalancePoolTokenRequestSDKType {
+  pagination?: PageRequestSDKType;
+}
+export interface QueryAllPermanentVirtualBalancePoolTokenResponse {
+  permanentVirtualBalancePoolToken: PermanentVirtualBalancePoolToken[];
+  pagination?: PageResponse;
+}
+export interface QueryAllPermanentVirtualBalancePoolTokenResponseProtoMsg {
+  typeUrl: "/pryzm.amm.v1.QueryAllPermanentVirtualBalancePoolTokenResponse";
+  value: Uint8Array;
+}
+export interface QueryAllPermanentVirtualBalancePoolTokenResponseAmino {
+  permanent_virtual_balance_pool_token?: PermanentVirtualBalancePoolTokenAmino[];
+  pagination?: PageResponseAmino;
+}
+export interface QueryAllPermanentVirtualBalancePoolTokenResponseAminoMsg {
+  type: "/pryzm.amm.v1.QueryAllPermanentVirtualBalancePoolTokenResponse";
+  value: QueryAllPermanentVirtualBalancePoolTokenResponseAmino;
+}
+export interface QueryAllPermanentVirtualBalancePoolTokenResponseSDKType {
+  permanent_virtual_balance_pool_token: PermanentVirtualBalancePoolTokenSDKType[];
   pagination?: PageResponseSDKType;
 }
 export interface QueryGetExpiringPoolTokenRequest {
@@ -1036,21 +1214,21 @@ export interface QueryGetExpiringPoolTokenRequestSDKType {
   denom: string;
 }
 export interface QueryGetExpiringPoolTokenResponse {
-  expiringPoolToken: VirtualBalancePoolToken;
+  expiringPoolToken: TemporalVirtualBalancePoolToken;
 }
 export interface QueryGetExpiringPoolTokenResponseProtoMsg {
   typeUrl: "/pryzm.amm.v1.QueryGetExpiringPoolTokenResponse";
   value: Uint8Array;
 }
 export interface QueryGetExpiringPoolTokenResponseAmino {
-  expiring_pool_token?: VirtualBalancePoolTokenAmino;
+  expiring_pool_token?: TemporalVirtualBalancePoolTokenAmino;
 }
 export interface QueryGetExpiringPoolTokenResponseAminoMsg {
   type: "/pryzm.amm.v1.QueryGetExpiringPoolTokenResponse";
   value: QueryGetExpiringPoolTokenResponseAmino;
 }
 export interface QueryGetExpiringPoolTokenResponseSDKType {
-  expiring_pool_token: VirtualBalancePoolTokenSDKType;
+  expiring_pool_token: TemporalVirtualBalancePoolTokenSDKType;
 }
 export interface QueryAllExpiringPoolTokenRequest {
   pagination?: PageRequest;
@@ -1070,7 +1248,7 @@ export interface QueryAllExpiringPoolTokenRequestSDKType {
   pagination?: PageRequestSDKType;
 }
 export interface QueryAllExpiringPoolTokenResponse {
-  expiringPoolToken: VirtualBalancePoolToken[];
+  expiringPoolToken: TemporalVirtualBalancePoolToken[];
   pagination?: PageResponse;
 }
 export interface QueryAllExpiringPoolTokenResponseProtoMsg {
@@ -1078,7 +1256,7 @@ export interface QueryAllExpiringPoolTokenResponseProtoMsg {
   value: Uint8Array;
 }
 export interface QueryAllExpiringPoolTokenResponseAmino {
-  expiring_pool_token?: VirtualBalancePoolTokenAmino[];
+  expiring_pool_token?: TemporalVirtualBalancePoolTokenAmino[];
   pagination?: PageResponseAmino;
 }
 export interface QueryAllExpiringPoolTokenResponseAminoMsg {
@@ -1086,7 +1264,7 @@ export interface QueryAllExpiringPoolTokenResponseAminoMsg {
   value: QueryAllExpiringPoolTokenResponseAmino;
 }
 export interface QueryAllExpiringPoolTokenResponseSDKType {
-  expiring_pool_token: VirtualBalancePoolTokenSDKType[];
+  expiring_pool_token: TemporalVirtualBalancePoolTokenSDKType[];
   pagination?: PageResponseSDKType;
 }
 export interface QueryLpTokenRequest {
@@ -2925,6 +3103,358 @@ export const QueryGetPoolTokenWeightResponse = {
   }
 };
 GlobalDecoderRegistry.register(QueryGetPoolTokenWeightResponse.typeUrl, QueryGetPoolTokenWeightResponse);
+function createBaseQueryAllPoolTokenInfoRequest(): QueryAllPoolTokenInfoRequest {
+  return {
+    poolId: BigInt(0)
+  };
+}
+export const QueryAllPoolTokenInfoRequest = {
+  typeUrl: "/pryzm.amm.v1.QueryAllPoolTokenInfoRequest",
+  is(o: any): o is QueryAllPoolTokenInfoRequest {
+    return o && (o.$typeUrl === QueryAllPoolTokenInfoRequest.typeUrl || typeof o.poolId === "bigint");
+  },
+  isSDK(o: any): o is QueryAllPoolTokenInfoRequestSDKType {
+    return o && (o.$typeUrl === QueryAllPoolTokenInfoRequest.typeUrl || typeof o.pool_id === "bigint");
+  },
+  isAmino(o: any): o is QueryAllPoolTokenInfoRequestAmino {
+    return o && (o.$typeUrl === QueryAllPoolTokenInfoRequest.typeUrl || typeof o.pool_id === "bigint");
+  },
+  encode(message: QueryAllPoolTokenInfoRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
+      writer.uint32(8).uint64(message.poolId);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllPoolTokenInfoRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllPoolTokenInfoRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.poolId = reader.uint64();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryAllPoolTokenInfoRequest {
+    return {
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0)
+    };
+  },
+  toJSON(message: QueryAllPoolTokenInfoRequest): unknown {
+    const obj: any = {};
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
+    return obj;
+  },
+  fromPartial(object: Partial<QueryAllPoolTokenInfoRequest>): QueryAllPoolTokenInfoRequest {
+    const message = createBaseQueryAllPoolTokenInfoRequest();
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
+    return message;
+  },
+  fromAmino(object: QueryAllPoolTokenInfoRequestAmino): QueryAllPoolTokenInfoRequest {
+    const message = createBaseQueryAllPoolTokenInfoRequest();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    return message;
+  },
+  toAmino(message: QueryAllPoolTokenInfoRequest, useInterfaces: boolean = true): QueryAllPoolTokenInfoRequestAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryAllPoolTokenInfoRequestAminoMsg): QueryAllPoolTokenInfoRequest {
+    return QueryAllPoolTokenInfoRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryAllPoolTokenInfoRequestProtoMsg, useInterfaces: boolean = true): QueryAllPoolTokenInfoRequest {
+    return QueryAllPoolTokenInfoRequest.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QueryAllPoolTokenInfoRequest): Uint8Array {
+    return QueryAllPoolTokenInfoRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryAllPoolTokenInfoRequest): QueryAllPoolTokenInfoRequestProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.QueryAllPoolTokenInfoRequest",
+      value: QueryAllPoolTokenInfoRequest.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QueryAllPoolTokenInfoRequest.typeUrl, QueryAllPoolTokenInfoRequest);
+function createBaseQueryAllPoolTokenInfoResponse(): QueryAllPoolTokenInfoResponse {
+  return {
+    tokenInfo: []
+  };
+}
+export const QueryAllPoolTokenInfoResponse = {
+  typeUrl: "/pryzm.amm.v1.QueryAllPoolTokenInfoResponse",
+  is(o: any): o is QueryAllPoolTokenInfoResponse {
+    return o && (o.$typeUrl === QueryAllPoolTokenInfoResponse.typeUrl || Array.isArray(o.tokenInfo) && (!o.tokenInfo.length || TokenInfo.is(o.tokenInfo[0])));
+  },
+  isSDK(o: any): o is QueryAllPoolTokenInfoResponseSDKType {
+    return o && (o.$typeUrl === QueryAllPoolTokenInfoResponse.typeUrl || Array.isArray(o.token_info) && (!o.token_info.length || TokenInfo.isSDK(o.token_info[0])));
+  },
+  isAmino(o: any): o is QueryAllPoolTokenInfoResponseAmino {
+    return o && (o.$typeUrl === QueryAllPoolTokenInfoResponse.typeUrl || Array.isArray(o.token_info) && (!o.token_info.length || TokenInfo.isAmino(o.token_info[0])));
+  },
+  encode(message: QueryAllPoolTokenInfoResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.tokenInfo) {
+      TokenInfo.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllPoolTokenInfoResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllPoolTokenInfoResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.tokenInfo.push(TokenInfo.decode(reader, reader.uint32(), useInterfaces));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryAllPoolTokenInfoResponse {
+    return {
+      tokenInfo: Array.isArray(object?.tokenInfo) ? object.tokenInfo.map((e: any) => TokenInfo.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: QueryAllPoolTokenInfoResponse): unknown {
+    const obj: any = {};
+    if (message.tokenInfo) {
+      obj.tokenInfo = message.tokenInfo.map(e => e ? TokenInfo.toJSON(e) : undefined);
+    } else {
+      obj.tokenInfo = [];
+    }
+    return obj;
+  },
+  fromPartial(object: Partial<QueryAllPoolTokenInfoResponse>): QueryAllPoolTokenInfoResponse {
+    const message = createBaseQueryAllPoolTokenInfoResponse();
+    message.tokenInfo = object.tokenInfo?.map(e => TokenInfo.fromPartial(e)) || [];
+    return message;
+  },
+  fromAmino(object: QueryAllPoolTokenInfoResponseAmino): QueryAllPoolTokenInfoResponse {
+    const message = createBaseQueryAllPoolTokenInfoResponse();
+    message.tokenInfo = object.token_info?.map(e => TokenInfo.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: QueryAllPoolTokenInfoResponse, useInterfaces: boolean = true): QueryAllPoolTokenInfoResponseAmino {
+    const obj: any = {};
+    if (message.tokenInfo) {
+      obj.token_info = message.tokenInfo.map(e => e ? TokenInfo.toAmino(e, useInterfaces) : undefined);
+    } else {
+      obj.token_info = message.tokenInfo;
+    }
+    return obj;
+  },
+  fromAminoMsg(object: QueryAllPoolTokenInfoResponseAminoMsg): QueryAllPoolTokenInfoResponse {
+    return QueryAllPoolTokenInfoResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryAllPoolTokenInfoResponseProtoMsg, useInterfaces: boolean = true): QueryAllPoolTokenInfoResponse {
+    return QueryAllPoolTokenInfoResponse.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QueryAllPoolTokenInfoResponse): Uint8Array {
+    return QueryAllPoolTokenInfoResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryAllPoolTokenInfoResponse): QueryAllPoolTokenInfoResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.QueryAllPoolTokenInfoResponse",
+      value: QueryAllPoolTokenInfoResponse.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QueryAllPoolTokenInfoResponse.typeUrl, QueryAllPoolTokenInfoResponse);
+function createBaseQueryGetPoolTokenInfoRequest(): QueryGetPoolTokenInfoRequest {
+  return {
+    poolId: BigInt(0),
+    denom: ""
+  };
+}
+export const QueryGetPoolTokenInfoRequest = {
+  typeUrl: "/pryzm.amm.v1.QueryGetPoolTokenInfoRequest",
+  is(o: any): o is QueryGetPoolTokenInfoRequest {
+    return o && (o.$typeUrl === QueryGetPoolTokenInfoRequest.typeUrl || typeof o.poolId === "bigint" && typeof o.denom === "string");
+  },
+  isSDK(o: any): o is QueryGetPoolTokenInfoRequestSDKType {
+    return o && (o.$typeUrl === QueryGetPoolTokenInfoRequest.typeUrl || typeof o.pool_id === "bigint" && typeof o.denom === "string");
+  },
+  isAmino(o: any): o is QueryGetPoolTokenInfoRequestAmino {
+    return o && (o.$typeUrl === QueryGetPoolTokenInfoRequest.typeUrl || typeof o.pool_id === "bigint" && typeof o.denom === "string");
+  },
+  encode(message: QueryGetPoolTokenInfoRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
+      writer.uint32(8).uint64(message.poolId);
+    }
+    if (message.denom !== "") {
+      writer.uint32(18).string(message.denom);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetPoolTokenInfoRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetPoolTokenInfoRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.poolId = reader.uint64();
+          break;
+        case 2:
+          message.denom = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryGetPoolTokenInfoRequest {
+    return {
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
+      denom: isSet(object.denom) ? String(object.denom) : ""
+    };
+  },
+  toJSON(message: QueryGetPoolTokenInfoRequest): unknown {
+    const obj: any = {};
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
+    message.denom !== undefined && (obj.denom = message.denom);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryGetPoolTokenInfoRequest>): QueryGetPoolTokenInfoRequest {
+    const message = createBaseQueryGetPoolTokenInfoRequest();
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
+    message.denom = object.denom ?? "";
+    return message;
+  },
+  fromAmino(object: QueryGetPoolTokenInfoRequestAmino): QueryGetPoolTokenInfoRequest {
+    const message = createBaseQueryGetPoolTokenInfoRequest();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    return message;
+  },
+  toAmino(message: QueryGetPoolTokenInfoRequest, useInterfaces: boolean = true): QueryGetPoolTokenInfoRequestAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    return obj;
+  },
+  fromAminoMsg(object: QueryGetPoolTokenInfoRequestAminoMsg): QueryGetPoolTokenInfoRequest {
+    return QueryGetPoolTokenInfoRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryGetPoolTokenInfoRequestProtoMsg, useInterfaces: boolean = true): QueryGetPoolTokenInfoRequest {
+    return QueryGetPoolTokenInfoRequest.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QueryGetPoolTokenInfoRequest): Uint8Array {
+    return QueryGetPoolTokenInfoRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryGetPoolTokenInfoRequest): QueryGetPoolTokenInfoRequestProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.QueryGetPoolTokenInfoRequest",
+      value: QueryGetPoolTokenInfoRequest.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QueryGetPoolTokenInfoRequest.typeUrl, QueryGetPoolTokenInfoRequest);
+function createBaseQueryGetPoolTokenInfoResponse(): QueryGetPoolTokenInfoResponse {
+  return {
+    tokenInfo: TokenInfo.fromPartial({})
+  };
+}
+export const QueryGetPoolTokenInfoResponse = {
+  typeUrl: "/pryzm.amm.v1.QueryGetPoolTokenInfoResponse",
+  is(o: any): o is QueryGetPoolTokenInfoResponse {
+    return o && (o.$typeUrl === QueryGetPoolTokenInfoResponse.typeUrl || TokenInfo.is(o.tokenInfo));
+  },
+  isSDK(o: any): o is QueryGetPoolTokenInfoResponseSDKType {
+    return o && (o.$typeUrl === QueryGetPoolTokenInfoResponse.typeUrl || TokenInfo.isSDK(o.token_info));
+  },
+  isAmino(o: any): o is QueryGetPoolTokenInfoResponseAmino {
+    return o && (o.$typeUrl === QueryGetPoolTokenInfoResponse.typeUrl || TokenInfo.isAmino(o.token_info));
+  },
+  encode(message: QueryGetPoolTokenInfoResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.tokenInfo !== undefined) {
+      TokenInfo.encode(message.tokenInfo, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetPoolTokenInfoResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetPoolTokenInfoResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.tokenInfo = TokenInfo.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryGetPoolTokenInfoResponse {
+    return {
+      tokenInfo: isSet(object.tokenInfo) ? TokenInfo.fromJSON(object.tokenInfo) : undefined
+    };
+  },
+  toJSON(message: QueryGetPoolTokenInfoResponse): unknown {
+    const obj: any = {};
+    message.tokenInfo !== undefined && (obj.tokenInfo = message.tokenInfo ? TokenInfo.toJSON(message.tokenInfo) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryGetPoolTokenInfoResponse>): QueryGetPoolTokenInfoResponse {
+    const message = createBaseQueryGetPoolTokenInfoResponse();
+    message.tokenInfo = object.tokenInfo !== undefined && object.tokenInfo !== null ? TokenInfo.fromPartial(object.tokenInfo) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryGetPoolTokenInfoResponseAmino): QueryGetPoolTokenInfoResponse {
+    const message = createBaseQueryGetPoolTokenInfoResponse();
+    if (object.token_info !== undefined && object.token_info !== null) {
+      message.tokenInfo = TokenInfo.fromAmino(object.token_info);
+    }
+    return message;
+  },
+  toAmino(message: QueryGetPoolTokenInfoResponse, useInterfaces: boolean = true): QueryGetPoolTokenInfoResponseAmino {
+    const obj: any = {};
+    obj.token_info = message.tokenInfo ? TokenInfo.toAmino(message.tokenInfo, useInterfaces) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryGetPoolTokenInfoResponseAminoMsg): QueryGetPoolTokenInfoResponse {
+    return QueryGetPoolTokenInfoResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryGetPoolTokenInfoResponseProtoMsg, useInterfaces: boolean = true): QueryGetPoolTokenInfoResponse {
+    return QueryGetPoolTokenInfoResponse.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QueryGetPoolTokenInfoResponse): Uint8Array {
+    return QueryGetPoolTokenInfoResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryGetPoolTokenInfoResponse): QueryGetPoolTokenInfoResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.QueryGetPoolTokenInfoResponse",
+      value: QueryGetPoolTokenInfoResponse.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QueryGetPoolTokenInfoResponse.typeUrl, QueryGetPoolTokenInfoResponse);
 function createBaseQueryGetPoolRequest(): QueryGetPoolRequest {
   return {
     id: BigInt(0)
@@ -4206,19 +4736,20 @@ GlobalDecoderRegistry.register(QuerySimulateSingleSwapResponse.typeUrl, QuerySim
 function createBaseQuerySimulateInitializePoolRequest(): QuerySimulateInitializePoolRequest {
   return {
     poolId: BigInt(0),
-    amountsIn: []
+    amountsIn: [],
+    permanentVirtualBalances: []
   };
 }
 export const QuerySimulateInitializePoolRequest = {
   typeUrl: "/pryzm.amm.v1.QuerySimulateInitializePoolRequest",
   is(o: any): o is QuerySimulateInitializePoolRequest {
-    return o && (o.$typeUrl === QuerySimulateInitializePoolRequest.typeUrl || typeof o.poolId === "bigint" && Array.isArray(o.amountsIn) && (!o.amountsIn.length || Coin.is(o.amountsIn[0])));
+    return o && (o.$typeUrl === QuerySimulateInitializePoolRequest.typeUrl || typeof o.poolId === "bigint" && Array.isArray(o.amountsIn) && (!o.amountsIn.length || Coin.is(o.amountsIn[0])) && Array.isArray(o.permanentVirtualBalances) && (!o.permanentVirtualBalances.length || Coin.is(o.permanentVirtualBalances[0])));
   },
   isSDK(o: any): o is QuerySimulateInitializePoolRequestSDKType {
-    return o && (o.$typeUrl === QuerySimulateInitializePoolRequest.typeUrl || typeof o.pool_id === "bigint" && Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isSDK(o.amounts_in[0])));
+    return o && (o.$typeUrl === QuerySimulateInitializePoolRequest.typeUrl || typeof o.pool_id === "bigint" && Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isSDK(o.amounts_in[0])) && Array.isArray(o.permanent_virtual_balances) && (!o.permanent_virtual_balances.length || Coin.isSDK(o.permanent_virtual_balances[0])));
   },
   isAmino(o: any): o is QuerySimulateInitializePoolRequestAmino {
-    return o && (o.$typeUrl === QuerySimulateInitializePoolRequest.typeUrl || typeof o.pool_id === "bigint" && Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isAmino(o.amounts_in[0])));
+    return o && (o.$typeUrl === QuerySimulateInitializePoolRequest.typeUrl || typeof o.pool_id === "bigint" && Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isAmino(o.amounts_in[0])) && Array.isArray(o.permanent_virtual_balances) && (!o.permanent_virtual_balances.length || Coin.isAmino(o.permanent_virtual_balances[0])));
   },
   encode(message: QuerySimulateInitializePoolRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.poolId !== BigInt(0)) {
@@ -4226,6 +4757,9 @@ export const QuerySimulateInitializePoolRequest = {
     }
     for (const v of message.amountsIn) {
       Coin.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    for (const v of message.permanentVirtualBalances) {
+      Coin.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -4242,6 +4776,9 @@ export const QuerySimulateInitializePoolRequest = {
         case 2:
           message.amountsIn.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
+        case 3:
+          message.permanentVirtualBalances.push(Coin.decode(reader, reader.uint32(), useInterfaces));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -4252,7 +4789,8 @@ export const QuerySimulateInitializePoolRequest = {
   fromJSON(object: any): QuerySimulateInitializePoolRequest {
     return {
       poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
-      amountsIn: Array.isArray(object?.amountsIn) ? object.amountsIn.map((e: any) => Coin.fromJSON(e)) : []
+      amountsIn: Array.isArray(object?.amountsIn) ? object.amountsIn.map((e: any) => Coin.fromJSON(e)) : [],
+      permanentVirtualBalances: Array.isArray(object?.permanentVirtualBalances) ? object.permanentVirtualBalances.map((e: any) => Coin.fromJSON(e)) : []
     };
   },
   toJSON(message: QuerySimulateInitializePoolRequest): unknown {
@@ -4263,12 +4801,18 @@ export const QuerySimulateInitializePoolRequest = {
     } else {
       obj.amountsIn = [];
     }
+    if (message.permanentVirtualBalances) {
+      obj.permanentVirtualBalances = message.permanentVirtualBalances.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.permanentVirtualBalances = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<QuerySimulateInitializePoolRequest>): QuerySimulateInitializePoolRequest {
     const message = createBaseQuerySimulateInitializePoolRequest();
     message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.amountsIn = object.amountsIn?.map(e => Coin.fromPartial(e)) || [];
+    message.permanentVirtualBalances = object.permanentVirtualBalances?.map(e => Coin.fromPartial(e)) || [];
     return message;
   },
   fromAmino(object: QuerySimulateInitializePoolRequestAmino): QuerySimulateInitializePoolRequest {
@@ -4277,6 +4821,7 @@ export const QuerySimulateInitializePoolRequest = {
       message.poolId = BigInt(object.pool_id);
     }
     message.amountsIn = object.amounts_in?.map(e => Coin.fromAmino(e)) || [];
+    message.permanentVirtualBalances = object.permanent_virtual_balances?.map(e => Coin.fromAmino(e)) || [];
     return message;
   },
   toAmino(message: QuerySimulateInitializePoolRequest, useInterfaces: boolean = true): QuerySimulateInitializePoolRequestAmino {
@@ -4286,6 +4831,11 @@ export const QuerySimulateInitializePoolRequest = {
       obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
       obj.amounts_in = message.amountsIn;
+    }
+    if (message.permanentVirtualBalances) {
+      obj.permanent_virtual_balances = message.permanentVirtualBalances.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
+    } else {
+      obj.permanent_virtual_balances = message.permanentVirtualBalances;
     }
     return obj;
   },
@@ -6368,23 +6918,23 @@ export const QueryGetIntroducingPoolTokenRequest = {
 GlobalDecoderRegistry.register(QueryGetIntroducingPoolTokenRequest.typeUrl, QueryGetIntroducingPoolTokenRequest);
 function createBaseQueryGetIntroducingPoolTokenResponse(): QueryGetIntroducingPoolTokenResponse {
   return {
-    introducingPoolToken: VirtualBalancePoolToken.fromPartial({})
+    introducingPoolToken: TemporalVirtualBalancePoolToken.fromPartial({})
   };
 }
 export const QueryGetIntroducingPoolTokenResponse = {
   typeUrl: "/pryzm.amm.v1.QueryGetIntroducingPoolTokenResponse",
   is(o: any): o is QueryGetIntroducingPoolTokenResponse {
-    return o && (o.$typeUrl === QueryGetIntroducingPoolTokenResponse.typeUrl || VirtualBalancePoolToken.is(o.introducingPoolToken));
+    return o && (o.$typeUrl === QueryGetIntroducingPoolTokenResponse.typeUrl || TemporalVirtualBalancePoolToken.is(o.introducingPoolToken));
   },
   isSDK(o: any): o is QueryGetIntroducingPoolTokenResponseSDKType {
-    return o && (o.$typeUrl === QueryGetIntroducingPoolTokenResponse.typeUrl || VirtualBalancePoolToken.isSDK(o.introducing_pool_token));
+    return o && (o.$typeUrl === QueryGetIntroducingPoolTokenResponse.typeUrl || TemporalVirtualBalancePoolToken.isSDK(o.introducing_pool_token));
   },
   isAmino(o: any): o is QueryGetIntroducingPoolTokenResponseAmino {
-    return o && (o.$typeUrl === QueryGetIntroducingPoolTokenResponse.typeUrl || VirtualBalancePoolToken.isAmino(o.introducing_pool_token));
+    return o && (o.$typeUrl === QueryGetIntroducingPoolTokenResponse.typeUrl || TemporalVirtualBalancePoolToken.isAmino(o.introducing_pool_token));
   },
   encode(message: QueryGetIntroducingPoolTokenResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.introducingPoolToken !== undefined) {
-      VirtualBalancePoolToken.encode(message.introducingPoolToken, writer.uint32(10).fork()).ldelim();
+      TemporalVirtualBalancePoolToken.encode(message.introducingPoolToken, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
@@ -6396,7 +6946,7 @@ export const QueryGetIntroducingPoolTokenResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.introducingPoolToken = VirtualBalancePoolToken.decode(reader, reader.uint32(), useInterfaces);
+          message.introducingPoolToken = TemporalVirtualBalancePoolToken.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -6407,29 +6957,29 @@ export const QueryGetIntroducingPoolTokenResponse = {
   },
   fromJSON(object: any): QueryGetIntroducingPoolTokenResponse {
     return {
-      introducingPoolToken: isSet(object.introducingPoolToken) ? VirtualBalancePoolToken.fromJSON(object.introducingPoolToken) : undefined
+      introducingPoolToken: isSet(object.introducingPoolToken) ? TemporalVirtualBalancePoolToken.fromJSON(object.introducingPoolToken) : undefined
     };
   },
   toJSON(message: QueryGetIntroducingPoolTokenResponse): unknown {
     const obj: any = {};
-    message.introducingPoolToken !== undefined && (obj.introducingPoolToken = message.introducingPoolToken ? VirtualBalancePoolToken.toJSON(message.introducingPoolToken) : undefined);
+    message.introducingPoolToken !== undefined && (obj.introducingPoolToken = message.introducingPoolToken ? TemporalVirtualBalancePoolToken.toJSON(message.introducingPoolToken) : undefined);
     return obj;
   },
   fromPartial(object: Partial<QueryGetIntroducingPoolTokenResponse>): QueryGetIntroducingPoolTokenResponse {
     const message = createBaseQueryGetIntroducingPoolTokenResponse();
-    message.introducingPoolToken = object.introducingPoolToken !== undefined && object.introducingPoolToken !== null ? VirtualBalancePoolToken.fromPartial(object.introducingPoolToken) : undefined;
+    message.introducingPoolToken = object.introducingPoolToken !== undefined && object.introducingPoolToken !== null ? TemporalVirtualBalancePoolToken.fromPartial(object.introducingPoolToken) : undefined;
     return message;
   },
   fromAmino(object: QueryGetIntroducingPoolTokenResponseAmino): QueryGetIntroducingPoolTokenResponse {
     const message = createBaseQueryGetIntroducingPoolTokenResponse();
     if (object.introducing_pool_token !== undefined && object.introducing_pool_token !== null) {
-      message.introducingPoolToken = VirtualBalancePoolToken.fromAmino(object.introducing_pool_token);
+      message.introducingPoolToken = TemporalVirtualBalancePoolToken.fromAmino(object.introducing_pool_token);
     }
     return message;
   },
   toAmino(message: QueryGetIntroducingPoolTokenResponse, useInterfaces: boolean = true): QueryGetIntroducingPoolTokenResponseAmino {
     const obj: any = {};
-    obj.introducing_pool_token = message.introducingPoolToken ? VirtualBalancePoolToken.toAmino(message.introducingPoolToken, useInterfaces) : undefined;
+    obj.introducing_pool_token = message.introducingPoolToken ? TemporalVirtualBalancePoolToken.toAmino(message.introducingPoolToken, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryGetIntroducingPoolTokenResponseAminoMsg): QueryGetIntroducingPoolTokenResponse {
@@ -6541,17 +7091,17 @@ function createBaseQueryAllIntroducingPoolTokenResponse(): QueryAllIntroducingPo
 export const QueryAllIntroducingPoolTokenResponse = {
   typeUrl: "/pryzm.amm.v1.QueryAllIntroducingPoolTokenResponse",
   is(o: any): o is QueryAllIntroducingPoolTokenResponse {
-    return o && (o.$typeUrl === QueryAllIntroducingPoolTokenResponse.typeUrl || Array.isArray(o.introducingPoolToken) && (!o.introducingPoolToken.length || VirtualBalancePoolToken.is(o.introducingPoolToken[0])));
+    return o && (o.$typeUrl === QueryAllIntroducingPoolTokenResponse.typeUrl || Array.isArray(o.introducingPoolToken) && (!o.introducingPoolToken.length || TemporalVirtualBalancePoolToken.is(o.introducingPoolToken[0])));
   },
   isSDK(o: any): o is QueryAllIntroducingPoolTokenResponseSDKType {
-    return o && (o.$typeUrl === QueryAllIntroducingPoolTokenResponse.typeUrl || Array.isArray(o.introducing_pool_token) && (!o.introducing_pool_token.length || VirtualBalancePoolToken.isSDK(o.introducing_pool_token[0])));
+    return o && (o.$typeUrl === QueryAllIntroducingPoolTokenResponse.typeUrl || Array.isArray(o.introducing_pool_token) && (!o.introducing_pool_token.length || TemporalVirtualBalancePoolToken.isSDK(o.introducing_pool_token[0])));
   },
   isAmino(o: any): o is QueryAllIntroducingPoolTokenResponseAmino {
-    return o && (o.$typeUrl === QueryAllIntroducingPoolTokenResponse.typeUrl || Array.isArray(o.introducing_pool_token) && (!o.introducing_pool_token.length || VirtualBalancePoolToken.isAmino(o.introducing_pool_token[0])));
+    return o && (o.$typeUrl === QueryAllIntroducingPoolTokenResponse.typeUrl || Array.isArray(o.introducing_pool_token) && (!o.introducing_pool_token.length || TemporalVirtualBalancePoolToken.isAmino(o.introducing_pool_token[0])));
   },
   encode(message: QueryAllIntroducingPoolTokenResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.introducingPoolToken) {
-      VirtualBalancePoolToken.encode(v!, writer.uint32(10).fork()).ldelim();
+      TemporalVirtualBalancePoolToken.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.pagination !== undefined) {
       PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
@@ -6566,7 +7116,7 @@ export const QueryAllIntroducingPoolTokenResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.introducingPoolToken.push(VirtualBalancePoolToken.decode(reader, reader.uint32(), useInterfaces));
+          message.introducingPoolToken.push(TemporalVirtualBalancePoolToken.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
           message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
@@ -6580,14 +7130,14 @@ export const QueryAllIntroducingPoolTokenResponse = {
   },
   fromJSON(object: any): QueryAllIntroducingPoolTokenResponse {
     return {
-      introducingPoolToken: Array.isArray(object?.introducingPoolToken) ? object.introducingPoolToken.map((e: any) => VirtualBalancePoolToken.fromJSON(e)) : [],
+      introducingPoolToken: Array.isArray(object?.introducingPoolToken) ? object.introducingPoolToken.map((e: any) => TemporalVirtualBalancePoolToken.fromJSON(e)) : [],
       pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined
     };
   },
   toJSON(message: QueryAllIntroducingPoolTokenResponse): unknown {
     const obj: any = {};
     if (message.introducingPoolToken) {
-      obj.introducingPoolToken = message.introducingPoolToken.map(e => e ? VirtualBalancePoolToken.toJSON(e) : undefined);
+      obj.introducingPoolToken = message.introducingPoolToken.map(e => e ? TemporalVirtualBalancePoolToken.toJSON(e) : undefined);
     } else {
       obj.introducingPoolToken = [];
     }
@@ -6596,13 +7146,13 @@ export const QueryAllIntroducingPoolTokenResponse = {
   },
   fromPartial(object: Partial<QueryAllIntroducingPoolTokenResponse>): QueryAllIntroducingPoolTokenResponse {
     const message = createBaseQueryAllIntroducingPoolTokenResponse();
-    message.introducingPoolToken = object.introducingPoolToken?.map(e => VirtualBalancePoolToken.fromPartial(e)) || [];
+    message.introducingPoolToken = object.introducingPoolToken?.map(e => TemporalVirtualBalancePoolToken.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
     return message;
   },
   fromAmino(object: QueryAllIntroducingPoolTokenResponseAmino): QueryAllIntroducingPoolTokenResponse {
     const message = createBaseQueryAllIntroducingPoolTokenResponse();
-    message.introducingPoolToken = object.introducing_pool_token?.map(e => VirtualBalancePoolToken.fromAmino(e)) || [];
+    message.introducingPoolToken = object.introducing_pool_token?.map(e => TemporalVirtualBalancePoolToken.fromAmino(e)) || [];
     if (object.pagination !== undefined && object.pagination !== null) {
       message.pagination = PageResponse.fromAmino(object.pagination);
     }
@@ -6611,7 +7161,7 @@ export const QueryAllIntroducingPoolTokenResponse = {
   toAmino(message: QueryAllIntroducingPoolTokenResponse, useInterfaces: boolean = true): QueryAllIntroducingPoolTokenResponseAmino {
     const obj: any = {};
     if (message.introducingPoolToken) {
-      obj.introducing_pool_token = message.introducingPoolToken.map(e => e ? VirtualBalancePoolToken.toAmino(e, useInterfaces) : undefined);
+      obj.introducing_pool_token = message.introducingPoolToken.map(e => e ? TemporalVirtualBalancePoolToken.toAmino(e, useInterfaces) : undefined);
     } else {
       obj.introducing_pool_token = message.introducingPoolToken;
     }
@@ -6635,6 +7185,372 @@ export const QueryAllIntroducingPoolTokenResponse = {
   }
 };
 GlobalDecoderRegistry.register(QueryAllIntroducingPoolTokenResponse.typeUrl, QueryAllIntroducingPoolTokenResponse);
+function createBaseQueryGetPermanentVirtualBalancePoolTokenRequest(): QueryGetPermanentVirtualBalancePoolTokenRequest {
+  return {
+    poolId: BigInt(0),
+    denom: ""
+  };
+}
+export const QueryGetPermanentVirtualBalancePoolTokenRequest = {
+  typeUrl: "/pryzm.amm.v1.QueryGetPermanentVirtualBalancePoolTokenRequest",
+  is(o: any): o is QueryGetPermanentVirtualBalancePoolTokenRequest {
+    return o && (o.$typeUrl === QueryGetPermanentVirtualBalancePoolTokenRequest.typeUrl || typeof o.poolId === "bigint" && typeof o.denom === "string");
+  },
+  isSDK(o: any): o is QueryGetPermanentVirtualBalancePoolTokenRequestSDKType {
+    return o && (o.$typeUrl === QueryGetPermanentVirtualBalancePoolTokenRequest.typeUrl || typeof o.pool_id === "bigint" && typeof o.denom === "string");
+  },
+  isAmino(o: any): o is QueryGetPermanentVirtualBalancePoolTokenRequestAmino {
+    return o && (o.$typeUrl === QueryGetPermanentVirtualBalancePoolTokenRequest.typeUrl || typeof o.pool_id === "bigint" && typeof o.denom === "string");
+  },
+  encode(message: QueryGetPermanentVirtualBalancePoolTokenRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
+      writer.uint32(8).uint64(message.poolId);
+    }
+    if (message.denom !== "") {
+      writer.uint32(18).string(message.denom);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetPermanentVirtualBalancePoolTokenRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetPermanentVirtualBalancePoolTokenRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.poolId = reader.uint64();
+          break;
+        case 2:
+          message.denom = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryGetPermanentVirtualBalancePoolTokenRequest {
+    return {
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
+      denom: isSet(object.denom) ? String(object.denom) : ""
+    };
+  },
+  toJSON(message: QueryGetPermanentVirtualBalancePoolTokenRequest): unknown {
+    const obj: any = {};
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
+    message.denom !== undefined && (obj.denom = message.denom);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryGetPermanentVirtualBalancePoolTokenRequest>): QueryGetPermanentVirtualBalancePoolTokenRequest {
+    const message = createBaseQueryGetPermanentVirtualBalancePoolTokenRequest();
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
+    message.denom = object.denom ?? "";
+    return message;
+  },
+  fromAmino(object: QueryGetPermanentVirtualBalancePoolTokenRequestAmino): QueryGetPermanentVirtualBalancePoolTokenRequest {
+    const message = createBaseQueryGetPermanentVirtualBalancePoolTokenRequest();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    return message;
+  },
+  toAmino(message: QueryGetPermanentVirtualBalancePoolTokenRequest, useInterfaces: boolean = true): QueryGetPermanentVirtualBalancePoolTokenRequestAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    return obj;
+  },
+  fromAminoMsg(object: QueryGetPermanentVirtualBalancePoolTokenRequestAminoMsg): QueryGetPermanentVirtualBalancePoolTokenRequest {
+    return QueryGetPermanentVirtualBalancePoolTokenRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryGetPermanentVirtualBalancePoolTokenRequestProtoMsg, useInterfaces: boolean = true): QueryGetPermanentVirtualBalancePoolTokenRequest {
+    return QueryGetPermanentVirtualBalancePoolTokenRequest.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QueryGetPermanentVirtualBalancePoolTokenRequest): Uint8Array {
+    return QueryGetPermanentVirtualBalancePoolTokenRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryGetPermanentVirtualBalancePoolTokenRequest): QueryGetPermanentVirtualBalancePoolTokenRequestProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.QueryGetPermanentVirtualBalancePoolTokenRequest",
+      value: QueryGetPermanentVirtualBalancePoolTokenRequest.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QueryGetPermanentVirtualBalancePoolTokenRequest.typeUrl, QueryGetPermanentVirtualBalancePoolTokenRequest);
+function createBaseQueryGetPermanentVirtualBalancePoolTokenResponse(): QueryGetPermanentVirtualBalancePoolTokenResponse {
+  return {
+    permanentVirtualBalancePoolToken: PermanentVirtualBalancePoolToken.fromPartial({})
+  };
+}
+export const QueryGetPermanentVirtualBalancePoolTokenResponse = {
+  typeUrl: "/pryzm.amm.v1.QueryGetPermanentVirtualBalancePoolTokenResponse",
+  is(o: any): o is QueryGetPermanentVirtualBalancePoolTokenResponse {
+    return o && (o.$typeUrl === QueryGetPermanentVirtualBalancePoolTokenResponse.typeUrl || PermanentVirtualBalancePoolToken.is(o.permanentVirtualBalancePoolToken));
+  },
+  isSDK(o: any): o is QueryGetPermanentVirtualBalancePoolTokenResponseSDKType {
+    return o && (o.$typeUrl === QueryGetPermanentVirtualBalancePoolTokenResponse.typeUrl || PermanentVirtualBalancePoolToken.isSDK(o.permanent_virtual_balance_pool_token));
+  },
+  isAmino(o: any): o is QueryGetPermanentVirtualBalancePoolTokenResponseAmino {
+    return o && (o.$typeUrl === QueryGetPermanentVirtualBalancePoolTokenResponse.typeUrl || PermanentVirtualBalancePoolToken.isAmino(o.permanent_virtual_balance_pool_token));
+  },
+  encode(message: QueryGetPermanentVirtualBalancePoolTokenResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.permanentVirtualBalancePoolToken !== undefined) {
+      PermanentVirtualBalancePoolToken.encode(message.permanentVirtualBalancePoolToken, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryGetPermanentVirtualBalancePoolTokenResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetPermanentVirtualBalancePoolTokenResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.permanentVirtualBalancePoolToken = PermanentVirtualBalancePoolToken.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryGetPermanentVirtualBalancePoolTokenResponse {
+    return {
+      permanentVirtualBalancePoolToken: isSet(object.permanentVirtualBalancePoolToken) ? PermanentVirtualBalancePoolToken.fromJSON(object.permanentVirtualBalancePoolToken) : undefined
+    };
+  },
+  toJSON(message: QueryGetPermanentVirtualBalancePoolTokenResponse): unknown {
+    const obj: any = {};
+    message.permanentVirtualBalancePoolToken !== undefined && (obj.permanentVirtualBalancePoolToken = message.permanentVirtualBalancePoolToken ? PermanentVirtualBalancePoolToken.toJSON(message.permanentVirtualBalancePoolToken) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryGetPermanentVirtualBalancePoolTokenResponse>): QueryGetPermanentVirtualBalancePoolTokenResponse {
+    const message = createBaseQueryGetPermanentVirtualBalancePoolTokenResponse();
+    message.permanentVirtualBalancePoolToken = object.permanentVirtualBalancePoolToken !== undefined && object.permanentVirtualBalancePoolToken !== null ? PermanentVirtualBalancePoolToken.fromPartial(object.permanentVirtualBalancePoolToken) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryGetPermanentVirtualBalancePoolTokenResponseAmino): QueryGetPermanentVirtualBalancePoolTokenResponse {
+    const message = createBaseQueryGetPermanentVirtualBalancePoolTokenResponse();
+    if (object.permanent_virtual_balance_pool_token !== undefined && object.permanent_virtual_balance_pool_token !== null) {
+      message.permanentVirtualBalancePoolToken = PermanentVirtualBalancePoolToken.fromAmino(object.permanent_virtual_balance_pool_token);
+    }
+    return message;
+  },
+  toAmino(message: QueryGetPermanentVirtualBalancePoolTokenResponse, useInterfaces: boolean = true): QueryGetPermanentVirtualBalancePoolTokenResponseAmino {
+    const obj: any = {};
+    obj.permanent_virtual_balance_pool_token = message.permanentVirtualBalancePoolToken ? PermanentVirtualBalancePoolToken.toAmino(message.permanentVirtualBalancePoolToken, useInterfaces) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryGetPermanentVirtualBalancePoolTokenResponseAminoMsg): QueryGetPermanentVirtualBalancePoolTokenResponse {
+    return QueryGetPermanentVirtualBalancePoolTokenResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryGetPermanentVirtualBalancePoolTokenResponseProtoMsg, useInterfaces: boolean = true): QueryGetPermanentVirtualBalancePoolTokenResponse {
+    return QueryGetPermanentVirtualBalancePoolTokenResponse.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QueryGetPermanentVirtualBalancePoolTokenResponse): Uint8Array {
+    return QueryGetPermanentVirtualBalancePoolTokenResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryGetPermanentVirtualBalancePoolTokenResponse): QueryGetPermanentVirtualBalancePoolTokenResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.QueryGetPermanentVirtualBalancePoolTokenResponse",
+      value: QueryGetPermanentVirtualBalancePoolTokenResponse.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QueryGetPermanentVirtualBalancePoolTokenResponse.typeUrl, QueryGetPermanentVirtualBalancePoolTokenResponse);
+function createBaseQueryAllPermanentVirtualBalancePoolTokenRequest(): QueryAllPermanentVirtualBalancePoolTokenRequest {
+  return {
+    pagination: undefined
+  };
+}
+export const QueryAllPermanentVirtualBalancePoolTokenRequest = {
+  typeUrl: "/pryzm.amm.v1.QueryAllPermanentVirtualBalancePoolTokenRequest",
+  is(o: any): o is QueryAllPermanentVirtualBalancePoolTokenRequest {
+    return o && o.$typeUrl === QueryAllPermanentVirtualBalancePoolTokenRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryAllPermanentVirtualBalancePoolTokenRequestSDKType {
+    return o && o.$typeUrl === QueryAllPermanentVirtualBalancePoolTokenRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryAllPermanentVirtualBalancePoolTokenRequestAmino {
+    return o && o.$typeUrl === QueryAllPermanentVirtualBalancePoolTokenRequest.typeUrl;
+  },
+  encode(message: QueryAllPermanentVirtualBalancePoolTokenRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllPermanentVirtualBalancePoolTokenRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllPermanentVirtualBalancePoolTokenRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryAllPermanentVirtualBalancePoolTokenRequest {
+    return {
+      pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
+    };
+  },
+  toJSON(message: QueryAllPermanentVirtualBalancePoolTokenRequest): unknown {
+    const obj: any = {};
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryAllPermanentVirtualBalancePoolTokenRequest>): QueryAllPermanentVirtualBalancePoolTokenRequest {
+    const message = createBaseQueryAllPermanentVirtualBalancePoolTokenRequest();
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryAllPermanentVirtualBalancePoolTokenRequestAmino): QueryAllPermanentVirtualBalancePoolTokenRequest {
+    const message = createBaseQueryAllPermanentVirtualBalancePoolTokenRequest();
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryAllPermanentVirtualBalancePoolTokenRequest, useInterfaces: boolean = true): QueryAllPermanentVirtualBalancePoolTokenRequestAmino {
+    const obj: any = {};
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination, useInterfaces) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryAllPermanentVirtualBalancePoolTokenRequestAminoMsg): QueryAllPermanentVirtualBalancePoolTokenRequest {
+    return QueryAllPermanentVirtualBalancePoolTokenRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryAllPermanentVirtualBalancePoolTokenRequestProtoMsg, useInterfaces: boolean = true): QueryAllPermanentVirtualBalancePoolTokenRequest {
+    return QueryAllPermanentVirtualBalancePoolTokenRequest.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QueryAllPermanentVirtualBalancePoolTokenRequest): Uint8Array {
+    return QueryAllPermanentVirtualBalancePoolTokenRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryAllPermanentVirtualBalancePoolTokenRequest): QueryAllPermanentVirtualBalancePoolTokenRequestProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.QueryAllPermanentVirtualBalancePoolTokenRequest",
+      value: QueryAllPermanentVirtualBalancePoolTokenRequest.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QueryAllPermanentVirtualBalancePoolTokenRequest.typeUrl, QueryAllPermanentVirtualBalancePoolTokenRequest);
+function createBaseQueryAllPermanentVirtualBalancePoolTokenResponse(): QueryAllPermanentVirtualBalancePoolTokenResponse {
+  return {
+    permanentVirtualBalancePoolToken: [],
+    pagination: undefined
+  };
+}
+export const QueryAllPermanentVirtualBalancePoolTokenResponse = {
+  typeUrl: "/pryzm.amm.v1.QueryAllPermanentVirtualBalancePoolTokenResponse",
+  is(o: any): o is QueryAllPermanentVirtualBalancePoolTokenResponse {
+    return o && (o.$typeUrl === QueryAllPermanentVirtualBalancePoolTokenResponse.typeUrl || Array.isArray(o.permanentVirtualBalancePoolToken) && (!o.permanentVirtualBalancePoolToken.length || PermanentVirtualBalancePoolToken.is(o.permanentVirtualBalancePoolToken[0])));
+  },
+  isSDK(o: any): o is QueryAllPermanentVirtualBalancePoolTokenResponseSDKType {
+    return o && (o.$typeUrl === QueryAllPermanentVirtualBalancePoolTokenResponse.typeUrl || Array.isArray(o.permanent_virtual_balance_pool_token) && (!o.permanent_virtual_balance_pool_token.length || PermanentVirtualBalancePoolToken.isSDK(o.permanent_virtual_balance_pool_token[0])));
+  },
+  isAmino(o: any): o is QueryAllPermanentVirtualBalancePoolTokenResponseAmino {
+    return o && (o.$typeUrl === QueryAllPermanentVirtualBalancePoolTokenResponse.typeUrl || Array.isArray(o.permanent_virtual_balance_pool_token) && (!o.permanent_virtual_balance_pool_token.length || PermanentVirtualBalancePoolToken.isAmino(o.permanent_virtual_balance_pool_token[0])));
+  },
+  encode(message: QueryAllPermanentVirtualBalancePoolTokenResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.permanentVirtualBalancePoolToken) {
+      PermanentVirtualBalancePoolToken.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryAllPermanentVirtualBalancePoolTokenResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllPermanentVirtualBalancePoolTokenResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.permanentVirtualBalancePoolToken.push(PermanentVirtualBalancePoolToken.decode(reader, reader.uint32(), useInterfaces));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryAllPermanentVirtualBalancePoolTokenResponse {
+    return {
+      permanentVirtualBalancePoolToken: Array.isArray(object?.permanentVirtualBalancePoolToken) ? object.permanentVirtualBalancePoolToken.map((e: any) => PermanentVirtualBalancePoolToken.fromJSON(e)) : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined
+    };
+  },
+  toJSON(message: QueryAllPermanentVirtualBalancePoolTokenResponse): unknown {
+    const obj: any = {};
+    if (message.permanentVirtualBalancePoolToken) {
+      obj.permanentVirtualBalancePoolToken = message.permanentVirtualBalancePoolToken.map(e => e ? PermanentVirtualBalancePoolToken.toJSON(e) : undefined);
+    } else {
+      obj.permanentVirtualBalancePoolToken = [];
+    }
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryAllPermanentVirtualBalancePoolTokenResponse>): QueryAllPermanentVirtualBalancePoolTokenResponse {
+    const message = createBaseQueryAllPermanentVirtualBalancePoolTokenResponse();
+    message.permanentVirtualBalancePoolToken = object.permanentVirtualBalancePoolToken?.map(e => PermanentVirtualBalancePoolToken.fromPartial(e)) || [];
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryAllPermanentVirtualBalancePoolTokenResponseAmino): QueryAllPermanentVirtualBalancePoolTokenResponse {
+    const message = createBaseQueryAllPermanentVirtualBalancePoolTokenResponse();
+    message.permanentVirtualBalancePoolToken = object.permanent_virtual_balance_pool_token?.map(e => PermanentVirtualBalancePoolToken.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryAllPermanentVirtualBalancePoolTokenResponse, useInterfaces: boolean = true): QueryAllPermanentVirtualBalancePoolTokenResponseAmino {
+    const obj: any = {};
+    if (message.permanentVirtualBalancePoolToken) {
+      obj.permanent_virtual_balance_pool_token = message.permanentVirtualBalancePoolToken.map(e => e ? PermanentVirtualBalancePoolToken.toAmino(e, useInterfaces) : undefined);
+    } else {
+      obj.permanent_virtual_balance_pool_token = message.permanentVirtualBalancePoolToken;
+    }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination, useInterfaces) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryAllPermanentVirtualBalancePoolTokenResponseAminoMsg): QueryAllPermanentVirtualBalancePoolTokenResponse {
+    return QueryAllPermanentVirtualBalancePoolTokenResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryAllPermanentVirtualBalancePoolTokenResponseProtoMsg, useInterfaces: boolean = true): QueryAllPermanentVirtualBalancePoolTokenResponse {
+    return QueryAllPermanentVirtualBalancePoolTokenResponse.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QueryAllPermanentVirtualBalancePoolTokenResponse): Uint8Array {
+    return QueryAllPermanentVirtualBalancePoolTokenResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryAllPermanentVirtualBalancePoolTokenResponse): QueryAllPermanentVirtualBalancePoolTokenResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.QueryAllPermanentVirtualBalancePoolTokenResponse",
+      value: QueryAllPermanentVirtualBalancePoolTokenResponse.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QueryAllPermanentVirtualBalancePoolTokenResponse.typeUrl, QueryAllPermanentVirtualBalancePoolTokenResponse);
 function createBaseQueryGetExpiringPoolTokenRequest(): QueryGetExpiringPoolTokenRequest {
   return {
     poolId: BigInt(0),
@@ -6734,23 +7650,23 @@ export const QueryGetExpiringPoolTokenRequest = {
 GlobalDecoderRegistry.register(QueryGetExpiringPoolTokenRequest.typeUrl, QueryGetExpiringPoolTokenRequest);
 function createBaseQueryGetExpiringPoolTokenResponse(): QueryGetExpiringPoolTokenResponse {
   return {
-    expiringPoolToken: VirtualBalancePoolToken.fromPartial({})
+    expiringPoolToken: TemporalVirtualBalancePoolToken.fromPartial({})
   };
 }
 export const QueryGetExpiringPoolTokenResponse = {
   typeUrl: "/pryzm.amm.v1.QueryGetExpiringPoolTokenResponse",
   is(o: any): o is QueryGetExpiringPoolTokenResponse {
-    return o && (o.$typeUrl === QueryGetExpiringPoolTokenResponse.typeUrl || VirtualBalancePoolToken.is(o.expiringPoolToken));
+    return o && (o.$typeUrl === QueryGetExpiringPoolTokenResponse.typeUrl || TemporalVirtualBalancePoolToken.is(o.expiringPoolToken));
   },
   isSDK(o: any): o is QueryGetExpiringPoolTokenResponseSDKType {
-    return o && (o.$typeUrl === QueryGetExpiringPoolTokenResponse.typeUrl || VirtualBalancePoolToken.isSDK(o.expiring_pool_token));
+    return o && (o.$typeUrl === QueryGetExpiringPoolTokenResponse.typeUrl || TemporalVirtualBalancePoolToken.isSDK(o.expiring_pool_token));
   },
   isAmino(o: any): o is QueryGetExpiringPoolTokenResponseAmino {
-    return o && (o.$typeUrl === QueryGetExpiringPoolTokenResponse.typeUrl || VirtualBalancePoolToken.isAmino(o.expiring_pool_token));
+    return o && (o.$typeUrl === QueryGetExpiringPoolTokenResponse.typeUrl || TemporalVirtualBalancePoolToken.isAmino(o.expiring_pool_token));
   },
   encode(message: QueryGetExpiringPoolTokenResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.expiringPoolToken !== undefined) {
-      VirtualBalancePoolToken.encode(message.expiringPoolToken, writer.uint32(10).fork()).ldelim();
+      TemporalVirtualBalancePoolToken.encode(message.expiringPoolToken, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
@@ -6762,7 +7678,7 @@ export const QueryGetExpiringPoolTokenResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.expiringPoolToken = VirtualBalancePoolToken.decode(reader, reader.uint32(), useInterfaces);
+          message.expiringPoolToken = TemporalVirtualBalancePoolToken.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -6773,29 +7689,29 @@ export const QueryGetExpiringPoolTokenResponse = {
   },
   fromJSON(object: any): QueryGetExpiringPoolTokenResponse {
     return {
-      expiringPoolToken: isSet(object.expiringPoolToken) ? VirtualBalancePoolToken.fromJSON(object.expiringPoolToken) : undefined
+      expiringPoolToken: isSet(object.expiringPoolToken) ? TemporalVirtualBalancePoolToken.fromJSON(object.expiringPoolToken) : undefined
     };
   },
   toJSON(message: QueryGetExpiringPoolTokenResponse): unknown {
     const obj: any = {};
-    message.expiringPoolToken !== undefined && (obj.expiringPoolToken = message.expiringPoolToken ? VirtualBalancePoolToken.toJSON(message.expiringPoolToken) : undefined);
+    message.expiringPoolToken !== undefined && (obj.expiringPoolToken = message.expiringPoolToken ? TemporalVirtualBalancePoolToken.toJSON(message.expiringPoolToken) : undefined);
     return obj;
   },
   fromPartial(object: Partial<QueryGetExpiringPoolTokenResponse>): QueryGetExpiringPoolTokenResponse {
     const message = createBaseQueryGetExpiringPoolTokenResponse();
-    message.expiringPoolToken = object.expiringPoolToken !== undefined && object.expiringPoolToken !== null ? VirtualBalancePoolToken.fromPartial(object.expiringPoolToken) : undefined;
+    message.expiringPoolToken = object.expiringPoolToken !== undefined && object.expiringPoolToken !== null ? TemporalVirtualBalancePoolToken.fromPartial(object.expiringPoolToken) : undefined;
     return message;
   },
   fromAmino(object: QueryGetExpiringPoolTokenResponseAmino): QueryGetExpiringPoolTokenResponse {
     const message = createBaseQueryGetExpiringPoolTokenResponse();
     if (object.expiring_pool_token !== undefined && object.expiring_pool_token !== null) {
-      message.expiringPoolToken = VirtualBalancePoolToken.fromAmino(object.expiring_pool_token);
+      message.expiringPoolToken = TemporalVirtualBalancePoolToken.fromAmino(object.expiring_pool_token);
     }
     return message;
   },
   toAmino(message: QueryGetExpiringPoolTokenResponse, useInterfaces: boolean = true): QueryGetExpiringPoolTokenResponseAmino {
     const obj: any = {};
-    obj.expiring_pool_token = message.expiringPoolToken ? VirtualBalancePoolToken.toAmino(message.expiringPoolToken, useInterfaces) : undefined;
+    obj.expiring_pool_token = message.expiringPoolToken ? TemporalVirtualBalancePoolToken.toAmino(message.expiringPoolToken, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryGetExpiringPoolTokenResponseAminoMsg): QueryGetExpiringPoolTokenResponse {
@@ -6907,17 +7823,17 @@ function createBaseQueryAllExpiringPoolTokenResponse(): QueryAllExpiringPoolToke
 export const QueryAllExpiringPoolTokenResponse = {
   typeUrl: "/pryzm.amm.v1.QueryAllExpiringPoolTokenResponse",
   is(o: any): o is QueryAllExpiringPoolTokenResponse {
-    return o && (o.$typeUrl === QueryAllExpiringPoolTokenResponse.typeUrl || Array.isArray(o.expiringPoolToken) && (!o.expiringPoolToken.length || VirtualBalancePoolToken.is(o.expiringPoolToken[0])));
+    return o && (o.$typeUrl === QueryAllExpiringPoolTokenResponse.typeUrl || Array.isArray(o.expiringPoolToken) && (!o.expiringPoolToken.length || TemporalVirtualBalancePoolToken.is(o.expiringPoolToken[0])));
   },
   isSDK(o: any): o is QueryAllExpiringPoolTokenResponseSDKType {
-    return o && (o.$typeUrl === QueryAllExpiringPoolTokenResponse.typeUrl || Array.isArray(o.expiring_pool_token) && (!o.expiring_pool_token.length || VirtualBalancePoolToken.isSDK(o.expiring_pool_token[0])));
+    return o && (o.$typeUrl === QueryAllExpiringPoolTokenResponse.typeUrl || Array.isArray(o.expiring_pool_token) && (!o.expiring_pool_token.length || TemporalVirtualBalancePoolToken.isSDK(o.expiring_pool_token[0])));
   },
   isAmino(o: any): o is QueryAllExpiringPoolTokenResponseAmino {
-    return o && (o.$typeUrl === QueryAllExpiringPoolTokenResponse.typeUrl || Array.isArray(o.expiring_pool_token) && (!o.expiring_pool_token.length || VirtualBalancePoolToken.isAmino(o.expiring_pool_token[0])));
+    return o && (o.$typeUrl === QueryAllExpiringPoolTokenResponse.typeUrl || Array.isArray(o.expiring_pool_token) && (!o.expiring_pool_token.length || TemporalVirtualBalancePoolToken.isAmino(o.expiring_pool_token[0])));
   },
   encode(message: QueryAllExpiringPoolTokenResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.expiringPoolToken) {
-      VirtualBalancePoolToken.encode(v!, writer.uint32(10).fork()).ldelim();
+      TemporalVirtualBalancePoolToken.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.pagination !== undefined) {
       PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
@@ -6932,7 +7848,7 @@ export const QueryAllExpiringPoolTokenResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.expiringPoolToken.push(VirtualBalancePoolToken.decode(reader, reader.uint32(), useInterfaces));
+          message.expiringPoolToken.push(TemporalVirtualBalancePoolToken.decode(reader, reader.uint32(), useInterfaces));
           break;
         case 2:
           message.pagination = PageResponse.decode(reader, reader.uint32(), useInterfaces);
@@ -6946,14 +7862,14 @@ export const QueryAllExpiringPoolTokenResponse = {
   },
   fromJSON(object: any): QueryAllExpiringPoolTokenResponse {
     return {
-      expiringPoolToken: Array.isArray(object?.expiringPoolToken) ? object.expiringPoolToken.map((e: any) => VirtualBalancePoolToken.fromJSON(e)) : [],
+      expiringPoolToken: Array.isArray(object?.expiringPoolToken) ? object.expiringPoolToken.map((e: any) => TemporalVirtualBalancePoolToken.fromJSON(e)) : [],
       pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined
     };
   },
   toJSON(message: QueryAllExpiringPoolTokenResponse): unknown {
     const obj: any = {};
     if (message.expiringPoolToken) {
-      obj.expiringPoolToken = message.expiringPoolToken.map(e => e ? VirtualBalancePoolToken.toJSON(e) : undefined);
+      obj.expiringPoolToken = message.expiringPoolToken.map(e => e ? TemporalVirtualBalancePoolToken.toJSON(e) : undefined);
     } else {
       obj.expiringPoolToken = [];
     }
@@ -6962,13 +7878,13 @@ export const QueryAllExpiringPoolTokenResponse = {
   },
   fromPartial(object: Partial<QueryAllExpiringPoolTokenResponse>): QueryAllExpiringPoolTokenResponse {
     const message = createBaseQueryAllExpiringPoolTokenResponse();
-    message.expiringPoolToken = object.expiringPoolToken?.map(e => VirtualBalancePoolToken.fromPartial(e)) || [];
+    message.expiringPoolToken = object.expiringPoolToken?.map(e => TemporalVirtualBalancePoolToken.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
     return message;
   },
   fromAmino(object: QueryAllExpiringPoolTokenResponseAmino): QueryAllExpiringPoolTokenResponse {
     const message = createBaseQueryAllExpiringPoolTokenResponse();
-    message.expiringPoolToken = object.expiring_pool_token?.map(e => VirtualBalancePoolToken.fromAmino(e)) || [];
+    message.expiringPoolToken = object.expiring_pool_token?.map(e => TemporalVirtualBalancePoolToken.fromAmino(e)) || [];
     if (object.pagination !== undefined && object.pagination !== null) {
       message.pagination = PageResponse.fromAmino(object.pagination);
     }
@@ -6977,7 +7893,7 @@ export const QueryAllExpiringPoolTokenResponse = {
   toAmino(message: QueryAllExpiringPoolTokenResponse, useInterfaces: boolean = true): QueryAllExpiringPoolTokenResponseAmino {
     const obj: any = {};
     if (message.expiringPoolToken) {
-      obj.expiring_pool_token = message.expiringPoolToken.map(e => e ? VirtualBalancePoolToken.toAmino(e, useInterfaces) : undefined);
+      obj.expiring_pool_token = message.expiringPoolToken.map(e => e ? TemporalVirtualBalancePoolToken.toAmino(e, useInterfaces) : undefined);
     } else {
       obj.expiring_pool_token = message.expiringPoolToken;
     }

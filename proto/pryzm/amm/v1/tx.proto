@@ -60,6 +60,7 @@ service Msg {
   rpc AddMaturityToYamm(MsgAddMaturityToYamm) returns (MsgAddMaturityToYammResponse);
   rpc SetInitializationAllowList(MsgSetInitializationAllowList) returns (MsgSetInitializationAllowListResponse);
   rpc SetPoolAdmins(MsgSetPoolAdmins) returns (MsgSetPoolAdminsResponse);
+  rpc SetPoolJoinBlocked(MsgSetPoolJoinBlocked) returns (MsgSetPoolJoinBlockedResponse);
   rpc SetPauseAllowList(MsgSetPauseAllowList) returns (MsgSetPauseAllowListResponse);
   rpc SetPauseWindow(MsgSetPauseWindow) returns (MsgSetPauseWindowResponse);
   rpc SetOrderPairDisabled(MsgSetOrderPairDisabled) returns (MsgSetOrderPairDisabledResponse);
@@ -335,6 +336,7 @@ message MsgCreateWeightedPool {
   repeated string admins = 14 [(amino.dont_omitempty) = true];
   repeated string pause_allow_list = 15 [(amino.dont_omitempty) = true];
   SwapFeeUpdateParams swap_fee_update_params = 16 [(gogoproto.nullable) = true];
+  bool join_blocked = 17;
 }
 
 message MsgCreateWeightedPoolResponse {
@@ -365,6 +367,11 @@ message MsgInitializePool {
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 pool_id = 2 [(amino.dont_omitempty) = true];
   repeated cosmos.base.v1beta1.Coin amounts_in = 3 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  // this is only supported for weighted pools
+  repeated cosmos.base.v1beta1.Coin permanent_virtual_balances = 4 [
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
@@ -570,6 +577,17 @@ message MsgSetRecoveryMode {
 
 message MsgSetRecoveryModeResponse {}
 
+message MsgSetPoolJoinBlocked {
+  option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "pryzm/amm/v1/SetPoolJoinBlocked";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64 pool_id = 2 [(amino.dont_omitempty) = true];
+  bool join_blocked = 3 [(amino.dont_omitempty) = true];
+}
+
+message MsgSetPoolJoinBlockedResponse {}
+
 message MsgRecoveryExit {
   option (cosmos.msg.v1.signer) = "creator";
   option (amino.name) = "pryzm/amm/v1/RecoveryExit";
@@ -750,6 +768,7 @@ message MsgUpdateParams {
   OrderParameters order_parameters = 4 [(gogoproto.nullable) = true];
   AuthorizationParameters authorization_parameters = 5 [(gogoproto.nullable) = true];
   GasParameters gas_parameters = 6 [(gogoproto.nullable) = true];
+  WeightedPoolParameters weighted_pool_parameters = 7 [(gogoproto.nullable) = true];
 }
 
 message MsgUpdateParamsResponse {}

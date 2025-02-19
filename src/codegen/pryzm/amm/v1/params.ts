@@ -247,6 +247,25 @@ export interface GasParametersSDKType {
   submit_order: bigint;
   proposal_match_order: bigint;
 }
+export interface WeightedPoolParameters {
+  /** This is applied only if the pool is initialized, for drained pools weights can be updated instantly. */
+  minWeightUpdateDurationMillis: bigint;
+}
+export interface WeightedPoolParametersProtoMsg {
+  typeUrl: "/pryzm.amm.v1.WeightedPoolParameters";
+  value: Uint8Array;
+}
+export interface WeightedPoolParametersAmino {
+  /** This is applied only if the pool is initialized, for drained pools weights can be updated instantly. */
+  min_weight_update_duration_millis: string;
+}
+export interface WeightedPoolParametersAminoMsg {
+  type: "/pryzm.amm.v1.WeightedPoolParameters";
+  value: WeightedPoolParametersAmino;
+}
+export interface WeightedPoolParametersSDKType {
+  min_weight_update_duration_millis: bigint;
+}
 /** Params defines the parameters for the module. */
 export interface Params {
   generalPoolParameters: GeneralPoolParameters;
@@ -254,6 +273,7 @@ export interface Params {
   orderParameters: OrderParameters;
   authorizationParameters: AuthorizationParameters;
   gasParameters: GasParameters;
+  weightedPoolParameters: WeightedPoolParameters;
 }
 export interface ParamsProtoMsg {
   typeUrl: "/pryzm.amm.v1.Params";
@@ -266,6 +286,7 @@ export interface ParamsAmino {
   order_parameters?: OrderParametersAmino;
   authorization_parameters?: AuthorizationParametersAmino;
   gas_parameters?: GasParametersAmino;
+  weighted_pool_parameters?: WeightedPoolParametersAmino;
 }
 export interface ParamsAminoMsg {
   type: "/pryzm.amm.v1.Params";
@@ -278,6 +299,7 @@ export interface ParamsSDKType {
   order_parameters: OrderParametersSDKType;
   authorization_parameters: AuthorizationParametersSDKType;
   gas_parameters: GasParametersSDKType;
+  weighted_pool_parameters: WeightedPoolParametersSDKType;
 }
 function createBaseOrderParameters(): OrderParameters {
   return {
@@ -1256,25 +1278,109 @@ export const GasParameters = {
   }
 };
 GlobalDecoderRegistry.register(GasParameters.typeUrl, GasParameters);
+function createBaseWeightedPoolParameters(): WeightedPoolParameters {
+  return {
+    minWeightUpdateDurationMillis: BigInt(0)
+  };
+}
+export const WeightedPoolParameters = {
+  typeUrl: "/pryzm.amm.v1.WeightedPoolParameters",
+  is(o: any): o is WeightedPoolParameters {
+    return o && (o.$typeUrl === WeightedPoolParameters.typeUrl || typeof o.minWeightUpdateDurationMillis === "bigint");
+  },
+  isSDK(o: any): o is WeightedPoolParametersSDKType {
+    return o && (o.$typeUrl === WeightedPoolParameters.typeUrl || typeof o.min_weight_update_duration_millis === "bigint");
+  },
+  isAmino(o: any): o is WeightedPoolParametersAmino {
+    return o && (o.$typeUrl === WeightedPoolParameters.typeUrl || typeof o.min_weight_update_duration_millis === "bigint");
+  },
+  encode(message: WeightedPoolParameters, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.minWeightUpdateDurationMillis !== BigInt(0)) {
+      writer.uint32(8).int64(message.minWeightUpdateDurationMillis);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): WeightedPoolParameters {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseWeightedPoolParameters();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.minWeightUpdateDurationMillis = reader.int64();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): WeightedPoolParameters {
+    return {
+      minWeightUpdateDurationMillis: isSet(object.minWeightUpdateDurationMillis) ? BigInt(object.minWeightUpdateDurationMillis.toString()) : BigInt(0)
+    };
+  },
+  toJSON(message: WeightedPoolParameters): unknown {
+    const obj: any = {};
+    message.minWeightUpdateDurationMillis !== undefined && (obj.minWeightUpdateDurationMillis = (message.minWeightUpdateDurationMillis || BigInt(0)).toString());
+    return obj;
+  },
+  fromPartial(object: Partial<WeightedPoolParameters>): WeightedPoolParameters {
+    const message = createBaseWeightedPoolParameters();
+    message.minWeightUpdateDurationMillis = object.minWeightUpdateDurationMillis !== undefined && object.minWeightUpdateDurationMillis !== null ? BigInt(object.minWeightUpdateDurationMillis.toString()) : BigInt(0);
+    return message;
+  },
+  fromAmino(object: WeightedPoolParametersAmino): WeightedPoolParameters {
+    const message = createBaseWeightedPoolParameters();
+    if (object.min_weight_update_duration_millis !== undefined && object.min_weight_update_duration_millis !== null) {
+      message.minWeightUpdateDurationMillis = BigInt(object.min_weight_update_duration_millis);
+    }
+    return message;
+  },
+  toAmino(message: WeightedPoolParameters, useInterfaces: boolean = true): WeightedPoolParametersAmino {
+    const obj: any = {};
+    obj.min_weight_update_duration_millis = message.minWeightUpdateDurationMillis ? message.minWeightUpdateDurationMillis.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: WeightedPoolParametersAminoMsg): WeightedPoolParameters {
+    return WeightedPoolParameters.fromAmino(object.value);
+  },
+  fromProtoMsg(message: WeightedPoolParametersProtoMsg, useInterfaces: boolean = true): WeightedPoolParameters {
+    return WeightedPoolParameters.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: WeightedPoolParameters): Uint8Array {
+    return WeightedPoolParameters.encode(message).finish();
+  },
+  toProtoMsg(message: WeightedPoolParameters): WeightedPoolParametersProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.WeightedPoolParameters",
+      value: WeightedPoolParameters.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(WeightedPoolParameters.typeUrl, WeightedPoolParameters);
 function createBaseParams(): Params {
   return {
     generalPoolParameters: GeneralPoolParameters.fromPartial({}),
     yammParameters: YammParameters.fromPartial({}),
     orderParameters: OrderParameters.fromPartial({}),
     authorizationParameters: AuthorizationParameters.fromPartial({}),
-    gasParameters: GasParameters.fromPartial({})
+    gasParameters: GasParameters.fromPartial({}),
+    weightedPoolParameters: WeightedPoolParameters.fromPartial({})
   };
 }
 export const Params = {
   typeUrl: "/pryzm.amm.v1.Params",
   is(o: any): o is Params {
-    return o && (o.$typeUrl === Params.typeUrl || GeneralPoolParameters.is(o.generalPoolParameters) && YammParameters.is(o.yammParameters) && OrderParameters.is(o.orderParameters) && AuthorizationParameters.is(o.authorizationParameters) && GasParameters.is(o.gasParameters));
+    return o && (o.$typeUrl === Params.typeUrl || GeneralPoolParameters.is(o.generalPoolParameters) && YammParameters.is(o.yammParameters) && OrderParameters.is(o.orderParameters) && AuthorizationParameters.is(o.authorizationParameters) && GasParameters.is(o.gasParameters) && WeightedPoolParameters.is(o.weightedPoolParameters));
   },
   isSDK(o: any): o is ParamsSDKType {
-    return o && (o.$typeUrl === Params.typeUrl || GeneralPoolParameters.isSDK(o.general_pool_parameters) && YammParameters.isSDK(o.yamm_parameters) && OrderParameters.isSDK(o.order_parameters) && AuthorizationParameters.isSDK(o.authorization_parameters) && GasParameters.isSDK(o.gas_parameters));
+    return o && (o.$typeUrl === Params.typeUrl || GeneralPoolParameters.isSDK(o.general_pool_parameters) && YammParameters.isSDK(o.yamm_parameters) && OrderParameters.isSDK(o.order_parameters) && AuthorizationParameters.isSDK(o.authorization_parameters) && GasParameters.isSDK(o.gas_parameters) && WeightedPoolParameters.isSDK(o.weighted_pool_parameters));
   },
   isAmino(o: any): o is ParamsAmino {
-    return o && (o.$typeUrl === Params.typeUrl || GeneralPoolParameters.isAmino(o.general_pool_parameters) && YammParameters.isAmino(o.yamm_parameters) && OrderParameters.isAmino(o.order_parameters) && AuthorizationParameters.isAmino(o.authorization_parameters) && GasParameters.isAmino(o.gas_parameters));
+    return o && (o.$typeUrl === Params.typeUrl || GeneralPoolParameters.isAmino(o.general_pool_parameters) && YammParameters.isAmino(o.yamm_parameters) && OrderParameters.isAmino(o.order_parameters) && AuthorizationParameters.isAmino(o.authorization_parameters) && GasParameters.isAmino(o.gas_parameters) && WeightedPoolParameters.isAmino(o.weighted_pool_parameters));
   },
   encode(message: Params, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.generalPoolParameters !== undefined) {
@@ -1291,6 +1397,9 @@ export const Params = {
     }
     if (message.gasParameters !== undefined) {
       GasParameters.encode(message.gasParameters, writer.uint32(42).fork()).ldelim();
+    }
+    if (message.weightedPoolParameters !== undefined) {
+      WeightedPoolParameters.encode(message.weightedPoolParameters, writer.uint32(50).fork()).ldelim();
     }
     return writer;
   },
@@ -1316,6 +1425,9 @@ export const Params = {
         case 5:
           message.gasParameters = GasParameters.decode(reader, reader.uint32(), useInterfaces);
           break;
+        case 6:
+          message.weightedPoolParameters = WeightedPoolParameters.decode(reader, reader.uint32(), useInterfaces);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1329,7 +1441,8 @@ export const Params = {
       yammParameters: isSet(object.yammParameters) ? YammParameters.fromJSON(object.yammParameters) : undefined,
       orderParameters: isSet(object.orderParameters) ? OrderParameters.fromJSON(object.orderParameters) : undefined,
       authorizationParameters: isSet(object.authorizationParameters) ? AuthorizationParameters.fromJSON(object.authorizationParameters) : undefined,
-      gasParameters: isSet(object.gasParameters) ? GasParameters.fromJSON(object.gasParameters) : undefined
+      gasParameters: isSet(object.gasParameters) ? GasParameters.fromJSON(object.gasParameters) : undefined,
+      weightedPoolParameters: isSet(object.weightedPoolParameters) ? WeightedPoolParameters.fromJSON(object.weightedPoolParameters) : undefined
     };
   },
   toJSON(message: Params): unknown {
@@ -1339,6 +1452,7 @@ export const Params = {
     message.orderParameters !== undefined && (obj.orderParameters = message.orderParameters ? OrderParameters.toJSON(message.orderParameters) : undefined);
     message.authorizationParameters !== undefined && (obj.authorizationParameters = message.authorizationParameters ? AuthorizationParameters.toJSON(message.authorizationParameters) : undefined);
     message.gasParameters !== undefined && (obj.gasParameters = message.gasParameters ? GasParameters.toJSON(message.gasParameters) : undefined);
+    message.weightedPoolParameters !== undefined && (obj.weightedPoolParameters = message.weightedPoolParameters ? WeightedPoolParameters.toJSON(message.weightedPoolParameters) : undefined);
     return obj;
   },
   fromPartial(object: Partial<Params>): Params {
@@ -1348,6 +1462,7 @@ export const Params = {
     message.orderParameters = object.orderParameters !== undefined && object.orderParameters !== null ? OrderParameters.fromPartial(object.orderParameters) : undefined;
     message.authorizationParameters = object.authorizationParameters !== undefined && object.authorizationParameters !== null ? AuthorizationParameters.fromPartial(object.authorizationParameters) : undefined;
     message.gasParameters = object.gasParameters !== undefined && object.gasParameters !== null ? GasParameters.fromPartial(object.gasParameters) : undefined;
+    message.weightedPoolParameters = object.weightedPoolParameters !== undefined && object.weightedPoolParameters !== null ? WeightedPoolParameters.fromPartial(object.weightedPoolParameters) : undefined;
     return message;
   },
   fromAmino(object: ParamsAmino): Params {
@@ -1367,6 +1482,9 @@ export const Params = {
     if (object.gas_parameters !== undefined && object.gas_parameters !== null) {
       message.gasParameters = GasParameters.fromAmino(object.gas_parameters);
     }
+    if (object.weighted_pool_parameters !== undefined && object.weighted_pool_parameters !== null) {
+      message.weightedPoolParameters = WeightedPoolParameters.fromAmino(object.weighted_pool_parameters);
+    }
     return message;
   },
   toAmino(message: Params, useInterfaces: boolean = true): ParamsAmino {
@@ -1376,6 +1494,7 @@ export const Params = {
     obj.order_parameters = message.orderParameters ? OrderParameters.toAmino(message.orderParameters, useInterfaces) : undefined;
     obj.authorization_parameters = message.authorizationParameters ? AuthorizationParameters.toAmino(message.authorizationParameters, useInterfaces) : undefined;
     obj.gas_parameters = message.gasParameters ? GasParameters.toAmino(message.gasParameters, useInterfaces) : undefined;
+    obj.weighted_pool_parameters = message.weightedPoolParameters ? WeightedPoolParameters.toAmino(message.weightedPoolParameters, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: ParamsAminoMsg): Params {

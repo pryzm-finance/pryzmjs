@@ -1,6 +1,6 @@
 import { setPaginationParams } from "../../../helpers";
 import { LCDClient } from "@refractedlabs/cosmology-lcd-fork";
-import { QueryParamsRequest, QueryParamsResponseSDKType, QueryGetPoolTokenRequest, QueryGetPoolTokenResponseSDKType, QueryAllPoolTokenRequest, QueryAllPoolTokenResponseSDKType, QueryAllPoolTokenForPoolRequest, QueryAllPoolTokenForPoolResponseSDKType, QueryAllPoolTokenWeightRequest, QueryAllPoolTokenWeightResponseSDKType, QueryGetPoolTokenWeightRequest, QueryGetPoolTokenWeightResponseSDKType, QueryGetPoolRequest, QueryGetPoolResponseSDKType, QueryAllPoolRequest, QueryAllPoolResponseSDKType, QueryGetWeightedTokenRequest, QueryGetWeightedTokenResponseSDKType, QueryAllWeightedTokenRequest, QueryAllWeightedTokenResponseSDKType, QueryGetWeightUpdateTimingRequest, QueryGetWeightUpdateTimingResponseSDKType, QueryAllWeightUpdateTimingRequest, QueryAllWeightUpdateTimingResponseSDKType, QuerySimulateSingleSwapRequest, QuerySimulateSingleSwapResponseSDKType, QuerySimulateInitializePoolRequest, QuerySimulateInitializePoolResponseSDKType, QuerySimulateJoinAllTokensExactLptRequest, QuerySimulateJoinAllTokensExactLptResponseSDKType, QuerySimulateJoinExactTokensRequest, QuerySimulateJoinExactTokensResponseSDKType, QuerySimulateZeroImpactJoinYammRequest, QuerySimulateZeroImpactJoinYammResponseSDKType, QuerySimulateJoinTokenExactLptRequest, QuerySimulateJoinTokenExactLptResponseSDKType, QuerySimulateExitTokenExactLptRequest, QuerySimulateExitTokenExactLptResponseSDKType, QuerySimulateExitExactTokensRequest, QuerySimulateExitExactTokensResponseSDKType, QuerySimulateExitAllTokensExactLptRequest, QuerySimulateExitAllTokensExactLptResponseSDKType, QuerySpotPriceRequest, QuerySpotPriceResponseSDKType, QueryGetIntroducingPoolTokenRequest, QueryGetIntroducingPoolTokenResponseSDKType, QueryAllIntroducingPoolTokenRequest, QueryAllIntroducingPoolTokenResponseSDKType, QueryGetExpiringPoolTokenRequest, QueryGetExpiringPoolTokenResponseSDKType, QueryAllExpiringPoolTokenRequest, QueryAllExpiringPoolTokenResponseSDKType, QueryLpTokenRequest, QueryLpTokenResponseSDKType, QuerySimulateBatchSwapRequest, QuerySimulateBatchSwapResponseSDKType, QueryGetYammConfigurationRequest, QueryGetYammConfigurationResponseSDKType, QueryAllYammConfigurationRequest, QueryAllYammConfigurationResponseSDKType, QueryGetWhitelistedRouteRequest, QueryGetWhitelistedRouteResponseSDKType, QueryAllWhitelistedRouteRequest, QueryAllWhitelistedRouteResponseSDKType, QueryGetOrderRequest, QueryGetOrderResponseSDKType, QueryAllOrderRequest, QueryAllOrderResponseSDKType, QueryGetExecutableOrderRequest, QueryGetExecutableOrderResponseSDKType, QueryAllExecutableOrderRequest, QueryAllExecutableOrderResponseSDKType, QueryGetScheduleOrderRequest, QueryGetScheduleOrderResponseSDKType, QueryAllScheduleOrderRequest, QueryAllScheduleOrderResponseSDKType, QueryGetOraclePricePairRequest, QueryGetOraclePricePairResponseSDKType, QueryAllOraclePricePairRequest, QueryAllOraclePricePairResponseSDKType, QueryVaultPauseModeRequest, QueryVaultPauseModeResponseSDKType, QueryGetPendingTokenIntroductionRequest, QueryGetPendingTokenIntroductionResponseSDKType, QueryAllPendingTokenIntroductionRequest, QueryAllPendingTokenIntroductionResponseSDKType, QueryYammPoolIdRequest, QueryYammPoolIdResponseSDKType, QueryOrderStepBoundsRequest, QueryOrderStepBoundsResponseSDKType, QueryAllDisabledOrderPairRequest, QueryAllDisabledOrderPairResponseSDKType, QueryOrderPairDisabledRequest, QueryOrderPairDisabledResponseSDKType } from "./query";
+import { QueryParamsRequest, QueryParamsResponseSDKType, QueryGetPoolTokenRequest, QueryGetPoolTokenResponseSDKType, QueryAllPoolTokenRequest, QueryAllPoolTokenResponseSDKType, QueryAllPoolTokenForPoolRequest, QueryAllPoolTokenForPoolResponseSDKType, QueryAllPoolTokenWeightRequest, QueryAllPoolTokenWeightResponseSDKType, QueryGetPoolTokenWeightRequest, QueryGetPoolTokenWeightResponseSDKType, QueryAllPoolTokenInfoRequest, QueryAllPoolTokenInfoResponseSDKType, QueryGetPoolTokenInfoRequest, QueryGetPoolTokenInfoResponseSDKType, QueryGetPoolRequest, QueryGetPoolResponseSDKType, QueryAllPoolRequest, QueryAllPoolResponseSDKType, QueryGetWeightedTokenRequest, QueryGetWeightedTokenResponseSDKType, QueryAllWeightedTokenRequest, QueryAllWeightedTokenResponseSDKType, QueryGetWeightUpdateTimingRequest, QueryGetWeightUpdateTimingResponseSDKType, QueryAllWeightUpdateTimingRequest, QueryAllWeightUpdateTimingResponseSDKType, QuerySimulateSingleSwapRequest, QuerySimulateSingleSwapResponseSDKType, QuerySimulateInitializePoolRequest, QuerySimulateInitializePoolResponseSDKType, QuerySimulateJoinAllTokensExactLptRequest, QuerySimulateJoinAllTokensExactLptResponseSDKType, QuerySimulateJoinExactTokensRequest, QuerySimulateJoinExactTokensResponseSDKType, QuerySimulateZeroImpactJoinYammRequest, QuerySimulateZeroImpactJoinYammResponseSDKType, QuerySimulateJoinTokenExactLptRequest, QuerySimulateJoinTokenExactLptResponseSDKType, QuerySimulateExitTokenExactLptRequest, QuerySimulateExitTokenExactLptResponseSDKType, QuerySimulateExitExactTokensRequest, QuerySimulateExitExactTokensResponseSDKType, QuerySimulateExitAllTokensExactLptRequest, QuerySimulateExitAllTokensExactLptResponseSDKType, QuerySpotPriceRequest, QuerySpotPriceResponseSDKType, QueryGetPermanentVirtualBalancePoolTokenRequest, QueryGetPermanentVirtualBalancePoolTokenResponseSDKType, QueryAllPermanentVirtualBalancePoolTokenRequest, QueryAllPermanentVirtualBalancePoolTokenResponseSDKType, QueryGetIntroducingPoolTokenRequest, QueryGetIntroducingPoolTokenResponseSDKType, QueryAllIntroducingPoolTokenRequest, QueryAllIntroducingPoolTokenResponseSDKType, QueryGetExpiringPoolTokenRequest, QueryGetExpiringPoolTokenResponseSDKType, QueryAllExpiringPoolTokenRequest, QueryAllExpiringPoolTokenResponseSDKType, QueryLpTokenRequest, QueryLpTokenResponseSDKType, QuerySimulateBatchSwapRequest, QuerySimulateBatchSwapResponseSDKType, QueryGetYammConfigurationRequest, QueryGetYammConfigurationResponseSDKType, QueryAllYammConfigurationRequest, QueryAllYammConfigurationResponseSDKType, QueryGetWhitelistedRouteRequest, QueryGetWhitelistedRouteResponseSDKType, QueryAllWhitelistedRouteRequest, QueryAllWhitelistedRouteResponseSDKType, QueryGetOrderRequest, QueryGetOrderResponseSDKType, QueryAllOrderRequest, QueryAllOrderResponseSDKType, QueryGetExecutableOrderRequest, QueryGetExecutableOrderResponseSDKType, QueryAllExecutableOrderRequest, QueryAllExecutableOrderResponseSDKType, QueryGetScheduleOrderRequest, QueryGetScheduleOrderResponseSDKType, QueryAllScheduleOrderRequest, QueryAllScheduleOrderResponseSDKType, QueryGetOraclePricePairRequest, QueryGetOraclePricePairResponseSDKType, QueryAllOraclePricePairRequest, QueryAllOraclePricePairResponseSDKType, QueryVaultPauseModeRequest, QueryVaultPauseModeResponseSDKType, QueryGetPendingTokenIntroductionRequest, QueryGetPendingTokenIntroductionResponseSDKType, QueryAllPendingTokenIntroductionRequest, QueryAllPendingTokenIntroductionResponseSDKType, QueryYammPoolIdRequest, QueryYammPoolIdResponseSDKType, QueryOrderStepBoundsRequest, QueryOrderStepBoundsResponseSDKType, QueryAllDisabledOrderPairRequest, QueryAllDisabledOrderPairResponseSDKType, QueryOrderPairDisabledRequest, QueryOrderPairDisabledResponseSDKType } from "./query";
 export class LCDQueryClient {
   req: LCDClient;
   constructor({
@@ -15,6 +15,8 @@ export class LCDQueryClient {
     this.poolTokenAllForPool = this.poolTokenAllForPool.bind(this);
     this.poolTokenWeightAll = this.poolTokenWeightAll.bind(this);
     this.poolTokenWeight = this.poolTokenWeight.bind(this);
+    this.poolTokenInfoAll = this.poolTokenInfoAll.bind(this);
+    this.poolTokenInfo = this.poolTokenInfo.bind(this);
     this.pool = this.pool.bind(this);
     this.poolAll = this.poolAll.bind(this);
     this.weightedToken = this.weightedToken.bind(this);
@@ -31,6 +33,8 @@ export class LCDQueryClient {
     this.simulateExitExactTokens = this.simulateExitExactTokens.bind(this);
     this.simulateExitAllTokensExactLpt = this.simulateExitAllTokensExactLpt.bind(this);
     this.spotPrice = this.spotPrice.bind(this);
+    this.permanentVirtualBalancePoolToken = this.permanentVirtualBalancePoolToken.bind(this);
+    this.permanentVirtualBalancePoolTokenAll = this.permanentVirtualBalancePoolTokenAll.bind(this);
     this.introducingPoolToken = this.introducingPoolToken.bind(this);
     this.introducingPoolTokenAll = this.introducingPoolTokenAll.bind(this);
     this.expiringPoolToken = this.expiringPoolToken.bind(this);
@@ -106,6 +110,20 @@ export class LCDQueryClient {
     const endpoint = `pryzm/amm/v1/pool_token_weight/${params.poolId}/${params.denom}`;
     return await this.req.get<QueryGetPoolTokenWeightResponseSDKType>(endpoint);
   }
+  /* Queries a list of TokenInfo
+   computing normalized weights requires reading all tokens from the context
+   and computing weight for all of them. And the number of tokens in a pool is not expected to
+   be high.
+   therefore, this query is not paginated */
+  async poolTokenInfoAll(params: QueryAllPoolTokenInfoRequest): Promise<QueryAllPoolTokenInfoResponseSDKType> {
+    const endpoint = `pryzm/amm/v1/pool_token_info/${params.poolId}`;
+    return await this.req.get<QueryAllPoolTokenInfoResponseSDKType>(endpoint);
+  }
+  /* Queries a TokenInfo */
+  async poolTokenInfo(params: QueryGetPoolTokenInfoRequest): Promise<QueryGetPoolTokenInfoResponseSDKType> {
+    const endpoint = `pryzm/amm/v1/pool_token_info/${params.poolId}/${params.denom}`;
+    return await this.req.get<QueryGetPoolTokenInfoResponseSDKType>(endpoint);
+  }
   /* Queries a Pool by id. */
   async pool(params: QueryGetPoolRequest): Promise<QueryGetPoolResponseSDKType> {
     const endpoint = `pryzm/amm/v1/pool/${params.id}`;
@@ -178,6 +196,9 @@ export class LCDQueryClient {
     };
     if (typeof params?.amountsIn !== "undefined") {
       options.params.amounts_in = params.amountsIn;
+    }
+    if (typeof params?.permanentVirtualBalances !== "undefined") {
+      options.params.permanent_virtual_balances = params.permanentVirtualBalances;
     }
     const endpoint = `pryzm/amm/v1/simulate_initialize_pool/${params.poolId}`;
     return await this.req.get<QuerySimulateInitializePoolResponseSDKType>(endpoint, options);
@@ -269,6 +290,24 @@ export class LCDQueryClient {
   async spotPrice(params: QuerySpotPriceRequest): Promise<QuerySpotPriceResponseSDKType> {
     const endpoint = `pryzm/amm/v1/spot_price/${params.poolId}/${params.tokenIn}/${params.tokenOut}/${params.applyFee}`;
     return await this.req.get<QuerySpotPriceResponseSDKType>(endpoint);
+  }
+  /* Queries a PermanentVirtualBalancePoolToken by index. */
+  async permanentVirtualBalancePoolToken(params: QueryGetPermanentVirtualBalancePoolTokenRequest): Promise<QueryGetPermanentVirtualBalancePoolTokenResponseSDKType> {
+    const endpoint = `pryzm/amm/v1/permanent_virtual_balance_pool_token/${params.poolId}/${params.denom}`;
+    return await this.req.get<QueryGetPermanentVirtualBalancePoolTokenResponseSDKType>(endpoint);
+  }
+  /* Queries a list of PermanentVirtualBalancePoolToken items. */
+  async permanentVirtualBalancePoolTokenAll(params: QueryAllPermanentVirtualBalancePoolTokenRequest = {
+    pagination: undefined
+  }): Promise<QueryAllPermanentVirtualBalancePoolTokenResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.pagination !== "undefined") {
+      setPaginationParams(options, params.pagination);
+    }
+    const endpoint = `pryzm/amm/v1/permanent_virtual_balance_pool_token`;
+    return await this.req.get<QueryAllPermanentVirtualBalancePoolTokenResponseSDKType>(endpoint, options);
   }
   /* Queries a IntroducingPoolToken by index. */
   async introducingPoolToken(params: QueryGetIntroducingPoolTokenRequest): Promise<QueryGetIntroducingPoolTokenResponseSDKType> {

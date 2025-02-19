@@ -7,7 +7,7 @@ import { WhitelistedRoute, WhitelistedRouteAmino, WhitelistedRouteSDKType } from
 import { PairMatchProposal, PairMatchProposalAmino, PairMatchProposalSDKType, MatchedPairSummary, MatchedPairSummaryAmino, MatchedPairSummarySDKType } from "./pair_match_proposal";
 import { TokenCircuitBreakerSettings, TokenCircuitBreakerSettingsAmino, TokenCircuitBreakerSettingsSDKType } from "./token_circuit_breaker_settings";
 import { OraclePricePair, OraclePricePairAmino, OraclePricePairSDKType } from "./oracle_price_pair";
-import { GeneralPoolParameters, GeneralPoolParametersAmino, GeneralPoolParametersSDKType, YammParameters, YammParametersAmino, YammParametersSDKType, OrderParameters, OrderParametersAmino, OrderParametersSDKType, AuthorizationParameters, AuthorizationParametersAmino, AuthorizationParametersSDKType, GasParameters, GasParametersAmino, GasParametersSDKType } from "./params";
+import { GeneralPoolParameters, GeneralPoolParametersAmino, GeneralPoolParametersSDKType, YammParameters, YammParametersAmino, YammParametersSDKType, OrderParameters, OrderParametersAmino, OrderParametersSDKType, AuthorizationParameters, AuthorizationParametersAmino, AuthorizationParametersSDKType, GasParameters, GasParametersAmino, GasParametersSDKType, WeightedPoolParameters, WeightedPoolParametersAmino, WeightedPoolParametersSDKType } from "./params";
 import { DisabledOrderPair, DisabledOrderPairAmino, DisabledOrderPairSDKType, Order, OrderAmino, OrderSDKType } from "./order";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, padDecimal } from "../../../helpers";
@@ -478,6 +478,7 @@ export interface MsgCreateWeightedPool {
   admins: string[];
   pauseAllowList: string[];
   swapFeeUpdateParams?: SwapFeeUpdateParams;
+  joinBlocked: boolean;
 }
 export interface MsgCreateWeightedPoolProtoMsg {
   typeUrl: "/pryzm.amm.v1.MsgCreateWeightedPool";
@@ -502,6 +503,7 @@ export interface MsgCreateWeightedPoolAmino {
   admins: string[];
   pause_allow_list: string[];
   swap_fee_update_params?: SwapFeeUpdateParamsAmino;
+  join_blocked?: boolean;
 }
 export interface MsgCreateWeightedPoolAminoMsg {
   type: "pryzm/amm/v1/CreateWeightedPool";
@@ -519,6 +521,7 @@ export interface MsgCreateWeightedPoolSDKType {
   admins: string[];
   pause_allow_list: string[];
   swap_fee_update_params?: SwapFeeUpdateParamsSDKType;
+  join_blocked: boolean;
 }
 export interface MsgCreateWeightedPoolResponse {
   poolId: bigint;
@@ -580,6 +583,8 @@ export interface MsgInitializePool {
   creator: string;
   poolId: bigint;
   amountsIn: Coin[];
+  /** this is only supported for weighted pools */
+  permanentVirtualBalances: Coin[];
 }
 export interface MsgInitializePoolProtoMsg {
   typeUrl: "/pryzm.amm.v1.MsgInitializePool";
@@ -589,6 +594,8 @@ export interface MsgInitializePoolAmino {
   creator?: string;
   pool_id: string;
   amounts_in?: CoinAmino[];
+  /** this is only supported for weighted pools */
+  permanent_virtual_balances?: CoinAmino[];
 }
 export interface MsgInitializePoolAminoMsg {
   type: "pryzm/amm/v1/InitializePool";
@@ -598,6 +605,7 @@ export interface MsgInitializePoolSDKType {
   creator: string;
   pool_id: bigint;
   amounts_in: CoinSDKType[];
+  permanent_virtual_balances: CoinSDKType[];
 }
 export interface MsgInitializePoolResponse {
   lptOut: Coin;
@@ -1038,6 +1046,40 @@ export interface MsgSetRecoveryModeResponseAminoMsg {
   value: MsgSetRecoveryModeResponseAmino;
 }
 export interface MsgSetRecoveryModeResponseSDKType {}
+export interface MsgSetPoolJoinBlocked {
+  creator: string;
+  poolId: bigint;
+  joinBlocked: boolean;
+}
+export interface MsgSetPoolJoinBlockedProtoMsg {
+  typeUrl: "/pryzm.amm.v1.MsgSetPoolJoinBlocked";
+  value: Uint8Array;
+}
+export interface MsgSetPoolJoinBlockedAmino {
+  creator?: string;
+  pool_id: string;
+  join_blocked: boolean;
+}
+export interface MsgSetPoolJoinBlockedAminoMsg {
+  type: "pryzm/amm/v1/SetPoolJoinBlocked";
+  value: MsgSetPoolJoinBlockedAmino;
+}
+export interface MsgSetPoolJoinBlockedSDKType {
+  creator: string;
+  pool_id: bigint;
+  join_blocked: boolean;
+}
+export interface MsgSetPoolJoinBlockedResponse {}
+export interface MsgSetPoolJoinBlockedResponseProtoMsg {
+  typeUrl: "/pryzm.amm.v1.MsgSetPoolJoinBlockedResponse";
+  value: Uint8Array;
+}
+export interface MsgSetPoolJoinBlockedResponseAmino {}
+export interface MsgSetPoolJoinBlockedResponseAminoMsg {
+  type: "/pryzm.amm.v1.MsgSetPoolJoinBlockedResponse";
+  value: MsgSetPoolJoinBlockedResponseAmino;
+}
+export interface MsgSetPoolJoinBlockedResponseSDKType {}
 export interface MsgRecoveryExit {
   creator: string;
   poolId: bigint;
@@ -1475,6 +1517,7 @@ export interface MsgUpdateParams {
   orderParameters?: OrderParameters;
   authorizationParameters?: AuthorizationParameters;
   gasParameters?: GasParameters;
+  weightedPoolParameters?: WeightedPoolParameters;
 }
 export interface MsgUpdateParamsProtoMsg {
   typeUrl: "/pryzm.amm.v1.MsgUpdateParams";
@@ -1487,6 +1530,7 @@ export interface MsgUpdateParamsAmino {
   order_parameters?: OrderParametersAmino;
   authorization_parameters?: AuthorizationParametersAmino;
   gas_parameters?: GasParametersAmino;
+  weighted_pool_parameters?: WeightedPoolParametersAmino;
 }
 export interface MsgUpdateParamsAminoMsg {
   type: "pryzm/amm/v1/UpdateParams";
@@ -1499,6 +1543,7 @@ export interface MsgUpdateParamsSDKType {
   order_parameters?: OrderParametersSDKType;
   authorization_parameters?: AuthorizationParametersSDKType;
   gas_parameters?: GasParametersSDKType;
+  weighted_pool_parameters?: WeightedPoolParametersSDKType;
 }
 export interface MsgUpdateParamsResponse {}
 export interface MsgUpdateParamsResponseProtoMsg {
@@ -3978,20 +4023,21 @@ function createBaseMsgCreateWeightedPool(): MsgCreateWeightedPool {
     forceGovOwner: false,
     admins: [],
     pauseAllowList: [],
-    swapFeeUpdateParams: undefined
+    swapFeeUpdateParams: undefined,
+    joinBlocked: false
   };
 }
 export const MsgCreateWeightedPool = {
   typeUrl: "/pryzm.amm.v1.MsgCreateWeightedPool",
   aminoType: "pryzm/amm/v1/CreateWeightedPool",
   is(o: any): o is MsgCreateWeightedPool {
-    return o && (o.$typeUrl === MsgCreateWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.name === "string" && typeof o.startSwapFeeRatio === "string" && typeof o.pauseWindowDurationMillis === "bigint" && typeof o.pauseBufferDurationMillis === "bigint" && Array.isArray(o.tokens) && (!o.tokens.length || CreateWeightedPoolToken.is(o.tokens[0])) && Array.isArray(o.initializationAllowList) && (!o.initializationAllowList.length || typeof o.initializationAllowList[0] === "string") && typeof o.forceGovOwner === "boolean" && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string") && Array.isArray(o.pauseAllowList) && (!o.pauseAllowList.length || typeof o.pauseAllowList[0] === "string"));
+    return o && (o.$typeUrl === MsgCreateWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.name === "string" && typeof o.startSwapFeeRatio === "string" && typeof o.pauseWindowDurationMillis === "bigint" && typeof o.pauseBufferDurationMillis === "bigint" && Array.isArray(o.tokens) && (!o.tokens.length || CreateWeightedPoolToken.is(o.tokens[0])) && Array.isArray(o.initializationAllowList) && (!o.initializationAllowList.length || typeof o.initializationAllowList[0] === "string") && typeof o.forceGovOwner === "boolean" && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string") && Array.isArray(o.pauseAllowList) && (!o.pauseAllowList.length || typeof o.pauseAllowList[0] === "string") && typeof o.joinBlocked === "boolean");
   },
   isSDK(o: any): o is MsgCreateWeightedPoolSDKType {
-    return o && (o.$typeUrl === MsgCreateWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.name === "string" && typeof o.start_swap_fee_ratio === "string" && typeof o.pause_window_duration_millis === "bigint" && typeof o.pause_buffer_duration_millis === "bigint" && Array.isArray(o.tokens) && (!o.tokens.length || CreateWeightedPoolToken.isSDK(o.tokens[0])) && Array.isArray(o.initialization_allow_list) && (!o.initialization_allow_list.length || typeof o.initialization_allow_list[0] === "string") && typeof o.force_gov_owner === "boolean" && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string") && Array.isArray(o.pause_allow_list) && (!o.pause_allow_list.length || typeof o.pause_allow_list[0] === "string"));
+    return o && (o.$typeUrl === MsgCreateWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.name === "string" && typeof o.start_swap_fee_ratio === "string" && typeof o.pause_window_duration_millis === "bigint" && typeof o.pause_buffer_duration_millis === "bigint" && Array.isArray(o.tokens) && (!o.tokens.length || CreateWeightedPoolToken.isSDK(o.tokens[0])) && Array.isArray(o.initialization_allow_list) && (!o.initialization_allow_list.length || typeof o.initialization_allow_list[0] === "string") && typeof o.force_gov_owner === "boolean" && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string") && Array.isArray(o.pause_allow_list) && (!o.pause_allow_list.length || typeof o.pause_allow_list[0] === "string") && typeof o.join_blocked === "boolean");
   },
   isAmino(o: any): o is MsgCreateWeightedPoolAmino {
-    return o && (o.$typeUrl === MsgCreateWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.name === "string" && typeof o.start_swap_fee_ratio === "string" && typeof o.pause_window_duration_millis === "bigint" && typeof o.pause_buffer_duration_millis === "bigint" && Array.isArray(o.tokens) && (!o.tokens.length || CreateWeightedPoolToken.isAmino(o.tokens[0])) && Array.isArray(o.initialization_allow_list) && (!o.initialization_allow_list.length || typeof o.initialization_allow_list[0] === "string") && typeof o.force_gov_owner === "boolean" && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string") && Array.isArray(o.pause_allow_list) && (!o.pause_allow_list.length || typeof o.pause_allow_list[0] === "string"));
+    return o && (o.$typeUrl === MsgCreateWeightedPool.typeUrl || typeof o.creator === "string" && typeof o.name === "string" && typeof o.start_swap_fee_ratio === "string" && typeof o.pause_window_duration_millis === "bigint" && typeof o.pause_buffer_duration_millis === "bigint" && Array.isArray(o.tokens) && (!o.tokens.length || CreateWeightedPoolToken.isAmino(o.tokens[0])) && Array.isArray(o.initialization_allow_list) && (!o.initialization_allow_list.length || typeof o.initialization_allow_list[0] === "string") && typeof o.force_gov_owner === "boolean" && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string") && Array.isArray(o.pause_allow_list) && (!o.pause_allow_list.length || typeof o.pause_allow_list[0] === "string") && typeof o.join_blocked === "boolean");
   },
   encode(message: MsgCreateWeightedPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
@@ -4026,6 +4072,9 @@ export const MsgCreateWeightedPool = {
     }
     if (message.swapFeeUpdateParams !== undefined) {
       SwapFeeUpdateParams.encode(message.swapFeeUpdateParams, writer.uint32(130).fork()).ldelim();
+    }
+    if (message.joinBlocked === true) {
+      writer.uint32(136).bool(message.joinBlocked);
     }
     return writer;
   },
@@ -4069,6 +4118,9 @@ export const MsgCreateWeightedPool = {
         case 16:
           message.swapFeeUpdateParams = SwapFeeUpdateParams.decode(reader, reader.uint32(), useInterfaces);
           break;
+        case 17:
+          message.joinBlocked = reader.bool();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -4088,7 +4140,8 @@ export const MsgCreateWeightedPool = {
       forceGovOwner: isSet(object.forceGovOwner) ? Boolean(object.forceGovOwner) : false,
       admins: Array.isArray(object?.admins) ? object.admins.map((e: any) => String(e)) : [],
       pauseAllowList: Array.isArray(object?.pauseAllowList) ? object.pauseAllowList.map((e: any) => String(e)) : [],
-      swapFeeUpdateParams: isSet(object.swapFeeUpdateParams) ? SwapFeeUpdateParams.fromJSON(object.swapFeeUpdateParams) : undefined
+      swapFeeUpdateParams: isSet(object.swapFeeUpdateParams) ? SwapFeeUpdateParams.fromJSON(object.swapFeeUpdateParams) : undefined,
+      joinBlocked: isSet(object.joinBlocked) ? Boolean(object.joinBlocked) : false
     };
   },
   toJSON(message: MsgCreateWeightedPool): unknown {
@@ -4120,6 +4173,7 @@ export const MsgCreateWeightedPool = {
       obj.pauseAllowList = [];
     }
     message.swapFeeUpdateParams !== undefined && (obj.swapFeeUpdateParams = message.swapFeeUpdateParams ? SwapFeeUpdateParams.toJSON(message.swapFeeUpdateParams) : undefined);
+    message.joinBlocked !== undefined && (obj.joinBlocked = message.joinBlocked);
     return obj;
   },
   fromPartial(object: Partial<MsgCreateWeightedPool>): MsgCreateWeightedPool {
@@ -4135,6 +4189,7 @@ export const MsgCreateWeightedPool = {
     message.admins = object.admins?.map(e => e) || [];
     message.pauseAllowList = object.pauseAllowList?.map(e => e) || [];
     message.swapFeeUpdateParams = object.swapFeeUpdateParams !== undefined && object.swapFeeUpdateParams !== null ? SwapFeeUpdateParams.fromPartial(object.swapFeeUpdateParams) : undefined;
+    message.joinBlocked = object.joinBlocked ?? false;
     return message;
   },
   fromAmino(object: MsgCreateWeightedPoolAmino): MsgCreateWeightedPool {
@@ -4163,6 +4218,9 @@ export const MsgCreateWeightedPool = {
     message.pauseAllowList = object.pause_allow_list?.map(e => e) || [];
     if (object.swap_fee_update_params !== undefined && object.swap_fee_update_params !== null) {
       message.swapFeeUpdateParams = SwapFeeUpdateParams.fromAmino(object.swap_fee_update_params);
+    }
+    if (object.join_blocked !== undefined && object.join_blocked !== null) {
+      message.joinBlocked = object.join_blocked;
     }
     return message;
   },
@@ -4195,6 +4253,7 @@ export const MsgCreateWeightedPool = {
       obj.pause_allow_list = message.pauseAllowList;
     }
     obj.swap_fee_update_params = message.swapFeeUpdateParams ? SwapFeeUpdateParams.toAmino(message.swapFeeUpdateParams, useInterfaces) : undefined;
+    obj.join_blocked = message.joinBlocked === false ? undefined : message.joinBlocked;
     return obj;
   },
   fromAminoMsg(object: MsgCreateWeightedPoolAminoMsg): MsgCreateWeightedPool {
@@ -4508,20 +4567,21 @@ function createBaseMsgInitializePool(): MsgInitializePool {
   return {
     creator: "",
     poolId: BigInt(0),
-    amountsIn: []
+    amountsIn: [],
+    permanentVirtualBalances: []
   };
 }
 export const MsgInitializePool = {
   typeUrl: "/pryzm.amm.v1.MsgInitializePool",
   aminoType: "pryzm/amm/v1/InitializePool",
   is(o: any): o is MsgInitializePool {
-    return o && (o.$typeUrl === MsgInitializePool.typeUrl || typeof o.creator === "string" && typeof o.poolId === "bigint" && Array.isArray(o.amountsIn) && (!o.amountsIn.length || Coin.is(o.amountsIn[0])));
+    return o && (o.$typeUrl === MsgInitializePool.typeUrl || typeof o.creator === "string" && typeof o.poolId === "bigint" && Array.isArray(o.amountsIn) && (!o.amountsIn.length || Coin.is(o.amountsIn[0])) && Array.isArray(o.permanentVirtualBalances) && (!o.permanentVirtualBalances.length || Coin.is(o.permanentVirtualBalances[0])));
   },
   isSDK(o: any): o is MsgInitializePoolSDKType {
-    return o && (o.$typeUrl === MsgInitializePool.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isSDK(o.amounts_in[0])));
+    return o && (o.$typeUrl === MsgInitializePool.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isSDK(o.amounts_in[0])) && Array.isArray(o.permanent_virtual_balances) && (!o.permanent_virtual_balances.length || Coin.isSDK(o.permanent_virtual_balances[0])));
   },
   isAmino(o: any): o is MsgInitializePoolAmino {
-    return o && (o.$typeUrl === MsgInitializePool.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isAmino(o.amounts_in[0])));
+    return o && (o.$typeUrl === MsgInitializePool.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && Array.isArray(o.amounts_in) && (!o.amounts_in.length || Coin.isAmino(o.amounts_in[0])) && Array.isArray(o.permanent_virtual_balances) && (!o.permanent_virtual_balances.length || Coin.isAmino(o.permanent_virtual_balances[0])));
   },
   encode(message: MsgInitializePool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
@@ -4532,6 +4592,9 @@ export const MsgInitializePool = {
     }
     for (const v of message.amountsIn) {
       Coin.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    for (const v of message.permanentVirtualBalances) {
+      Coin.encode(v!, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -4551,6 +4614,9 @@ export const MsgInitializePool = {
         case 3:
           message.amountsIn.push(Coin.decode(reader, reader.uint32(), useInterfaces));
           break;
+        case 4:
+          message.permanentVirtualBalances.push(Coin.decode(reader, reader.uint32(), useInterfaces));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -4562,7 +4628,8 @@ export const MsgInitializePool = {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
       poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
-      amountsIn: Array.isArray(object?.amountsIn) ? object.amountsIn.map((e: any) => Coin.fromJSON(e)) : []
+      amountsIn: Array.isArray(object?.amountsIn) ? object.amountsIn.map((e: any) => Coin.fromJSON(e)) : [],
+      permanentVirtualBalances: Array.isArray(object?.permanentVirtualBalances) ? object.permanentVirtualBalances.map((e: any) => Coin.fromJSON(e)) : []
     };
   },
   toJSON(message: MsgInitializePool): unknown {
@@ -4574,6 +4641,11 @@ export const MsgInitializePool = {
     } else {
       obj.amountsIn = [];
     }
+    if (message.permanentVirtualBalances) {
+      obj.permanentVirtualBalances = message.permanentVirtualBalances.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.permanentVirtualBalances = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<MsgInitializePool>): MsgInitializePool {
@@ -4581,6 +4653,7 @@ export const MsgInitializePool = {
     message.creator = object.creator ?? "";
     message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
     message.amountsIn = object.amountsIn?.map(e => Coin.fromPartial(e)) || [];
+    message.permanentVirtualBalances = object.permanentVirtualBalances?.map(e => Coin.fromPartial(e)) || [];
     return message;
   },
   fromAmino(object: MsgInitializePoolAmino): MsgInitializePool {
@@ -4592,6 +4665,7 @@ export const MsgInitializePool = {
       message.poolId = BigInt(object.pool_id);
     }
     message.amountsIn = object.amounts_in?.map(e => Coin.fromAmino(e)) || [];
+    message.permanentVirtualBalances = object.permanent_virtual_balances?.map(e => Coin.fromAmino(e)) || [];
     return message;
   },
   toAmino(message: MsgInitializePool, useInterfaces: boolean = true): MsgInitializePoolAmino {
@@ -4602,6 +4676,11 @@ export const MsgInitializePool = {
       obj.amounts_in = message.amountsIn.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
     } else {
       obj.amounts_in = message.amountsIn;
+    }
+    if (message.permanentVirtualBalances) {
+      obj.permanent_virtual_balances = message.permanentVirtualBalances.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
+    } else {
+      obj.permanent_virtual_balances = message.permanentVirtualBalances;
     }
     return obj;
   },
@@ -6950,6 +7029,192 @@ export const MsgSetRecoveryModeResponse = {
   }
 };
 GlobalDecoderRegistry.register(MsgSetRecoveryModeResponse.typeUrl, MsgSetRecoveryModeResponse);
+function createBaseMsgSetPoolJoinBlocked(): MsgSetPoolJoinBlocked {
+  return {
+    creator: "",
+    poolId: BigInt(0),
+    joinBlocked: false
+  };
+}
+export const MsgSetPoolJoinBlocked = {
+  typeUrl: "/pryzm.amm.v1.MsgSetPoolJoinBlocked",
+  aminoType: "pryzm/amm/v1/SetPoolJoinBlocked",
+  is(o: any): o is MsgSetPoolJoinBlocked {
+    return o && (o.$typeUrl === MsgSetPoolJoinBlocked.typeUrl || typeof o.creator === "string" && typeof o.poolId === "bigint" && typeof o.joinBlocked === "boolean");
+  },
+  isSDK(o: any): o is MsgSetPoolJoinBlockedSDKType {
+    return o && (o.$typeUrl === MsgSetPoolJoinBlocked.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && typeof o.join_blocked === "boolean");
+  },
+  isAmino(o: any): o is MsgSetPoolJoinBlockedAmino {
+    return o && (o.$typeUrl === MsgSetPoolJoinBlocked.typeUrl || typeof o.creator === "string" && typeof o.pool_id === "bigint" && typeof o.join_blocked === "boolean");
+  },
+  encode(message: MsgSetPoolJoinBlocked, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.poolId !== BigInt(0)) {
+      writer.uint32(16).uint64(message.poolId);
+    }
+    if (message.joinBlocked === true) {
+      writer.uint32(24).bool(message.joinBlocked);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSetPoolJoinBlocked {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgSetPoolJoinBlocked();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.poolId = reader.uint64();
+          break;
+        case 3:
+          message.joinBlocked = reader.bool();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgSetPoolJoinBlocked {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
+      joinBlocked: isSet(object.joinBlocked) ? Boolean(object.joinBlocked) : false
+    };
+  },
+  toJSON(message: MsgSetPoolJoinBlocked): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
+    message.joinBlocked !== undefined && (obj.joinBlocked = message.joinBlocked);
+    return obj;
+  },
+  fromPartial(object: Partial<MsgSetPoolJoinBlocked>): MsgSetPoolJoinBlocked {
+    const message = createBaseMsgSetPoolJoinBlocked();
+    message.creator = object.creator ?? "";
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
+    message.joinBlocked = object.joinBlocked ?? false;
+    return message;
+  },
+  fromAmino(object: MsgSetPoolJoinBlockedAmino): MsgSetPoolJoinBlocked {
+    const message = createBaseMsgSetPoolJoinBlocked();
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    }
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.join_blocked !== undefined && object.join_blocked !== null) {
+      message.joinBlocked = object.join_blocked;
+    }
+    return message;
+  },
+  toAmino(message: MsgSetPoolJoinBlocked, useInterfaces: boolean = true): MsgSetPoolJoinBlockedAmino {
+    const obj: any = {};
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.join_blocked = message.joinBlocked === false ? undefined : message.joinBlocked;
+    return obj;
+  },
+  fromAminoMsg(object: MsgSetPoolJoinBlockedAminoMsg): MsgSetPoolJoinBlocked {
+    return MsgSetPoolJoinBlocked.fromAmino(object.value);
+  },
+  toAminoMsg(message: MsgSetPoolJoinBlocked, useInterfaces: boolean = true): MsgSetPoolJoinBlockedAminoMsg {
+    return {
+      type: "pryzm/amm/v1/SetPoolJoinBlocked",
+      value: MsgSetPoolJoinBlocked.toAmino(message, useInterfaces)
+    };
+  },
+  fromProtoMsg(message: MsgSetPoolJoinBlockedProtoMsg, useInterfaces: boolean = true): MsgSetPoolJoinBlocked {
+    return MsgSetPoolJoinBlocked.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: MsgSetPoolJoinBlocked): Uint8Array {
+    return MsgSetPoolJoinBlocked.encode(message).finish();
+  },
+  toProtoMsg(message: MsgSetPoolJoinBlocked): MsgSetPoolJoinBlockedProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.MsgSetPoolJoinBlocked",
+      value: MsgSetPoolJoinBlocked.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(MsgSetPoolJoinBlocked.typeUrl, MsgSetPoolJoinBlocked);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgSetPoolJoinBlocked.aminoType, MsgSetPoolJoinBlocked.typeUrl);
+function createBaseMsgSetPoolJoinBlockedResponse(): MsgSetPoolJoinBlockedResponse {
+  return {};
+}
+export const MsgSetPoolJoinBlockedResponse = {
+  typeUrl: "/pryzm.amm.v1.MsgSetPoolJoinBlockedResponse",
+  is(o: any): o is MsgSetPoolJoinBlockedResponse {
+    return o && o.$typeUrl === MsgSetPoolJoinBlockedResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgSetPoolJoinBlockedResponseSDKType {
+    return o && o.$typeUrl === MsgSetPoolJoinBlockedResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgSetPoolJoinBlockedResponseAmino {
+    return o && o.$typeUrl === MsgSetPoolJoinBlockedResponse.typeUrl;
+  },
+  encode(_: MsgSetPoolJoinBlockedResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgSetPoolJoinBlockedResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgSetPoolJoinBlockedResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgSetPoolJoinBlockedResponse {
+    return {};
+  },
+  toJSON(_: MsgSetPoolJoinBlockedResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: Partial<MsgSetPoolJoinBlockedResponse>): MsgSetPoolJoinBlockedResponse {
+    const message = createBaseMsgSetPoolJoinBlockedResponse();
+    return message;
+  },
+  fromAmino(_: MsgSetPoolJoinBlockedResponseAmino): MsgSetPoolJoinBlockedResponse {
+    const message = createBaseMsgSetPoolJoinBlockedResponse();
+    return message;
+  },
+  toAmino(_: MsgSetPoolJoinBlockedResponse, useInterfaces: boolean = true): MsgSetPoolJoinBlockedResponseAmino {
+    const obj: any = {};
+    return obj;
+  },
+  fromAminoMsg(object: MsgSetPoolJoinBlockedResponseAminoMsg): MsgSetPoolJoinBlockedResponse {
+    return MsgSetPoolJoinBlockedResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgSetPoolJoinBlockedResponseProtoMsg, useInterfaces: boolean = true): MsgSetPoolJoinBlockedResponse {
+    return MsgSetPoolJoinBlockedResponse.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: MsgSetPoolJoinBlockedResponse): Uint8Array {
+    return MsgSetPoolJoinBlockedResponse.encode(message).finish();
+  },
+  toProtoMsg(message: MsgSetPoolJoinBlockedResponse): MsgSetPoolJoinBlockedResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.MsgSetPoolJoinBlockedResponse",
+      value: MsgSetPoolJoinBlockedResponse.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(MsgSetPoolJoinBlockedResponse.typeUrl, MsgSetPoolJoinBlockedResponse);
 function createBaseMsgRecoveryExit(): MsgRecoveryExit {
   return {
     creator: "",
@@ -9273,7 +9538,8 @@ function createBaseMsgUpdateParams(): MsgUpdateParams {
     yammParameters: undefined,
     orderParameters: undefined,
     authorizationParameters: undefined,
-    gasParameters: undefined
+    gasParameters: undefined,
+    weightedPoolParameters: undefined
   };
 }
 export const MsgUpdateParams = {
@@ -9307,6 +9573,9 @@ export const MsgUpdateParams = {
     if (message.gasParameters !== undefined) {
       GasParameters.encode(message.gasParameters, writer.uint32(50).fork()).ldelim();
     }
+    if (message.weightedPoolParameters !== undefined) {
+      WeightedPoolParameters.encode(message.weightedPoolParameters, writer.uint32(58).fork()).ldelim();
+    }
     return writer;
   },
   decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUpdateParams {
@@ -9334,6 +9603,9 @@ export const MsgUpdateParams = {
         case 6:
           message.gasParameters = GasParameters.decode(reader, reader.uint32(), useInterfaces);
           break;
+        case 7:
+          message.weightedPoolParameters = WeightedPoolParameters.decode(reader, reader.uint32(), useInterfaces);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -9348,7 +9620,8 @@ export const MsgUpdateParams = {
       yammParameters: isSet(object.yammParameters) ? YammParameters.fromJSON(object.yammParameters) : undefined,
       orderParameters: isSet(object.orderParameters) ? OrderParameters.fromJSON(object.orderParameters) : undefined,
       authorizationParameters: isSet(object.authorizationParameters) ? AuthorizationParameters.fromJSON(object.authorizationParameters) : undefined,
-      gasParameters: isSet(object.gasParameters) ? GasParameters.fromJSON(object.gasParameters) : undefined
+      gasParameters: isSet(object.gasParameters) ? GasParameters.fromJSON(object.gasParameters) : undefined,
+      weightedPoolParameters: isSet(object.weightedPoolParameters) ? WeightedPoolParameters.fromJSON(object.weightedPoolParameters) : undefined
     };
   },
   toJSON(message: MsgUpdateParams): unknown {
@@ -9359,6 +9632,7 @@ export const MsgUpdateParams = {
     message.orderParameters !== undefined && (obj.orderParameters = message.orderParameters ? OrderParameters.toJSON(message.orderParameters) : undefined);
     message.authorizationParameters !== undefined && (obj.authorizationParameters = message.authorizationParameters ? AuthorizationParameters.toJSON(message.authorizationParameters) : undefined);
     message.gasParameters !== undefined && (obj.gasParameters = message.gasParameters ? GasParameters.toJSON(message.gasParameters) : undefined);
+    message.weightedPoolParameters !== undefined && (obj.weightedPoolParameters = message.weightedPoolParameters ? WeightedPoolParameters.toJSON(message.weightedPoolParameters) : undefined);
     return obj;
   },
   fromPartial(object: Partial<MsgUpdateParams>): MsgUpdateParams {
@@ -9369,6 +9643,7 @@ export const MsgUpdateParams = {
     message.orderParameters = object.orderParameters !== undefined && object.orderParameters !== null ? OrderParameters.fromPartial(object.orderParameters) : undefined;
     message.authorizationParameters = object.authorizationParameters !== undefined && object.authorizationParameters !== null ? AuthorizationParameters.fromPartial(object.authorizationParameters) : undefined;
     message.gasParameters = object.gasParameters !== undefined && object.gasParameters !== null ? GasParameters.fromPartial(object.gasParameters) : undefined;
+    message.weightedPoolParameters = object.weightedPoolParameters !== undefined && object.weightedPoolParameters !== null ? WeightedPoolParameters.fromPartial(object.weightedPoolParameters) : undefined;
     return message;
   },
   fromAmino(object: MsgUpdateParamsAmino): MsgUpdateParams {
@@ -9391,6 +9666,9 @@ export const MsgUpdateParams = {
     if (object.gas_parameters !== undefined && object.gas_parameters !== null) {
       message.gasParameters = GasParameters.fromAmino(object.gas_parameters);
     }
+    if (object.weighted_pool_parameters !== undefined && object.weighted_pool_parameters !== null) {
+      message.weightedPoolParameters = WeightedPoolParameters.fromAmino(object.weighted_pool_parameters);
+    }
     return message;
   },
   toAmino(message: MsgUpdateParams, useInterfaces: boolean = true): MsgUpdateParamsAmino {
@@ -9401,6 +9679,7 @@ export const MsgUpdateParams = {
     obj.order_parameters = message.orderParameters ? OrderParameters.toAmino(message.orderParameters, useInterfaces) : undefined;
     obj.authorization_parameters = message.authorizationParameters ? AuthorizationParameters.toAmino(message.authorizationParameters, useInterfaces) : undefined;
     obj.gas_parameters = message.gasParameters ? GasParameters.toAmino(message.gasParameters, useInterfaces) : undefined;
+    obj.weighted_pool_parameters = message.weightedPoolParameters ? WeightedPoolParameters.toAmino(message.weightedPoolParameters, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgUpdateParamsAminoMsg): MsgUpdateParams {

@@ -60,6 +60,20 @@ service Query {
     option (google.api.http).get = "/pryzm/amm/v1/pool_token_weight/{pool_id}/{denom}";
   }
 
+  // Queries a list of TokenInfo
+  // computing normalized weights requires reading all tokens from the context
+  // and computing weight for all of them. And the number of tokens in a pool is not expected to
+  // be high.
+  // therefore, this query is not paginated
+  rpc PoolTokenInfoAll(QueryAllPoolTokenInfoRequest) returns (QueryAllPoolTokenInfoResponse) {
+    option (google.api.http).get = "/pryzm/amm/v1/pool_token_info/{pool_id}";
+  }
+
+  // Queries a TokenInfo
+  rpc PoolTokenInfo(QueryGetPoolTokenInfoRequest) returns (QueryGetPoolTokenInfoResponse) {
+    option (google.api.http).get = "/pryzm/amm/v1/pool_token_info/{pool_id}/{denom}";
+  }
+
   // Queries a Pool by id.
   rpc Pool(QueryGetPoolRequest) returns (QueryGetPoolResponse) {
     option (google.api.http).get = "/pryzm/amm/v1/pool/{id}";
@@ -138,6 +152,16 @@ service Query {
   // Queries a list of SpotPrice items.
   rpc SpotPrice(QuerySpotPriceRequest) returns (QuerySpotPriceResponse) {
     option (google.api.http).get = "/pryzm/amm/v1/spot_price/{pool_id}/{token_in}/{token_out}/{apply_fee}";
+  }
+
+  // Queries a PermanentVirtualBalancePoolToken by index.
+  rpc PermanentVirtualBalancePoolToken(QueryGetPermanentVirtualBalancePoolTokenRequest) returns (QueryGetPermanentVirtualBalancePoolTokenResponse) {
+    option (google.api.http).get = "/pryzm/amm/v1/permanent_virtual_balance_pool_token/{pool_id}/{denom}";
+  }
+
+  // Queries a list of PermanentVirtualBalancePoolToken items.
+  rpc PermanentVirtualBalancePoolTokenAll(QueryAllPermanentVirtualBalancePoolTokenRequest) returns (QueryAllPermanentVirtualBalancePoolTokenResponse) {
+    option (google.api.http).get = "/pryzm/amm/v1/permanent_virtual_balance_pool_token";
   }
 
   // Queries a IntroducingPoolToken by index.
@@ -324,6 +348,29 @@ message QueryGetPoolTokenWeightResponse {
   TokenWeight token_weight = 1 [(gogoproto.nullable) = false];
 }
 
+// computing normalized weights requires reading all tokens from the context
+// and computing weight for all of them
+// therefore, this query is not paginated
+message QueryAllPoolTokenInfoRequest {
+  uint64 pool_id = 1;
+}
+
+// computing normalized weights requires reading all tokens from the context
+// and computing weight for all of them
+// therefore, this query is not paginated
+message QueryAllPoolTokenInfoResponse {
+  repeated TokenInfo token_info = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryGetPoolTokenInfoRequest {
+  uint64 pool_id = 1;
+  string denom = 2;
+}
+
+message QueryGetPoolTokenInfoResponse {
+  TokenInfo token_info = 1 [(gogoproto.nullable) = false];
+}
+
 message QueryGetPoolRequest {
   uint64 id = 1;
 }
@@ -392,6 +439,10 @@ message QuerySimulateSingleSwapResponse {
 message QuerySimulateInitializePoolRequest {
   uint64 pool_id = 1;
   repeated cosmos.base.v1beta1.Coin amounts_in = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  repeated cosmos.base.v1beta1.Coin permanent_virtual_balances = 3 [
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
@@ -576,7 +627,7 @@ message QueryGetIntroducingPoolTokenRequest {
 }
 
 message QueryGetIntroducingPoolTokenResponse {
-  VirtualBalancePoolToken introducing_pool_token = 1 [(gogoproto.nullable) = false];
+  TemporalVirtualBalancePoolToken introducing_pool_token = 1 [(gogoproto.nullable) = false];
 }
 
 message QueryAllIntroducingPoolTokenRequest {
@@ -584,7 +635,25 @@ message QueryAllIntroducingPoolTokenRequest {
 }
 
 message QueryAllIntroducingPoolTokenResponse {
-  repeated VirtualBalancePoolToken introducing_pool_token = 1 [(gogoproto.nullable) = false];
+  repeated TemporalVirtualBalancePoolToken introducing_pool_token = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
+}
+
+message QueryGetPermanentVirtualBalancePoolTokenRequest {
+  uint64 pool_id = 1;
+  string denom = 2;
+}
+
+message QueryGetPermanentVirtualBalancePoolTokenResponse {
+  PermanentVirtualBalancePoolToken permanent_virtual_balance_pool_token = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllPermanentVirtualBalancePoolTokenRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1 [(gogoproto.nullable) = true];
+}
+
+message QueryAllPermanentVirtualBalancePoolTokenResponse {
+  repeated PermanentVirtualBalancePoolToken permanent_virtual_balance_pool_token = 1 [(gogoproto.nullable) = false];
   cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }
 
@@ -594,7 +663,7 @@ message QueryGetExpiringPoolTokenRequest {
 }
 
 message QueryGetExpiringPoolTokenResponse {
-  VirtualBalancePoolToken expiring_pool_token = 1 [(gogoproto.nullable) = false];
+  TemporalVirtualBalancePoolToken expiring_pool_token = 1 [(gogoproto.nullable) = false];
 }
 
 message QueryAllExpiringPoolTokenRequest {
@@ -602,7 +671,7 @@ message QueryAllExpiringPoolTokenRequest {
 }
 
 message QueryAllExpiringPoolTokenResponse {
-  repeated VirtualBalancePoolToken expiring_pool_token = 1 [(gogoproto.nullable) = false];
+  repeated TemporalVirtualBalancePoolToken expiring_pool_token = 1 [(gogoproto.nullable) = false];
   cosmos.base.query.v1beta1.PageResponse pagination = 2 [(gogoproto.nullable) = true];
 }
 message QueryLpTokenRequest {

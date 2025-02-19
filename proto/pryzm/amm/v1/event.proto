@@ -119,7 +119,7 @@ message EventRemoveExecutableOrder {
 }
 
 message EventSetIntroducingPoolToken {
-  VirtualBalancePoolToken virtual_balance_token = 1 [(gogoproto.nullable) = false];
+  TemporalVirtualBalancePoolToken virtual_balance_token = 1 [(gogoproto.nullable) = false];
 }
 
 message EventRemoveIntroducingPoolToken {
@@ -128,7 +128,7 @@ message EventRemoveIntroducingPoolToken {
 }
 
 message EventSetExpiringPoolToken {
-  VirtualBalancePoolToken virtual_balance_token = 1 [(gogoproto.nullable) = false];
+  TemporalVirtualBalancePoolToken virtual_balance_token = 1 [(gogoproto.nullable) = false];
 }
 
 message EventRemoveExpiringPoolToken {
@@ -357,4 +357,13 @@ message EventRemovePendingTokenIntroduction {
 
 message EventSetParams {
   Params params = 1 [(gogoproto.nullable) = false];
+}
+
+message EventSetPermanentVirtualBalancePoolToken {
+  PermanentVirtualBalancePoolToken virtual_balance_token = 1 [(gogoproto.nullable) = false];
+}
+
+message EventRemovePermanentVirtualBalancePoolToken {
+  uint64 pool_id = 1;
+  string denom = 2;
 }

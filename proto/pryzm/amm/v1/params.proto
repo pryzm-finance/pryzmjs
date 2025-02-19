@@ -169,6 +169,11 @@ message GasParameters {
   uint64 proposal_match_order = 9;
 }
 
+message WeightedPoolParameters {
+  // This is applied only if the pool is initialized, for drained pools weights can be updated instantly.
+  int64 min_weight_update_duration_millis = 1 [(amino.dont_omitempty) = true];
+}
+
 // Params defines the parameters for the module.
 message Params {
   GeneralPoolParameters general_pool_parameters = 1 [(gogoproto.nullable) = false];
@@ -176,4 +181,5 @@ message Params {
   OrderParameters order_parameters = 3 [(gogoproto.nullable) = false];
   AuthorizationParameters authorization_parameters = 4 [(gogoproto.nullable) = false];
   GasParameters gas_parameters = 5 [(gogoproto.nullable) = false];
+  WeightedPoolParameters weighted_pool_parameters = 6 [(gogoproto.nullable) = false];
 }

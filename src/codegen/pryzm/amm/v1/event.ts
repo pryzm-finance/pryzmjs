@@ -7,7 +7,7 @@ import { WhitelistedRoute, WhitelistedRouteAmino, WhitelistedRouteSDKType } from
 import { YammConfiguration, YammConfigurationAmino, YammConfigurationSDKType } from "./yamm_configuration";
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { ScheduleOrder, ScheduleOrderAmino, ScheduleOrderSDKType } from "./schedule_order";
-import { VirtualBalancePoolToken, VirtualBalancePoolTokenAmino, VirtualBalancePoolTokenSDKType } from "./virtual_balance_pool_token";
+import { TemporalVirtualBalancePoolToken, TemporalVirtualBalancePoolTokenAmino, TemporalVirtualBalancePoolTokenSDKType, PermanentVirtualBalancePoolToken, PermanentVirtualBalancePoolTokenAmino, PermanentVirtualBalancePoolTokenSDKType } from "./virtual_balance_pool_token";
 import { MatchedPairSummary, MatchedPairSummaryAmino, MatchedPairSummarySDKType } from "./pair_match_proposal";
 import { ExitSummary, ExitSummaryAmino, ExitSummarySDKType, JoinSummary, JoinSummaryAmino, JoinSummarySDKType, SwapSummary, SwapSummaryAmino, SwapSummarySDKType, ExitType, JoinType, SwapType, SwapStep, SwapStepAmino, SwapStepSDKType, exitTypeFromJSON, exitTypeToJSON, joinTypeFromJSON, joinTypeToJSON, swapTypeFromJSON, swapTypeToJSON } from "./operations";
 import { OraclePricePair, OraclePricePairAmino, OraclePricePairSDKType } from "./oracle_price_pair";
@@ -410,21 +410,21 @@ export interface EventRemoveExecutableOrderSDKType {
   order_id: bigint;
 }
 export interface EventSetIntroducingPoolToken {
-  virtualBalanceToken: VirtualBalancePoolToken;
+  virtualBalanceToken: TemporalVirtualBalancePoolToken;
 }
 export interface EventSetIntroducingPoolTokenProtoMsg {
   typeUrl: "/pryzm.amm.v1.EventSetIntroducingPoolToken";
   value: Uint8Array;
 }
 export interface EventSetIntroducingPoolTokenAmino {
-  virtual_balance_token?: VirtualBalancePoolTokenAmino;
+  virtual_balance_token?: TemporalVirtualBalancePoolTokenAmino;
 }
 export interface EventSetIntroducingPoolTokenAminoMsg {
   type: "/pryzm.amm.v1.EventSetIntroducingPoolToken";
   value: EventSetIntroducingPoolTokenAmino;
 }
 export interface EventSetIntroducingPoolTokenSDKType {
-  virtual_balance_token: VirtualBalancePoolTokenSDKType;
+  virtual_balance_token: TemporalVirtualBalancePoolTokenSDKType;
 }
 export interface EventRemoveIntroducingPoolToken {
   poolId: bigint;
@@ -447,21 +447,21 @@ export interface EventRemoveIntroducingPoolTokenSDKType {
   denom: string;
 }
 export interface EventSetExpiringPoolToken {
-  virtualBalanceToken: VirtualBalancePoolToken;
+  virtualBalanceToken: TemporalVirtualBalancePoolToken;
 }
 export interface EventSetExpiringPoolTokenProtoMsg {
   typeUrl: "/pryzm.amm.v1.EventSetExpiringPoolToken";
   value: Uint8Array;
 }
 export interface EventSetExpiringPoolTokenAmino {
-  virtual_balance_token?: VirtualBalancePoolTokenAmino;
+  virtual_balance_token?: TemporalVirtualBalancePoolTokenAmino;
 }
 export interface EventSetExpiringPoolTokenAminoMsg {
   type: "/pryzm.amm.v1.EventSetExpiringPoolToken";
   value: EventSetExpiringPoolTokenAmino;
 }
 export interface EventSetExpiringPoolTokenSDKType {
-  virtual_balance_token: VirtualBalancePoolTokenSDKType;
+  virtual_balance_token: TemporalVirtualBalancePoolTokenSDKType;
 }
 export interface EventRemoveExpiringPoolToken {
   poolId: bigint;
@@ -964,6 +964,43 @@ export interface EventSetParamsAminoMsg {
 }
 export interface EventSetParamsSDKType {
   params: ParamsSDKType;
+}
+export interface EventSetPermanentVirtualBalancePoolToken {
+  virtualBalanceToken: PermanentVirtualBalancePoolToken;
+}
+export interface EventSetPermanentVirtualBalancePoolTokenProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventSetPermanentVirtualBalancePoolToken";
+  value: Uint8Array;
+}
+export interface EventSetPermanentVirtualBalancePoolTokenAmino {
+  virtual_balance_token?: PermanentVirtualBalancePoolTokenAmino;
+}
+export interface EventSetPermanentVirtualBalancePoolTokenAminoMsg {
+  type: "/pryzm.amm.v1.EventSetPermanentVirtualBalancePoolToken";
+  value: EventSetPermanentVirtualBalancePoolTokenAmino;
+}
+export interface EventSetPermanentVirtualBalancePoolTokenSDKType {
+  virtual_balance_token: PermanentVirtualBalancePoolTokenSDKType;
+}
+export interface EventRemovePermanentVirtualBalancePoolToken {
+  poolId: bigint;
+  denom: string;
+}
+export interface EventRemovePermanentVirtualBalancePoolTokenProtoMsg {
+  typeUrl: "/pryzm.amm.v1.EventRemovePermanentVirtualBalancePoolToken";
+  value: Uint8Array;
+}
+export interface EventRemovePermanentVirtualBalancePoolTokenAmino {
+  pool_id?: string;
+  denom?: string;
+}
+export interface EventRemovePermanentVirtualBalancePoolTokenAminoMsg {
+  type: "/pryzm.amm.v1.EventRemovePermanentVirtualBalancePoolToken";
+  value: EventRemovePermanentVirtualBalancePoolTokenAmino;
+}
+export interface EventRemovePermanentVirtualBalancePoolTokenSDKType {
+  pool_id: bigint;
+  denom: string;
 }
 function createBaseEventSetPool(): EventSetPool {
   return {
@@ -2642,23 +2679,23 @@ export const EventRemoveExecutableOrder = {
 GlobalDecoderRegistry.register(EventRemoveExecutableOrder.typeUrl, EventRemoveExecutableOrder);
 function createBaseEventSetIntroducingPoolToken(): EventSetIntroducingPoolToken {
   return {
-    virtualBalanceToken: VirtualBalancePoolToken.fromPartial({})
+    virtualBalanceToken: TemporalVirtualBalancePoolToken.fromPartial({})
   };
 }
 export const EventSetIntroducingPoolToken = {
   typeUrl: "/pryzm.amm.v1.EventSetIntroducingPoolToken",
   is(o: any): o is EventSetIntroducingPoolToken {
-    return o && (o.$typeUrl === EventSetIntroducingPoolToken.typeUrl || VirtualBalancePoolToken.is(o.virtualBalanceToken));
+    return o && (o.$typeUrl === EventSetIntroducingPoolToken.typeUrl || TemporalVirtualBalancePoolToken.is(o.virtualBalanceToken));
   },
   isSDK(o: any): o is EventSetIntroducingPoolTokenSDKType {
-    return o && (o.$typeUrl === EventSetIntroducingPoolToken.typeUrl || VirtualBalancePoolToken.isSDK(o.virtual_balance_token));
+    return o && (o.$typeUrl === EventSetIntroducingPoolToken.typeUrl || TemporalVirtualBalancePoolToken.isSDK(o.virtual_balance_token));
   },
   isAmino(o: any): o is EventSetIntroducingPoolTokenAmino {
-    return o && (o.$typeUrl === EventSetIntroducingPoolToken.typeUrl || VirtualBalancePoolToken.isAmino(o.virtual_balance_token));
+    return o && (o.$typeUrl === EventSetIntroducingPoolToken.typeUrl || TemporalVirtualBalancePoolToken.isAmino(o.virtual_balance_token));
   },
   encode(message: EventSetIntroducingPoolToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.virtualBalanceToken !== undefined) {
-      VirtualBalancePoolToken.encode(message.virtualBalanceToken, writer.uint32(10).fork()).ldelim();
+      TemporalVirtualBalancePoolToken.encode(message.virtualBalanceToken, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
@@ -2670,7 +2707,7 @@ export const EventSetIntroducingPoolToken = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.virtualBalanceToken = VirtualBalancePoolToken.decode(reader, reader.uint32(), useInterfaces);
+          message.virtualBalanceToken = TemporalVirtualBalancePoolToken.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -2681,29 +2718,29 @@ export const EventSetIntroducingPoolToken = {
   },
   fromJSON(object: any): EventSetIntroducingPoolToken {
     return {
-      virtualBalanceToken: isSet(object.virtualBalanceToken) ? VirtualBalancePoolToken.fromJSON(object.virtualBalanceToken) : undefined
+      virtualBalanceToken: isSet(object.virtualBalanceToken) ? TemporalVirtualBalancePoolToken.fromJSON(object.virtualBalanceToken) : undefined
     };
   },
   toJSON(message: EventSetIntroducingPoolToken): unknown {
     const obj: any = {};
-    message.virtualBalanceToken !== undefined && (obj.virtualBalanceToken = message.virtualBalanceToken ? VirtualBalancePoolToken.toJSON(message.virtualBalanceToken) : undefined);
+    message.virtualBalanceToken !== undefined && (obj.virtualBalanceToken = message.virtualBalanceToken ? TemporalVirtualBalancePoolToken.toJSON(message.virtualBalanceToken) : undefined);
     return obj;
   },
   fromPartial(object: Partial<EventSetIntroducingPoolToken>): EventSetIntroducingPoolToken {
     const message = createBaseEventSetIntroducingPoolToken();
-    message.virtualBalanceToken = object.virtualBalanceToken !== undefined && object.virtualBalanceToken !== null ? VirtualBalancePoolToken.fromPartial(object.virtualBalanceToken) : undefined;
+    message.virtualBalanceToken = object.virtualBalanceToken !== undefined && object.virtualBalanceToken !== null ? TemporalVirtualBalancePoolToken.fromPartial(object.virtualBalanceToken) : undefined;
     return message;
   },
   fromAmino(object: EventSetIntroducingPoolTokenAmino): EventSetIntroducingPoolToken {
     const message = createBaseEventSetIntroducingPoolToken();
     if (object.virtual_balance_token !== undefined && object.virtual_balance_token !== null) {
-      message.virtualBalanceToken = VirtualBalancePoolToken.fromAmino(object.virtual_balance_token);
+      message.virtualBalanceToken = TemporalVirtualBalancePoolToken.fromAmino(object.virtual_balance_token);
     }
     return message;
   },
   toAmino(message: EventSetIntroducingPoolToken, useInterfaces: boolean = true): EventSetIntroducingPoolTokenAmino {
     const obj: any = {};
-    obj.virtual_balance_token = message.virtualBalanceToken ? VirtualBalancePoolToken.toAmino(message.virtualBalanceToken, useInterfaces) : undefined;
+    obj.virtual_balance_token = message.virtualBalanceToken ? TemporalVirtualBalancePoolToken.toAmino(message.virtualBalanceToken, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetIntroducingPoolTokenAminoMsg): EventSetIntroducingPoolToken {
@@ -2822,23 +2859,23 @@ export const EventRemoveIntroducingPoolToken = {
 GlobalDecoderRegistry.register(EventRemoveIntroducingPoolToken.typeUrl, EventRemoveIntroducingPoolToken);
 function createBaseEventSetExpiringPoolToken(): EventSetExpiringPoolToken {
   return {
-    virtualBalanceToken: VirtualBalancePoolToken.fromPartial({})
+    virtualBalanceToken: TemporalVirtualBalancePoolToken.fromPartial({})
   };
 }
 export const EventSetExpiringPoolToken = {
   typeUrl: "/pryzm.amm.v1.EventSetExpiringPoolToken",
   is(o: any): o is EventSetExpiringPoolToken {
-    return o && (o.$typeUrl === EventSetExpiringPoolToken.typeUrl || VirtualBalancePoolToken.is(o.virtualBalanceToken));
+    return o && (o.$typeUrl === EventSetExpiringPoolToken.typeUrl || TemporalVirtualBalancePoolToken.is(o.virtualBalanceToken));
   },
   isSDK(o: any): o is EventSetExpiringPoolTokenSDKType {
-    return o && (o.$typeUrl === EventSetExpiringPoolToken.typeUrl || VirtualBalancePoolToken.isSDK(o.virtual_balance_token));
+    return o && (o.$typeUrl === EventSetExpiringPoolToken.typeUrl || TemporalVirtualBalancePoolToken.isSDK(o.virtual_balance_token));
   },
   isAmino(o: any): o is EventSetExpiringPoolTokenAmino {
-    return o && (o.$typeUrl === EventSetExpiringPoolToken.typeUrl || VirtualBalancePoolToken.isAmino(o.virtual_balance_token));
+    return o && (o.$typeUrl === EventSetExpiringPoolToken.typeUrl || TemporalVirtualBalancePoolToken.isAmino(o.virtual_balance_token));
   },
   encode(message: EventSetExpiringPoolToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.virtualBalanceToken !== undefined) {
-      VirtualBalancePoolToken.encode(message.virtualBalanceToken, writer.uint32(10).fork()).ldelim();
+      TemporalVirtualBalancePoolToken.encode(message.virtualBalanceToken, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
@@ -2850,7 +2887,7 @@ export const EventSetExpiringPoolToken = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.virtualBalanceToken = VirtualBalancePoolToken.decode(reader, reader.uint32(), useInterfaces);
+          message.virtualBalanceToken = TemporalVirtualBalancePoolToken.decode(reader, reader.uint32(), useInterfaces);
           break;
         default:
           reader.skipType(tag & 7);
@@ -2861,29 +2898,29 @@ export const EventSetExpiringPoolToken = {
   },
   fromJSON(object: any): EventSetExpiringPoolToken {
     return {
-      virtualBalanceToken: isSet(object.virtualBalanceToken) ? VirtualBalancePoolToken.fromJSON(object.virtualBalanceToken) : undefined
+      virtualBalanceToken: isSet(object.virtualBalanceToken) ? TemporalVirtualBalancePoolToken.fromJSON(object.virtualBalanceToken) : undefined
     };
   },
   toJSON(message: EventSetExpiringPoolToken): unknown {
     const obj: any = {};
-    message.virtualBalanceToken !== undefined && (obj.virtualBalanceToken = message.virtualBalanceToken ? VirtualBalancePoolToken.toJSON(message.virtualBalanceToken) : undefined);
+    message.virtualBalanceToken !== undefined && (obj.virtualBalanceToken = message.virtualBalanceToken ? TemporalVirtualBalancePoolToken.toJSON(message.virtualBalanceToken) : undefined);
     return obj;
   },
   fromPartial(object: Partial<EventSetExpiringPoolToken>): EventSetExpiringPoolToken {
     const message = createBaseEventSetExpiringPoolToken();
-    message.virtualBalanceToken = object.virtualBalanceToken !== undefined && object.virtualBalanceToken !== null ? VirtualBalancePoolToken.fromPartial(object.virtualBalanceToken) : undefined;
+    message.virtualBalanceToken = object.virtualBalanceToken !== undefined && object.virtualBalanceToken !== null ? TemporalVirtualBalancePoolToken.fromPartial(object.virtualBalanceToken) : undefined;
     return message;
   },
   fromAmino(object: EventSetExpiringPoolTokenAmino): EventSetExpiringPoolToken {
     const message = createBaseEventSetExpiringPoolToken();
     if (object.virtual_balance_token !== undefined && object.virtual_balance_token !== null) {
-      message.virtualBalanceToken = VirtualBalancePoolToken.fromAmino(object.virtual_balance_token);
+      message.virtualBalanceToken = TemporalVirtualBalancePoolToken.fromAmino(object.virtual_balance_token);
     }
     return message;
   },
   toAmino(message: EventSetExpiringPoolToken, useInterfaces: boolean = true): EventSetExpiringPoolTokenAmino {
     const obj: any = {};
-    obj.virtual_balance_token = message.virtualBalanceToken ? VirtualBalancePoolToken.toAmino(message.virtualBalanceToken, useInterfaces) : undefined;
+    obj.virtual_balance_token = message.virtualBalanceToken ? TemporalVirtualBalancePoolToken.toAmino(message.virtualBalanceToken, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSetExpiringPoolTokenAminoMsg): EventSetExpiringPoolToken {
@@ -5409,3 +5446,183 @@ export const EventSetParams = {
   }
 };
 GlobalDecoderRegistry.register(EventSetParams.typeUrl, EventSetParams);
+function createBaseEventSetPermanentVirtualBalancePoolToken(): EventSetPermanentVirtualBalancePoolToken {
+  return {
+    virtualBalanceToken: PermanentVirtualBalancePoolToken.fromPartial({})
+  };
+}
+export const EventSetPermanentVirtualBalancePoolToken = {
+  typeUrl: "/pryzm.amm.v1.EventSetPermanentVirtualBalancePoolToken",
+  is(o: any): o is EventSetPermanentVirtualBalancePoolToken {
+    return o && (o.$typeUrl === EventSetPermanentVirtualBalancePoolToken.typeUrl || PermanentVirtualBalancePoolToken.is(o.virtualBalanceToken));
+  },
+  isSDK(o: any): o is EventSetPermanentVirtualBalancePoolTokenSDKType {
+    return o && (o.$typeUrl === EventSetPermanentVirtualBalancePoolToken.typeUrl || PermanentVirtualBalancePoolToken.isSDK(o.virtual_balance_token));
+  },
+  isAmino(o: any): o is EventSetPermanentVirtualBalancePoolTokenAmino {
+    return o && (o.$typeUrl === EventSetPermanentVirtualBalancePoolToken.typeUrl || PermanentVirtualBalancePoolToken.isAmino(o.virtual_balance_token));
+  },
+  encode(message: EventSetPermanentVirtualBalancePoolToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.virtualBalanceToken !== undefined) {
+      PermanentVirtualBalancePoolToken.encode(message.virtualBalanceToken, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventSetPermanentVirtualBalancePoolToken {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEventSetPermanentVirtualBalancePoolToken();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.virtualBalanceToken = PermanentVirtualBalancePoolToken.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): EventSetPermanentVirtualBalancePoolToken {
+    return {
+      virtualBalanceToken: isSet(object.virtualBalanceToken) ? PermanentVirtualBalancePoolToken.fromJSON(object.virtualBalanceToken) : undefined
+    };
+  },
+  toJSON(message: EventSetPermanentVirtualBalancePoolToken): unknown {
+    const obj: any = {};
+    message.virtualBalanceToken !== undefined && (obj.virtualBalanceToken = message.virtualBalanceToken ? PermanentVirtualBalancePoolToken.toJSON(message.virtualBalanceToken) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<EventSetPermanentVirtualBalancePoolToken>): EventSetPermanentVirtualBalancePoolToken {
+    const message = createBaseEventSetPermanentVirtualBalancePoolToken();
+    message.virtualBalanceToken = object.virtualBalanceToken !== undefined && object.virtualBalanceToken !== null ? PermanentVirtualBalancePoolToken.fromPartial(object.virtualBalanceToken) : undefined;
+    return message;
+  },
+  fromAmino(object: EventSetPermanentVirtualBalancePoolTokenAmino): EventSetPermanentVirtualBalancePoolToken {
+    const message = createBaseEventSetPermanentVirtualBalancePoolToken();
+    if (object.virtual_balance_token !== undefined && object.virtual_balance_token !== null) {
+      message.virtualBalanceToken = PermanentVirtualBalancePoolToken.fromAmino(object.virtual_balance_token);
+    }
+    return message;
+  },
+  toAmino(message: EventSetPermanentVirtualBalancePoolToken, useInterfaces: boolean = true): EventSetPermanentVirtualBalancePoolTokenAmino {
+    const obj: any = {};
+    obj.virtual_balance_token = message.virtualBalanceToken ? PermanentVirtualBalancePoolToken.toAmino(message.virtualBalanceToken, useInterfaces) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventSetPermanentVirtualBalancePoolTokenAminoMsg): EventSetPermanentVirtualBalancePoolToken {
+    return EventSetPermanentVirtualBalancePoolToken.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventSetPermanentVirtualBalancePoolTokenProtoMsg, useInterfaces: boolean = true): EventSetPermanentVirtualBalancePoolToken {
+    return EventSetPermanentVirtualBalancePoolToken.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: EventSetPermanentVirtualBalancePoolToken): Uint8Array {
+    return EventSetPermanentVirtualBalancePoolToken.encode(message).finish();
+  },
+  toProtoMsg(message: EventSetPermanentVirtualBalancePoolToken): EventSetPermanentVirtualBalancePoolTokenProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventSetPermanentVirtualBalancePoolToken",
+      value: EventSetPermanentVirtualBalancePoolToken.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(EventSetPermanentVirtualBalancePoolToken.typeUrl, EventSetPermanentVirtualBalancePoolToken);
+function createBaseEventRemovePermanentVirtualBalancePoolToken(): EventRemovePermanentVirtualBalancePoolToken {
+  return {
+    poolId: BigInt(0),
+    denom: ""
+  };
+}
+export const EventRemovePermanentVirtualBalancePoolToken = {
+  typeUrl: "/pryzm.amm.v1.EventRemovePermanentVirtualBalancePoolToken",
+  is(o: any): o is EventRemovePermanentVirtualBalancePoolToken {
+    return o && (o.$typeUrl === EventRemovePermanentVirtualBalancePoolToken.typeUrl || typeof o.poolId === "bigint" && typeof o.denom === "string");
+  },
+  isSDK(o: any): o is EventRemovePermanentVirtualBalancePoolTokenSDKType {
+    return o && (o.$typeUrl === EventRemovePermanentVirtualBalancePoolToken.typeUrl || typeof o.pool_id === "bigint" && typeof o.denom === "string");
+  },
+  isAmino(o: any): o is EventRemovePermanentVirtualBalancePoolTokenAmino {
+    return o && (o.$typeUrl === EventRemovePermanentVirtualBalancePoolToken.typeUrl || typeof o.pool_id === "bigint" && typeof o.denom === "string");
+  },
+  encode(message: EventRemovePermanentVirtualBalancePoolToken, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
+      writer.uint32(8).uint64(message.poolId);
+    }
+    if (message.denom !== "") {
+      writer.uint32(18).string(message.denom);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventRemovePermanentVirtualBalancePoolToken {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEventRemovePermanentVirtualBalancePoolToken();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.poolId = reader.uint64();
+          break;
+        case 2:
+          message.denom = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): EventRemovePermanentVirtualBalancePoolToken {
+    return {
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
+      denom: isSet(object.denom) ? String(object.denom) : ""
+    };
+  },
+  toJSON(message: EventRemovePermanentVirtualBalancePoolToken): unknown {
+    const obj: any = {};
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
+    message.denom !== undefined && (obj.denom = message.denom);
+    return obj;
+  },
+  fromPartial(object: Partial<EventRemovePermanentVirtualBalancePoolToken>): EventRemovePermanentVirtualBalancePoolToken {
+    const message = createBaseEventRemovePermanentVirtualBalancePoolToken();
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
+    message.denom = object.denom ?? "";
+    return message;
+  },
+  fromAmino(object: EventRemovePermanentVirtualBalancePoolTokenAmino): EventRemovePermanentVirtualBalancePoolToken {
+    const message = createBaseEventRemovePermanentVirtualBalancePoolToken();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    return message;
+  },
+  toAmino(message: EventRemovePermanentVirtualBalancePoolToken, useInterfaces: boolean = true): EventRemovePermanentVirtualBalancePoolTokenAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    return obj;
+  },
+  fromAminoMsg(object: EventRemovePermanentVirtualBalancePoolTokenAminoMsg): EventRemovePermanentVirtualBalancePoolToken {
+    return EventRemovePermanentVirtualBalancePoolToken.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventRemovePermanentVirtualBalancePoolTokenProtoMsg, useInterfaces: boolean = true): EventRemovePermanentVirtualBalancePoolToken {
+    return EventRemovePermanentVirtualBalancePoolToken.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: EventRemovePermanentVirtualBalancePoolToken): Uint8Array {
+    return EventRemovePermanentVirtualBalancePoolToken.encode(message).finish();
+  },
+  toProtoMsg(message: EventRemovePermanentVirtualBalancePoolToken): EventRemovePermanentVirtualBalancePoolTokenProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.EventRemovePermanentVirtualBalancePoolToken",
+      value: EventRemovePermanentVirtualBalancePoolToken.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(EventRemovePermanentVirtualBalancePoolToken.typeUrl, EventRemovePermanentVirtualBalancePoolToken);

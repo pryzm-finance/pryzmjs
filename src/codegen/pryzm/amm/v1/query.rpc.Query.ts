@@ -2,7 +2,7 @@ import { grpc } from "@improbable-eng/grpc-web";
 import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
 import { BrowserHeaders } from "browser-headers";
-import { QueryParamsRequest, QueryParamsResponse, QueryGetPoolTokenRequest, QueryGetPoolTokenResponse, QueryAllPoolTokenRequest, QueryAllPoolTokenResponse, QueryAllPoolTokenForPoolRequest, QueryAllPoolTokenForPoolResponse, QueryAllPoolTokenWeightRequest, QueryAllPoolTokenWeightResponse, QueryGetPoolTokenWeightRequest, QueryGetPoolTokenWeightResponse, QueryGetPoolRequest, QueryGetPoolResponse, QueryAllPoolRequest, QueryAllPoolResponse, QueryGetWeightedTokenRequest, QueryGetWeightedTokenResponse, QueryAllWeightedTokenRequest, QueryAllWeightedTokenResponse, QueryGetWeightUpdateTimingRequest, QueryGetWeightUpdateTimingResponse, QueryAllWeightUpdateTimingRequest, QueryAllWeightUpdateTimingResponse, QuerySimulateSingleSwapRequest, QuerySimulateSingleSwapResponse, QuerySimulateInitializePoolRequest, QuerySimulateInitializePoolResponse, QuerySimulateJoinAllTokensExactLptRequest, QuerySimulateJoinAllTokensExactLptResponse, QuerySimulateJoinExactTokensRequest, QuerySimulateJoinExactTokensResponse, QuerySimulateZeroImpactJoinYammRequest, QuerySimulateZeroImpactJoinYammResponse, QuerySimulateJoinTokenExactLptRequest, QuerySimulateJoinTokenExactLptResponse, QuerySimulateExitTokenExactLptRequest, QuerySimulateExitTokenExactLptResponse, QuerySimulateExitExactTokensRequest, QuerySimulateExitExactTokensResponse, QuerySimulateExitAllTokensExactLptRequest, QuerySimulateExitAllTokensExactLptResponse, QuerySpotPriceRequest, QuerySpotPriceResponse, QueryGetIntroducingPoolTokenRequest, QueryGetIntroducingPoolTokenResponse, QueryAllIntroducingPoolTokenRequest, QueryAllIntroducingPoolTokenResponse, QueryGetExpiringPoolTokenRequest, QueryGetExpiringPoolTokenResponse, QueryAllExpiringPoolTokenRequest, QueryAllExpiringPoolTokenResponse, QueryLpTokenRequest, QueryLpTokenResponse, QuerySimulateBatchSwapRequest, QuerySimulateBatchSwapResponse, QueryGetYammConfigurationRequest, QueryGetYammConfigurationResponse, QueryAllYammConfigurationRequest, QueryAllYammConfigurationResponse, QueryGetWhitelistedRouteRequest, QueryGetWhitelistedRouteResponse, QueryAllWhitelistedRouteRequest, QueryAllWhitelistedRouteResponse, QueryGetOrderRequest, QueryGetOrderResponse, QueryAllOrderRequest, QueryAllOrderResponse, QueryGetExecutableOrderRequest, QueryGetExecutableOrderResponse, QueryAllExecutableOrderRequest, QueryAllExecutableOrderResponse, QueryGetScheduleOrderRequest, QueryGetScheduleOrderResponse, QueryAllScheduleOrderRequest, QueryAllScheduleOrderResponse, QueryGetOraclePricePairRequest, QueryGetOraclePricePairResponse, QueryAllOraclePricePairRequest, QueryAllOraclePricePairResponse, QueryVaultPauseModeRequest, QueryVaultPauseModeResponse, QueryGetPendingTokenIntroductionRequest, QueryGetPendingTokenIntroductionResponse, QueryAllPendingTokenIntroductionRequest, QueryAllPendingTokenIntroductionResponse, QueryYammPoolIdRequest, QueryYammPoolIdResponse, QueryOrderStepBoundsRequest, QueryOrderStepBoundsResponse, QueryAllDisabledOrderPairRequest, QueryAllDisabledOrderPairResponse, QueryOrderPairDisabledRequest, QueryOrderPairDisabledResponse } from "./query";
+import { QueryParamsRequest, QueryParamsResponse, QueryGetPoolTokenRequest, QueryGetPoolTokenResponse, QueryAllPoolTokenRequest, QueryAllPoolTokenResponse, QueryAllPoolTokenForPoolRequest, QueryAllPoolTokenForPoolResponse, QueryAllPoolTokenWeightRequest, QueryAllPoolTokenWeightResponse, QueryGetPoolTokenWeightRequest, QueryGetPoolTokenWeightResponse, QueryAllPoolTokenInfoRequest, QueryAllPoolTokenInfoResponse, QueryGetPoolTokenInfoRequest, QueryGetPoolTokenInfoResponse, QueryGetPoolRequest, QueryGetPoolResponse, QueryAllPoolRequest, QueryAllPoolResponse, QueryGetWeightedTokenRequest, QueryGetWeightedTokenResponse, QueryAllWeightedTokenRequest, QueryAllWeightedTokenResponse, QueryGetWeightUpdateTimingRequest, QueryGetWeightUpdateTimingResponse, QueryAllWeightUpdateTimingRequest, QueryAllWeightUpdateTimingResponse, QuerySimulateSingleSwapRequest, QuerySimulateSingleSwapResponse, QuerySimulateInitializePoolRequest, QuerySimulateInitializePoolResponse, QuerySimulateJoinAllTokensExactLptRequest, QuerySimulateJoinAllTokensExactLptResponse, QuerySimulateJoinExactTokensRequest, QuerySimulateJoinExactTokensResponse, QuerySimulateZeroImpactJoinYammRequest, QuerySimulateZeroImpactJoinYammResponse, QuerySimulateJoinTokenExactLptRequest, QuerySimulateJoinTokenExactLptResponse, QuerySimulateExitTokenExactLptRequest, QuerySimulateExitTokenExactLptResponse, QuerySimulateExitExactTokensRequest, QuerySimulateExitExactTokensResponse, QuerySimulateExitAllTokensExactLptRequest, QuerySimulateExitAllTokensExactLptResponse, QuerySpotPriceRequest, QuerySpotPriceResponse, QueryGetPermanentVirtualBalancePoolTokenRequest, QueryGetPermanentVirtualBalancePoolTokenResponse, QueryAllPermanentVirtualBalancePoolTokenRequest, QueryAllPermanentVirtualBalancePoolTokenResponse, QueryGetIntroducingPoolTokenRequest, QueryGetIntroducingPoolTokenResponse, QueryAllIntroducingPoolTokenRequest, QueryAllIntroducingPoolTokenResponse, QueryGetExpiringPoolTokenRequest, QueryGetExpiringPoolTokenResponse, QueryAllExpiringPoolTokenRequest, QueryAllExpiringPoolTokenResponse, QueryLpTokenRequest, QueryLpTokenResponse, QuerySimulateBatchSwapRequest, QuerySimulateBatchSwapResponse, QueryGetYammConfigurationRequest, QueryGetYammConfigurationResponse, QueryAllYammConfigurationRequest, QueryAllYammConfigurationResponse, QueryGetWhitelistedRouteRequest, QueryGetWhitelistedRouteResponse, QueryAllWhitelistedRouteRequest, QueryAllWhitelistedRouteResponse, QueryGetOrderRequest, QueryGetOrderResponse, QueryAllOrderRequest, QueryAllOrderResponse, QueryGetExecutableOrderRequest, QueryGetExecutableOrderResponse, QueryAllExecutableOrderRequest, QueryAllExecutableOrderResponse, QueryGetScheduleOrderRequest, QueryGetScheduleOrderResponse, QueryAllScheduleOrderRequest, QueryAllScheduleOrderResponse, QueryGetOraclePricePairRequest, QueryGetOraclePricePairResponse, QueryAllOraclePricePairRequest, QueryAllOraclePricePairResponse, QueryVaultPauseModeRequest, QueryVaultPauseModeResponse, QueryGetPendingTokenIntroductionRequest, QueryGetPendingTokenIntroductionResponse, QueryAllPendingTokenIntroductionRequest, QueryAllPendingTokenIntroductionResponse, QueryYammPoolIdRequest, QueryYammPoolIdResponse, QueryOrderStepBoundsRequest, QueryOrderStepBoundsResponse, QueryAllDisabledOrderPairRequest, QueryAllDisabledOrderPairResponse, QueryOrderPairDisabledRequest, QueryOrderPairDisabledResponse } from "./query";
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -22,6 +22,16 @@ export interface Query {
   poolTokenWeightAll(request: DeepPartial<QueryAllPoolTokenWeightRequest>, metadata?: grpc.Metadata): Promise<QueryAllPoolTokenWeightResponse>;
   /** Queries a TokenWeight */
   poolTokenWeight(request: DeepPartial<QueryGetPoolTokenWeightRequest>, metadata?: grpc.Metadata): Promise<QueryGetPoolTokenWeightResponse>;
+  /**
+   * Queries a list of TokenInfo
+   * computing normalized weights requires reading all tokens from the context
+   * and computing weight for all of them. And the number of tokens in a pool is not expected to
+   * be high.
+   * therefore, this query is not paginated
+   */
+  poolTokenInfoAll(request: DeepPartial<QueryAllPoolTokenInfoRequest>, metadata?: grpc.Metadata): Promise<QueryAllPoolTokenInfoResponse>;
+  /** Queries a TokenInfo */
+  poolTokenInfo(request: DeepPartial<QueryGetPoolTokenInfoRequest>, metadata?: grpc.Metadata): Promise<QueryGetPoolTokenInfoResponse>;
   /** Queries a Pool by id. */
   pool(request: DeepPartial<QueryGetPoolRequest>, metadata?: grpc.Metadata): Promise<QueryGetPoolResponse>;
   /** Queries a list of Pool items. */
@@ -54,6 +64,10 @@ export interface Query {
   simulateExitAllTokensExactLpt(request: DeepPartial<QuerySimulateExitAllTokensExactLptRequest>, metadata?: grpc.Metadata): Promise<QuerySimulateExitAllTokensExactLptResponse>;
   /** Queries a list of SpotPrice items. */
   spotPrice(request: DeepPartial<QuerySpotPriceRequest>, metadata?: grpc.Metadata): Promise<QuerySpotPriceResponse>;
+  /** Queries a PermanentVirtualBalancePoolToken by index. */
+  permanentVirtualBalancePoolToken(request: DeepPartial<QueryGetPermanentVirtualBalancePoolTokenRequest>, metadata?: grpc.Metadata): Promise<QueryGetPermanentVirtualBalancePoolTokenResponse>;
+  /** Queries a list of PermanentVirtualBalancePoolToken items. */
+  permanentVirtualBalancePoolTokenAll(request?: DeepPartial<QueryAllPermanentVirtualBalancePoolTokenRequest>, metadata?: grpc.Metadata): Promise<QueryAllPermanentVirtualBalancePoolTokenResponse>;
   /** Queries a IntroducingPoolToken by index. */
   introducingPoolToken(request: DeepPartial<QueryGetIntroducingPoolTokenRequest>, metadata?: grpc.Metadata): Promise<QueryGetIntroducingPoolTokenResponse>;
   /** Queries a list of IntroducingPoolToken items. */
@@ -114,6 +128,8 @@ export class QueryClientImpl implements Query {
     this.poolTokenAllForPool = this.poolTokenAllForPool.bind(this);
     this.poolTokenWeightAll = this.poolTokenWeightAll.bind(this);
     this.poolTokenWeight = this.poolTokenWeight.bind(this);
+    this.poolTokenInfoAll = this.poolTokenInfoAll.bind(this);
+    this.poolTokenInfo = this.poolTokenInfo.bind(this);
     this.pool = this.pool.bind(this);
     this.poolAll = this.poolAll.bind(this);
     this.weightedToken = this.weightedToken.bind(this);
@@ -130,6 +146,8 @@ export class QueryClientImpl implements Query {
     this.simulateExitExactTokens = this.simulateExitExactTokens.bind(this);
     this.simulateExitAllTokensExactLpt = this.simulateExitAllTokensExactLpt.bind(this);
     this.spotPrice = this.spotPrice.bind(this);
+    this.permanentVirtualBalancePoolToken = this.permanentVirtualBalancePoolToken.bind(this);
+    this.permanentVirtualBalancePoolTokenAll = this.permanentVirtualBalancePoolTokenAll.bind(this);
     this.introducingPoolToken = this.introducingPoolToken.bind(this);
     this.introducingPoolTokenAll = this.introducingPoolTokenAll.bind(this);
     this.expiringPoolToken = this.expiringPoolToken.bind(this);
@@ -173,6 +191,12 @@ export class QueryClientImpl implements Query {
   }
   poolTokenWeight(request: DeepPartial<QueryGetPoolTokenWeightRequest>, metadata?: grpc.Metadata): Promise<QueryGetPoolTokenWeightResponse> {
     return this.rpc.unary(QueryPoolTokenWeightDesc, QueryGetPoolTokenWeightRequest.fromPartial(request as any), metadata);
+  }
+  poolTokenInfoAll(request: DeepPartial<QueryAllPoolTokenInfoRequest>, metadata?: grpc.Metadata): Promise<QueryAllPoolTokenInfoResponse> {
+    return this.rpc.unary(QueryPoolTokenInfoAllDesc, QueryAllPoolTokenInfoRequest.fromPartial(request as any), metadata);
+  }
+  poolTokenInfo(request: DeepPartial<QueryGetPoolTokenInfoRequest>, metadata?: grpc.Metadata): Promise<QueryGetPoolTokenInfoResponse> {
+    return this.rpc.unary(QueryPoolTokenInfoDesc, QueryGetPoolTokenInfoRequest.fromPartial(request as any), metadata);
   }
   pool(request: DeepPartial<QueryGetPoolRequest>, metadata?: grpc.Metadata): Promise<QueryGetPoolResponse> {
     return this.rpc.unary(QueryPoolDesc, QueryGetPoolRequest.fromPartial(request as any), metadata);
@@ -227,6 +251,14 @@ export class QueryClientImpl implements Query {
   }
   spotPrice(request: DeepPartial<QuerySpotPriceRequest>, metadata?: grpc.Metadata): Promise<QuerySpotPriceResponse> {
     return this.rpc.unary(QuerySpotPriceDesc, QuerySpotPriceRequest.fromPartial(request as any), metadata);
+  }
+  permanentVirtualBalancePoolToken(request: DeepPartial<QueryGetPermanentVirtualBalancePoolTokenRequest>, metadata?: grpc.Metadata): Promise<QueryGetPermanentVirtualBalancePoolTokenResponse> {
+    return this.rpc.unary(QueryPermanentVirtualBalancePoolTokenDesc, QueryGetPermanentVirtualBalancePoolTokenRequest.fromPartial(request as any), metadata);
+  }
+  permanentVirtualBalancePoolTokenAll(request: DeepPartial<QueryAllPermanentVirtualBalancePoolTokenRequest> = {
+    pagination: undefined
+  }, metadata?: grpc.Metadata): Promise<QueryAllPermanentVirtualBalancePoolTokenResponse> {
+    return this.rpc.unary(QueryPermanentVirtualBalancePoolTokenAllDesc, QueryAllPermanentVirtualBalancePoolTokenRequest.fromPartial(request as any), metadata);
   }
   introducingPoolToken(request: DeepPartial<QueryGetIntroducingPoolTokenRequest>, metadata?: grpc.Metadata): Promise<QueryGetIntroducingPoolTokenResponse> {
     return this.rpc.unary(QueryIntroducingPoolTokenDesc, QueryGetIntroducingPoolTokenRequest.fromPartial(request as any), metadata);
@@ -446,6 +478,48 @@ export const QueryPoolTokenWeightDesc: UnaryMethodDefinitionish = {
     deserializeBinary(data: Uint8Array) {
       return {
         ...QueryGetPoolTokenWeightResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryPoolTokenInfoAllDesc: UnaryMethodDefinitionish = {
+  methodName: "PoolTokenInfoAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllPoolTokenInfoRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllPoolTokenInfoResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryPoolTokenInfoDesc: UnaryMethodDefinitionish = {
+  methodName: "PoolTokenInfo",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGetPoolTokenInfoRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGetPoolTokenInfoResponse.decode(data),
         toObject() {
           return this;
         }
@@ -782,6 +856,48 @@ export const QuerySpotPriceDesc: UnaryMethodDefinitionish = {
     deserializeBinary(data: Uint8Array) {
       return {
         ...QuerySpotPriceResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryPermanentVirtualBalancePoolTokenDesc: UnaryMethodDefinitionish = {
+  methodName: "PermanentVirtualBalancePoolToken",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryGetPermanentVirtualBalancePoolTokenRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryGetPermanentVirtualBalancePoolTokenResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const QueryPermanentVirtualBalancePoolTokenAllDesc: UnaryMethodDefinitionish = {
+  methodName: "PermanentVirtualBalancePoolTokenAll",
+  service: QueryDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return QueryAllPermanentVirtualBalancePoolTokenRequest.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...QueryAllPermanentVirtualBalancePoolTokenResponse.decode(data),
         toObject() {
           return this;
         }

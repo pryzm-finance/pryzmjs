@@ -80,6 +80,34 @@ export interface TokenAmountSDKType {
   token: PoolTokenSDKType;
   amount: string;
 }
+export interface TokenInfo {
+  denom: string;
+  balance: string;
+  virtualBalance: string;
+  /** weight is nil for pools that dont implement WeightedPoolApi */
+  normalizedWeight?: string;
+}
+export interface TokenInfoProtoMsg {
+  typeUrl: "/pryzm.amm.v1.TokenInfo";
+  value: Uint8Array;
+}
+export interface TokenInfoAmino {
+  denom?: string;
+  balance?: string;
+  virtual_balance?: string;
+  /** weight is nil for pools that dont implement WeightedPoolApi */
+  normalized_weight?: string;
+}
+export interface TokenInfoAminoMsg {
+  type: "/pryzm.amm.v1.TokenInfo";
+  value: TokenInfoAmino;
+}
+export interface TokenInfoSDKType {
+  denom: string;
+  balance: string;
+  virtual_balance: string;
+  normalized_weight?: string;
+}
 function createBaseCircuitBreaker(): CircuitBreaker {
   return {
     referenceLptPrice: "",
@@ -455,3 +483,128 @@ export const TokenAmount = {
   }
 };
 GlobalDecoderRegistry.register(TokenAmount.typeUrl, TokenAmount);
+function createBaseTokenInfo(): TokenInfo {
+  return {
+    denom: "",
+    balance: "",
+    virtualBalance: "",
+    normalizedWeight: undefined
+  };
+}
+export const TokenInfo = {
+  typeUrl: "/pryzm.amm.v1.TokenInfo",
+  is(o: any): o is TokenInfo {
+    return o && (o.$typeUrl === TokenInfo.typeUrl || typeof o.denom === "string" && typeof o.balance === "string" && typeof o.virtualBalance === "string");
+  },
+  isSDK(o: any): o is TokenInfoSDKType {
+    return o && (o.$typeUrl === TokenInfo.typeUrl || typeof o.denom === "string" && typeof o.balance === "string" && typeof o.virtual_balance === "string");
+  },
+  isAmino(o: any): o is TokenInfoAmino {
+    return o && (o.$typeUrl === TokenInfo.typeUrl || typeof o.denom === "string" && typeof o.balance === "string" && typeof o.virtual_balance === "string");
+  },
+  encode(message: TokenInfo, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.denom !== "") {
+      writer.uint32(10).string(message.denom);
+    }
+    if (message.balance !== "") {
+      writer.uint32(18).string(message.balance);
+    }
+    if (message.virtualBalance !== "") {
+      writer.uint32(26).string(Decimal.fromUserInput(message.virtualBalance, 18).atomics);
+    }
+    if (message.normalizedWeight !== undefined) {
+      writer.uint32(34).string(Decimal.fromUserInput(message.normalizedWeight, 18).atomics);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): TokenInfo {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseTokenInfo();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.denom = reader.string();
+          break;
+        case 2:
+          message.balance = reader.string();
+          break;
+        case 3:
+          message.virtualBalance = Decimal.fromAtomics(reader.string(), 18).toString();
+          break;
+        case 4:
+          message.normalizedWeight = Decimal.fromAtomics(reader.string(), 18).toString();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): TokenInfo {
+    return {
+      denom: isSet(object.denom) ? String(object.denom) : "",
+      balance: isSet(object.balance) ? String(object.balance) : "",
+      virtualBalance: isSet(object.virtualBalance) ? String(object.virtualBalance) : "",
+      normalizedWeight: isSet(object.normalizedWeight) ? String(object.normalizedWeight) : undefined
+    };
+  },
+  toJSON(message: TokenInfo): unknown {
+    const obj: any = {};
+    message.denom !== undefined && (obj.denom = message.denom);
+    message.balance !== undefined && (obj.balance = message.balance);
+    message.virtualBalance !== undefined && (obj.virtualBalance = message.virtualBalance);
+    message.normalizedWeight !== undefined && (obj.normalizedWeight = message.normalizedWeight);
+    return obj;
+  },
+  fromPartial(object: Partial<TokenInfo>): TokenInfo {
+    const message = createBaseTokenInfo();
+    message.denom = object.denom ?? "";
+    message.balance = object.balance ?? "";
+    message.virtualBalance = object.virtualBalance ?? "";
+    message.normalizedWeight = object.normalizedWeight ?? undefined;
+    return message;
+  },
+  fromAmino(object: TokenInfoAmino): TokenInfo {
+    const message = createBaseTokenInfo();
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    if (object.balance !== undefined && object.balance !== null) {
+      message.balance = object.balance;
+    }
+    if (object.virtual_balance !== undefined && object.virtual_balance !== null) {
+      message.virtualBalance = object.virtual_balance;
+    }
+    if (object.normalized_weight !== undefined && object.normalized_weight !== null) {
+      message.normalizedWeight = object.normalized_weight;
+    }
+    return message;
+  },
+  toAmino(message: TokenInfo, useInterfaces: boolean = true): TokenInfoAmino {
+    const obj: any = {};
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.balance = message.balance === "" ? undefined : message.balance;
+    obj.virtual_balance = padDecimal(message.virtualBalance) === "" ? undefined : padDecimal(message.virtualBalance);
+    obj.normalized_weight = padDecimal(message.normalizedWeight) === null ? undefined : padDecimal(message.normalizedWeight);
+    return obj;
+  },
+  fromAminoMsg(object: TokenInfoAminoMsg): TokenInfo {
+    return TokenInfo.fromAmino(object.value);
+  },
+  fromProtoMsg(message: TokenInfoProtoMsg, useInterfaces: boolean = true): TokenInfo {
+    return TokenInfo.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: TokenInfo): Uint8Array {
+    return TokenInfo.encode(message).finish();
+  },
+  toProtoMsg(message: TokenInfo): TokenInfoProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.TokenInfo",
+      value: TokenInfo.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(TokenInfo.typeUrl, TokenInfo);

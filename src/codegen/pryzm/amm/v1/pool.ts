@@ -105,6 +105,7 @@ export interface Pool {
   admins: string[];
   pauseAllowList: string[];
   swapFeeUpdateParams?: SwapFeeUpdateParams;
+  joinBlocked: boolean;
 }
 export interface PoolProtoMsg {
   typeUrl: "/pryzm.amm.v1.Pool";
@@ -137,6 +138,7 @@ export interface PoolAmino {
   admins?: string[];
   pause_allow_list?: string[];
   swap_fee_update_params?: SwapFeeUpdateParamsAmino;
+  join_blocked?: boolean;
 }
 export interface PoolAminoMsg {
   type: "/pryzm.amm.v1.Pool";
@@ -158,6 +160,7 @@ export interface PoolSDKType {
   admins: string[];
   pause_allow_list: string[];
   swap_fee_update_params?: SwapFeeUpdateParamsSDKType;
+  join_blocked: boolean;
 }
 function createBasePoolPauseWindow(): PoolPauseWindow {
   return {
@@ -383,19 +386,20 @@ function createBasePool(): Pool {
     initializationAllowList: [],
     admins: [],
     pauseAllowList: [],
-    swapFeeUpdateParams: undefined
+    swapFeeUpdateParams: undefined,
+    joinBlocked: false
   };
 }
 export const Pool = {
   typeUrl: "/pryzm.amm.v1.Pool",
   is(o: any): o is Pool {
-    return o && (o.$typeUrl === Pool.typeUrl || typeof o.id === "bigint" && typeof o.name === "string" && typeof o.startSwapFeeRatio === "string" && isSet(o.poolType) && typeof o.creator === "string" && typeof o.recoveryMode === "boolean" && typeof o.pausedByGov === "boolean" && typeof o.pausedByOwner === "boolean" && Array.isArray(o.initializationAllowList) && (!o.initializationAllowList.length || typeof o.initializationAllowList[0] === "string") && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string") && Array.isArray(o.pauseAllowList) && (!o.pauseAllowList.length || typeof o.pauseAllowList[0] === "string"));
+    return o && (o.$typeUrl === Pool.typeUrl || typeof o.id === "bigint" && typeof o.name === "string" && typeof o.startSwapFeeRatio === "string" && isSet(o.poolType) && typeof o.creator === "string" && typeof o.recoveryMode === "boolean" && typeof o.pausedByGov === "boolean" && typeof o.pausedByOwner === "boolean" && Array.isArray(o.initializationAllowList) && (!o.initializationAllowList.length || typeof o.initializationAllowList[0] === "string") && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string") && Array.isArray(o.pauseAllowList) && (!o.pauseAllowList.length || typeof o.pauseAllowList[0] === "string") && typeof o.joinBlocked === "boolean");
   },
   isSDK(o: any): o is PoolSDKType {
-    return o && (o.$typeUrl === Pool.typeUrl || typeof o.id === "bigint" && typeof o.name === "string" && typeof o.start_swap_fee_ratio === "string" && isSet(o.pool_type) && typeof o.creator === "string" && typeof o.recovery_mode === "boolean" && typeof o.paused_by_gov === "boolean" && typeof o.paused_by_owner === "boolean" && Array.isArray(o.initialization_allow_list) && (!o.initialization_allow_list.length || typeof o.initialization_allow_list[0] === "string") && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string") && Array.isArray(o.pause_allow_list) && (!o.pause_allow_list.length || typeof o.pause_allow_list[0] === "string"));
+    return o && (o.$typeUrl === Pool.typeUrl || typeof o.id === "bigint" && typeof o.name === "string" && typeof o.start_swap_fee_ratio === "string" && isSet(o.pool_type) && typeof o.creator === "string" && typeof o.recovery_mode === "boolean" && typeof o.paused_by_gov === "boolean" && typeof o.paused_by_owner === "boolean" && Array.isArray(o.initialization_allow_list) && (!o.initialization_allow_list.length || typeof o.initialization_allow_list[0] === "string") && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string") && Array.isArray(o.pause_allow_list) && (!o.pause_allow_list.length || typeof o.pause_allow_list[0] === "string") && typeof o.join_blocked === "boolean");
   },
   isAmino(o: any): o is PoolAmino {
-    return o && (o.$typeUrl === Pool.typeUrl || typeof o.id === "bigint" && typeof o.name === "string" && typeof o.start_swap_fee_ratio === "string" && isSet(o.pool_type) && typeof o.creator === "string" && typeof o.recovery_mode === "boolean" && typeof o.paused_by_gov === "boolean" && typeof o.paused_by_owner === "boolean" && Array.isArray(o.initialization_allow_list) && (!o.initialization_allow_list.length || typeof o.initialization_allow_list[0] === "string") && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string") && Array.isArray(o.pause_allow_list) && (!o.pause_allow_list.length || typeof o.pause_allow_list[0] === "string"));
+    return o && (o.$typeUrl === Pool.typeUrl || typeof o.id === "bigint" && typeof o.name === "string" && typeof o.start_swap_fee_ratio === "string" && isSet(o.pool_type) && typeof o.creator === "string" && typeof o.recovery_mode === "boolean" && typeof o.paused_by_gov === "boolean" && typeof o.paused_by_owner === "boolean" && Array.isArray(o.initialization_allow_list) && (!o.initialization_allow_list.length || typeof o.initialization_allow_list[0] === "string") && Array.isArray(o.admins) && (!o.admins.length || typeof o.admins[0] === "string") && Array.isArray(o.pause_allow_list) && (!o.pause_allow_list.length || typeof o.pause_allow_list[0] === "string") && typeof o.join_blocked === "boolean");
   },
   encode(message: Pool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
@@ -442,6 +446,9 @@ export const Pool = {
     }
     if (message.swapFeeUpdateParams !== undefined) {
       SwapFeeUpdateParams.encode(message.swapFeeUpdateParams, writer.uint32(122).fork()).ldelim();
+    }
+    if (message.joinBlocked === true) {
+      writer.uint32(128).bool(message.joinBlocked);
     }
     return writer;
   },
@@ -497,6 +504,9 @@ export const Pool = {
         case 15:
           message.swapFeeUpdateParams = SwapFeeUpdateParams.decode(reader, reader.uint32(), useInterfaces);
           break;
+        case 16:
+          message.joinBlocked = reader.bool();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -520,7 +530,8 @@ export const Pool = {
       initializationAllowList: Array.isArray(object?.initializationAllowList) ? object.initializationAllowList.map((e: any) => String(e)) : [],
       admins: Array.isArray(object?.admins) ? object.admins.map((e: any) => String(e)) : [],
       pauseAllowList: Array.isArray(object?.pauseAllowList) ? object.pauseAllowList.map((e: any) => String(e)) : [],
-      swapFeeUpdateParams: isSet(object.swapFeeUpdateParams) ? SwapFeeUpdateParams.fromJSON(object.swapFeeUpdateParams) : undefined
+      swapFeeUpdateParams: isSet(object.swapFeeUpdateParams) ? SwapFeeUpdateParams.fromJSON(object.swapFeeUpdateParams) : undefined,
+      joinBlocked: isSet(object.joinBlocked) ? Boolean(object.joinBlocked) : false
     };
   },
   toJSON(message: Pool): unknown {
@@ -552,6 +563,7 @@ export const Pool = {
       obj.pauseAllowList = [];
     }
     message.swapFeeUpdateParams !== undefined && (obj.swapFeeUpdateParams = message.swapFeeUpdateParams ? SwapFeeUpdateParams.toJSON(message.swapFeeUpdateParams) : undefined);
+    message.joinBlocked !== undefined && (obj.joinBlocked = message.joinBlocked);
     return obj;
   },
   fromPartial(object: Partial<Pool>): Pool {
@@ -571,6 +583,7 @@ export const Pool = {
     message.admins = object.admins?.map(e => e) || [];
     message.pauseAllowList = object.pauseAllowList?.map(e => e) || [];
     message.swapFeeUpdateParams = object.swapFeeUpdateParams !== undefined && object.swapFeeUpdateParams !== null ? SwapFeeUpdateParams.fromPartial(object.swapFeeUpdateParams) : undefined;
+    message.joinBlocked = object.joinBlocked ?? false;
     return message;
   },
   fromAmino(object: PoolAmino): Pool {
@@ -614,6 +627,9 @@ export const Pool = {
     if (object.swap_fee_update_params !== undefined && object.swap_fee_update_params !== null) {
       message.swapFeeUpdateParams = SwapFeeUpdateParams.fromAmino(object.swap_fee_update_params);
     }
+    if (object.join_blocked !== undefined && object.join_blocked !== null) {
+      message.joinBlocked = object.join_blocked;
+    }
     return message;
   },
   toAmino(message: Pool, useInterfaces: boolean = true): PoolAmino {
@@ -645,6 +661,7 @@ export const Pool = {
       obj.pause_allow_list = message.pauseAllowList;
     }
     obj.swap_fee_update_params = message.swapFeeUpdateParams ? SwapFeeUpdateParams.toAmino(message.swapFeeUpdateParams, useInterfaces) : undefined;
+    obj.join_blocked = message.joinBlocked === false ? undefined : message.joinBlocked;
     return obj;
   },
   fromAminoMsg(object: PoolAminoMsg): Pool {
