@@ -12,6 +12,11 @@ export interface Allocation {
   spendLimit: Coin[];
   /** allow list of receivers, an empty allow list permits any receiver address */
   allowList: string[];
+  /**
+   * allow list of memo strings, an empty list prohibits all memo strings;
+   * a list only with "*" permits any memo string
+   */
+  allowedPacketData: string[];
 }
 export interface AllocationProtoMsg {
   typeUrl: "/ibc.applications.transfer.v1.Allocation";
@@ -27,6 +32,11 @@ export interface AllocationAmino {
   spend_limit?: CoinAmino[];
   /** allow list of receivers, an empty allow list permits any receiver address */
   allow_list?: string[];
+  /**
+   * allow list of memo strings, an empty list prohibits all memo strings;
+   * a list only with "*" permits any memo string
+   */
+  allowed_packet_data?: string[];
 }
 export interface AllocationAminoMsg {
   type: "cosmos-sdk/Allocation";
@@ -38,6 +48,7 @@ export interface AllocationSDKType {
   source_channel: string;
   spend_limit: CoinSDKType[];
   allow_list: string[];
+  allowed_packet_data: string[];
 }
 /**
  * TransferAuthorization allows the grantee to spend up to spend_limit coins from
@@ -77,20 +88,21 @@ function createBaseAllocation(): Allocation {
     sourcePort: "",
     sourceChannel: "",
     spendLimit: [],
-    allowList: []
+    allowList: [],
+    allowedPacketData: []
   };
 }
 export const Allocation = {
   typeUrl: "/ibc.applications.transfer.v1.Allocation",
   aminoType: "cosmos-sdk/Allocation",
   is(o: any): o is Allocation {
-    return o && (o.$typeUrl === Allocation.typeUrl || typeof o.sourcePort === "string" && typeof o.sourceChannel === "string" && Array.isArray(o.spendLimit) && (!o.spendLimit.length || Coin.is(o.spendLimit[0])) && Array.isArray(o.allowList) && (!o.allowList.length || typeof o.allowList[0] === "string"));
+    return o && (o.$typeUrl === Allocation.typeUrl || typeof o.sourcePort === "string" && typeof o.sourceChannel === "string" && Array.isArray(o.spendLimit) && (!o.spendLimit.length || Coin.is(o.spendLimit[0])) && Array.isArray(o.allowList) && (!o.allowList.length || typeof o.allowList[0] === "string") && Array.isArray(o.allowedPacketData) && (!o.allowedPacketData.length || typeof o.allowedPacketData[0] === "string"));
   },
   isSDK(o: any): o is AllocationSDKType {
-    return o && (o.$typeUrl === Allocation.typeUrl || typeof o.source_port === "string" && typeof o.source_channel === "string" && Array.isArray(o.spend_limit) && (!o.spend_limit.length || Coin.isSDK(o.spend_limit[0])) && Array.isArray(o.allow_list) && (!o.allow_list.length || typeof o.allow_list[0] === "string"));
+    return o && (o.$typeUrl === Allocation.typeUrl || typeof o.source_port === "string" && typeof o.source_channel === "string" && Array.isArray(o.spend_limit) && (!o.spend_limit.length || Coin.isSDK(o.spend_limit[0])) && Array.isArray(o.allow_list) && (!o.allow_list.length || typeof o.allow_list[0] === "string") && Array.isArray(o.allowed_packet_data) && (!o.allowed_packet_data.length || typeof o.allowed_packet_data[0] === "string"));
   },
   isAmino(o: any): o is AllocationAmino {
-    return o && (o.$typeUrl === Allocation.typeUrl || typeof o.source_port === "string" && typeof o.source_channel === "string" && Array.isArray(o.spend_limit) && (!o.spend_limit.length || Coin.isAmino(o.spend_limit[0])) && Array.isArray(o.allow_list) && (!o.allow_list.length || typeof o.allow_list[0] === "string"));
+    return o && (o.$typeUrl === Allocation.typeUrl || typeof o.source_port === "string" && typeof o.source_channel === "string" && Array.isArray(o.spend_limit) && (!o.spend_limit.length || Coin.isAmino(o.spend_limit[0])) && Array.isArray(o.allow_list) && (!o.allow_list.length || typeof o.allow_list[0] === "string") && Array.isArray(o.allowed_packet_data) && (!o.allowed_packet_data.length || typeof o.allowed_packet_data[0] === "string"));
   },
   encode(message: Allocation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.sourcePort !== "") {
@@ -104,6 +116,9 @@ export const Allocation = {
     }
     for (const v of message.allowList) {
       writer.uint32(34).string(v!);
+    }
+    for (const v of message.allowedPacketData) {
+      writer.uint32(42).string(v!);
     }
     return writer;
   },
@@ -126,6 +141,9 @@ export const Allocation = {
         case 4:
           message.allowList.push(reader.string());
           break;
+        case 5:
+          message.allowedPacketData.push(reader.string());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -138,7 +156,8 @@ export const Allocation = {
       sourcePort: isSet(object.sourcePort) ? String(object.sourcePort) : "",
       sourceChannel: isSet(object.sourceChannel) ? String(object.sourceChannel) : "",
       spendLimit: Array.isArray(object?.spendLimit) ? object.spendLimit.map((e: any) => Coin.fromJSON(e)) : [],
-      allowList: Array.isArray(object?.allowList) ? object.allowList.map((e: any) => String(e)) : []
+      allowList: Array.isArray(object?.allowList) ? object.allowList.map((e: any) => String(e)) : [],
+      allowedPacketData: Array.isArray(object?.allowedPacketData) ? object.allowedPacketData.map((e: any) => String(e)) : []
     };
   },
   toJSON(message: Allocation): unknown {
@@ -155,6 +174,11 @@ export const Allocation = {
     } else {
       obj.allowList = [];
     }
+    if (message.allowedPacketData) {
+      obj.allowedPacketData = message.allowedPacketData.map(e => e);
+    } else {
+      obj.allowedPacketData = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<Allocation>): Allocation {
@@ -163,6 +187,7 @@ export const Allocation = {
     message.sourceChannel = object.sourceChannel ?? "";
     message.spendLimit = object.spendLimit?.map(e => Coin.fromPartial(e)) || [];
     message.allowList = object.allowList?.map(e => e) || [];
+    message.allowedPacketData = object.allowedPacketData?.map(e => e) || [];
     return message;
   },
   fromAmino(object: AllocationAmino): Allocation {
@@ -175,6 +200,7 @@ export const Allocation = {
     }
     message.spendLimit = object.spend_limit?.map(e => Coin.fromAmino(e)) || [];
     message.allowList = object.allow_list?.map(e => e) || [];
+    message.allowedPacketData = object.allowed_packet_data?.map(e => e) || [];
     return message;
   },
   toAmino(message: Allocation, useInterfaces: boolean = true): AllocationAmino {
@@ -190,6 +216,11 @@ export const Allocation = {
       obj.allow_list = message.allowList.map(e => e);
     } else {
       obj.allow_list = message.allowList;
+    }
+    if (message.allowedPacketData) {
+      obj.allowed_packet_data = message.allowedPacketData.map(e => e);
+    } else {
+      obj.allowed_packet_data = message.allowedPacketData;
     }
     return obj;
   },

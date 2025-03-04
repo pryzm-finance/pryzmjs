@@ -1,5 +1,5 @@
 import { BinaryReader, BinaryWriter } from "../../../../../binary";
-import { isSet } from "../../../../../helpers";
+import { isSet, bytesFromBase64, base64FromBytes } from "../../../../../helpers";
 import { GlobalDecoderRegistry } from "../../../../../registry";
 /**
  * Params defines the set of on-chain interchain accounts parameters.
@@ -36,6 +36,54 @@ export interface ParamsAminoMsg {
 export interface ParamsSDKType {
   host_enabled: boolean;
   allow_messages: string[];
+}
+/**
+ * QueryRequest defines the parameters for a particular query request
+ * by an interchain account.
+ */
+export interface QueryRequest {
+  /**
+   * path defines the path of the query request as defined by ADR-021.
+   * https://github.com/cosmos/cosmos-sdk/blob/main/docs/architecture/adr-021-protobuf-query-encoding.md#custom-query-registration-and-routing
+   */
+  path: string;
+  /**
+   * data defines the payload of the query request as defined by ADR-021.
+   * https://github.com/cosmos/cosmos-sdk/blob/main/docs/architecture/adr-021-protobuf-query-encoding.md#custom-query-registration-and-routing
+   */
+  data: Uint8Array;
+}
+export interface QueryRequestProtoMsg {
+  typeUrl: "/ibc.applications.interchain_accounts.host.v1.QueryRequest";
+  value: Uint8Array;
+}
+/**
+ * QueryRequest defines the parameters for a particular query request
+ * by an interchain account.
+ */
+export interface QueryRequestAmino {
+  /**
+   * path defines the path of the query request as defined by ADR-021.
+   * https://github.com/cosmos/cosmos-sdk/blob/main/docs/architecture/adr-021-protobuf-query-encoding.md#custom-query-registration-and-routing
+   */
+  path?: string;
+  /**
+   * data defines the payload of the query request as defined by ADR-021.
+   * https://github.com/cosmos/cosmos-sdk/blob/main/docs/architecture/adr-021-protobuf-query-encoding.md#custom-query-registration-and-routing
+   */
+  data?: string;
+}
+export interface QueryRequestAminoMsg {
+  type: "cosmos-sdk/QueryRequest";
+  value: QueryRequestAmino;
+}
+/**
+ * QueryRequest defines the parameters for a particular query request
+ * by an interchain account.
+ */
+export interface QueryRequestSDKType {
+  path: string;
+  data: Uint8Array;
 }
 function createBaseParams(): Params {
   return {
@@ -148,3 +196,108 @@ export const Params = {
 };
 GlobalDecoderRegistry.register(Params.typeUrl, Params);
 GlobalDecoderRegistry.registerAminoProtoMapping(Params.aminoType, Params.typeUrl);
+function createBaseQueryRequest(): QueryRequest {
+  return {
+    path: "",
+    data: new Uint8Array()
+  };
+}
+export const QueryRequest = {
+  typeUrl: "/ibc.applications.interchain_accounts.host.v1.QueryRequest",
+  aminoType: "cosmos-sdk/QueryRequest",
+  is(o: any): o is QueryRequest {
+    return o && (o.$typeUrl === QueryRequest.typeUrl || typeof o.path === "string" && (o.data instanceof Uint8Array || typeof o.data === "string"));
+  },
+  isSDK(o: any): o is QueryRequestSDKType {
+    return o && (o.$typeUrl === QueryRequest.typeUrl || typeof o.path === "string" && (o.data instanceof Uint8Array || typeof o.data === "string"));
+  },
+  isAmino(o: any): o is QueryRequestAmino {
+    return o && (o.$typeUrl === QueryRequest.typeUrl || typeof o.path === "string" && (o.data instanceof Uint8Array || typeof o.data === "string"));
+  },
+  encode(message: QueryRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.path !== "") {
+      writer.uint32(10).string(message.path);
+    }
+    if (message.data.length !== 0) {
+      writer.uint32(18).bytes(message.data);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QueryRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.path = reader.string();
+          break;
+        case 2:
+          message.data = reader.bytes();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryRequest {
+    return {
+      path: isSet(object.path) ? String(object.path) : "",
+      data: isSet(object.data) ? bytesFromBase64(object.data) : new Uint8Array()
+    };
+  },
+  toJSON(message: QueryRequest): unknown {
+    const obj: any = {};
+    message.path !== undefined && (obj.path = message.path);
+    message.data !== undefined && (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
+    return obj;
+  },
+  fromPartial(object: Partial<QueryRequest>): QueryRequest {
+    const message = createBaseQueryRequest();
+    message.path = object.path ?? "";
+    message.data = object.data ?? new Uint8Array();
+    return message;
+  },
+  fromAmino(object: QueryRequestAmino): QueryRequest {
+    const message = createBaseQueryRequest();
+    if (object.path !== undefined && object.path !== null) {
+      message.path = object.path;
+    }
+    if (object.data !== undefined && object.data !== null) {
+      message.data = bytesFromBase64(object.data);
+    }
+    return message;
+  },
+  toAmino(message: QueryRequest, useInterfaces: boolean = true): QueryRequestAmino {
+    const obj: any = {};
+    obj.path = message.path === "" ? undefined : message.path;
+    obj.data = message.data ? base64FromBytes(message.data) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryRequestAminoMsg): QueryRequest {
+    return QueryRequest.fromAmino(object.value);
+  },
+  toAminoMsg(message: QueryRequest, useInterfaces: boolean = true): QueryRequestAminoMsg {
+    return {
+      type: "cosmos-sdk/QueryRequest",
+      value: QueryRequest.toAmino(message, useInterfaces)
+    };
+  },
+  fromProtoMsg(message: QueryRequestProtoMsg, useInterfaces: boolean = true): QueryRequest {
+    return QueryRequest.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QueryRequest): Uint8Array {
+    return QueryRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryRequest): QueryRequestProtoMsg {
+    return {
+      typeUrl: "/ibc.applications.interchain_accounts.host.v1.QueryRequest",
+      value: QueryRequest.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QueryRequest.typeUrl, QueryRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryRequest.aminoType, QueryRequest.typeUrl);
