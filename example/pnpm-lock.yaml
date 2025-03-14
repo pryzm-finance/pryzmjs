@@ -15,8 +15,8 @@ importers:
         specifier: 0.32.4
         version: 0.32.4
       '@pryzm-finance/pryzmjs':
-        specifier: 0.26.0
-        version: 0.26.0(google-protobuf@3.21.2)(starknet@6.11.0)
+        specifier: 0.27.0
+        version: 0.27.0(google-protobuf@3.21.2)(starknet@6.11.0)
       '@refractedlabs/internal-js-utils':
         specifier: 0.6.5
         version: 0.6.5
@@ -95,13 +95,13 @@ packages:
     peerDependencies:
       google-protobuf: ^3.14.0
 
-  '@keplr-wallet/types@0.12.190':
-    resolution: {integrity: sha512-f/fCuUuFv0KXMOrpagY6DEMLV4EQnBk07XNAshaF0/jOeTR20LRkEp5/ew1VmGe2DAUrLPHrBkFWpbDvuYiwWw==}
+  '@keplr-wallet/types@0.12.200':
+    resolution: {integrity: sha512-YB0diAI/hc/7jY8UfN5hHD0E5zWdQ6whdQy3TxD0l2AXxBPw0zzoJIWDCehNf2Iqr9sSyn5ofAe6X5T99AErHQ==}
     peerDependencies:
       starknet: ^6
 
-  '@keplr-wallet/unit@0.12.190':
-    resolution: {integrity: sha512-Mt1M32/AiNxRlFO+L/mZOCQLNv8YXemjiCrl2BWTvEZsiuXEFeky8SVS1OQGH/mI6U3AyDPgxYy6PSqEyiT4+w==}
+  '@keplr-wallet/unit@0.12.200':
+    resolution: {integrity: sha512-+yat++QGdpOHvkGR2Wv7e824yiGHSa0Zeht+fSUOkPKNBD4vKMnV18IEiA1n8r/oNUoVBKF8qbI95Yz7yngrWQ==}
 
   '@noble/curves@1.3.0':
     resolution: {integrity: sha512-t01iSXPuN+Eqzb4eBX0S5oubSqXbK/xXa1Ne18Hj8f9pStxztHCE2gfboSp/dZRLSqfuLpRK2nDXDK+W9puocA==}
@@ -151,8 +151,8 @@ packages:
   '@protobufjs/utf8@1.1.0':
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
 
-  '@pryzm-finance/pryzmjs@0.26.0':
-    resolution: {integrity: sha512-AynhLNMUGdTbpzcRKBiknr76016VWb7tEYbiAYhd5t64Y93GbUBgWl3G0wh6ceDkGbBYz9UvL429mTZcgyP8Ag==}
+  '@pryzm-finance/pryzmjs@0.27.0':
+    resolution: {integrity: sha512-EJlm6/2lU5TuCWu/aAtXStvDZedlD7EG0bKmYGu5mqBzoM6YRHWTsCYtYj5Cme43kuaN4hMYP/ZIB1Yo5941nQ==}
 
   '@refractedlabs/cosmology-lcd-fork@0.13.7':
     resolution: {integrity: sha512-5DEQy8DHzSIsTfl+amlISteWCWmAokWC1pJkMit8H16Mx1ycaDfSrvREHHJlB5bfOkTkc3YHMmd8e8izihEHng==}
@@ -557,11 +557,11 @@ packages:
   text-hex@1.0.0:
     resolution: {integrity: sha512-uuVGNWzgJ4yhRaNSiubPY7OjISw4sw4E5Uv0wbjp+OzcbmVU/rsT8ujgcXJhn9ypzsgr5vlzpPqP+MBBKcGvbg==}
 
-  tldts-core@6.1.82:
-    resolution: {integrity: sha512-Jabl32m21tt/d/PbDO88R43F8aY98Piiz6BVH9ShUlOAiiAELhEqwrAmBocjAqnCfoUeIsRU+h3IEzZd318F3w==}
+  tldts-core@6.1.84:
+    resolution: {integrity: sha512-NaQa1W76W2aCGjXybvnMYzGSM4x8fvG2AN/pla7qxcg0ZHbooOPhA8kctmOZUDfZyhDL27OGNbwAeig8P4p1vg==}
 
-  tldts@6.1.82:
-    resolution: {integrity: sha512-KCTjNL9F7j8MzxgfTgjT+v21oYH38OidFty7dH00maWANAI2IsLw2AnThtTJi9HKALHZKQQWnNebYheadacD+g==}
+  tldts@6.1.84:
+    resolution: {integrity: sha512-aRGIbCIF3teodtUFAYSdQONVmDRy21REM3o6JnqWn5ZkQBJJ4gHxhw6OfwQ+WkSAi3ASamrS4N4nyazWx6uTYg==}
     hasBin: true
 
   tough-cookie@5.1.2:
@@ -800,14 +800,14 @@ snapshots:
       browser-headers: 0.4.1
       google-protobuf: 3.21.2
 
-  '@keplr-wallet/types@0.12.190(starknet@6.11.0)':
+  '@keplr-wallet/types@0.12.200(starknet@6.11.0)':
     dependencies:
       long: 4.0.0
       starknet: 6.11.0
 
-  '@keplr-wallet/unit@0.12.190(starknet@6.11.0)':
+  '@keplr-wallet/unit@0.12.200(starknet@6.11.0)':
     dependencies:
-      '@keplr-wallet/types': 0.12.190(starknet@6.11.0)
+      '@keplr-wallet/types': 0.12.200(starknet@6.11.0)
       big-integer: 1.6.52
       utility-types: 3.11.0
     transitivePeerDependencies:
@@ -850,7 +850,7 @@ snapshots:
 
   '@protobufjs/utf8@1.1.0': {}
 
-  '@pryzm-finance/pryzmjs@0.26.0(google-protobuf@3.21.2)(starknet@6.11.0)':
+  '@pryzm-finance/pryzmjs@0.27.0(google-protobuf@3.21.2)(starknet@6.11.0)':
     dependencies:
       '@cosmjs/math': 0.32.4
       '@cosmjs/proto-signing': 0.32.4
@@ -858,7 +858,7 @@ snapshots:
       '@cosmjs/tendermint-rpc': 0.32.4
       '@improbable-eng/grpc-web': 0.15.0(google-protobuf@3.21.2)
       '@improbable-eng/grpc-web-node-http-transport': 0.15.0(@improbable-eng/grpc-web@0.15.0(google-protobuf@3.21.2))
-      '@keplr-wallet/unit': 0.12.190(starknet@6.11.0)
+      '@keplr-wallet/unit': 0.12.200(starknet@6.11.0)
       '@refractedlabs/cosmology-lcd-fork': 0.13.7
       '@refractedlabs/internal-js-utils': 0.6.5
       browser-headers: 0.4.1
@@ -1298,15 +1298,15 @@ snapshots:
 
   text-hex@1.0.0: {}
 
-  tldts-core@6.1.82: {}
+  tldts-core@6.1.84: {}
 
-  tldts@6.1.82:
+  tldts@6.1.84:
     dependencies:
-      tldts-core: 6.1.82
+      tldts-core: 6.1.84
 
   tough-cookie@5.1.2:
     dependencies:
-      tldts: 6.1.82
+      tldts: 6.1.84
 
   tr46@0.0.3: {}
 
