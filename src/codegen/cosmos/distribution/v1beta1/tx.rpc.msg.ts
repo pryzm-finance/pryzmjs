@@ -1,0 +1,251 @@
+import { UnaryMethodDefinitionish } from "../../../grpc-web";
+import { DeepPartial } from "../../../helpers";
+import { grpc } from "@improbable-eng/grpc-web";
+import { BrowserHeaders } from "browser-headers";
+import { MsgSetWithdrawAddress, MsgSetWithdrawAddressResponse, MsgWithdrawDelegatorReward, MsgWithdrawDelegatorRewardResponse, MsgWithdrawValidatorCommission, MsgWithdrawValidatorCommissionResponse, MsgFundCommunityPool, MsgFundCommunityPoolResponse, MsgUpdateParams, MsgUpdateParamsResponse, MsgCommunityPoolSpend, MsgCommunityPoolSpendResponse } from "./tx";
+/** Msg defines the distribution Msg service. */
+export interface Msg {
+  /**
+   * SetWithdrawAddress defines a method to change the withdraw address
+   * for a delegator (or validator self-delegation).
+   */
+  setWithdrawAddress(request: DeepPartial<MsgSetWithdrawAddress>, metadata?: grpc.Metadata): Promise<MsgSetWithdrawAddressResponse>;
+  /**
+   * WithdrawDelegatorReward defines a method to withdraw rewards of delegator
+   * from a single validator.
+   */
+  withdrawDelegatorReward(request: DeepPartial<MsgWithdrawDelegatorReward>, metadata?: grpc.Metadata): Promise<MsgWithdrawDelegatorRewardResponse>;
+  /**
+   * WithdrawValidatorCommission defines a method to withdraw the
+   * full commission to the validator address.
+   */
+  withdrawValidatorCommission(request: DeepPartial<MsgWithdrawValidatorCommission>, metadata?: grpc.Metadata): Promise<MsgWithdrawValidatorCommissionResponse>;
+  /**
+   * FundCommunityPool defines a method to allow an account to directly
+   * fund the community pool.
+   */
+  fundCommunityPool(request: DeepPartial<MsgFundCommunityPool>, metadata?: grpc.Metadata): Promise<MsgFundCommunityPoolResponse>;
+  /**
+   * UpdateParams defines a governance operation for updating the x/distribution
+   * module parameters. The authority is defined in the keeper.
+   * 
+   * Since: cosmos-sdk 0.47
+   */
+  updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse>;
+  /**
+   * CommunityPoolSpend defines a governance operation for sending tokens from
+   * the community pool in the x/distribution module to another account, which
+   * could be the governance module itself. The authority is defined in the
+   * keeper.
+   * 
+   * Since: cosmos-sdk 0.47
+   */
+  communityPoolSpend(request: DeepPartial<MsgCommunityPoolSpend>, metadata?: grpc.Metadata): Promise<MsgCommunityPoolSpendResponse>;
+}
+export class MsgClientImpl implements Msg {
+  private readonly rpc: Rpc;
+  constructor(rpc: Rpc) {
+    this.rpc = rpc;
+    this.setWithdrawAddress = this.setWithdrawAddress.bind(this);
+    this.withdrawDelegatorReward = this.withdrawDelegatorReward.bind(this);
+    this.withdrawValidatorCommission = this.withdrawValidatorCommission.bind(this);
+    this.fundCommunityPool = this.fundCommunityPool.bind(this);
+    this.updateParams = this.updateParams.bind(this);
+    this.communityPoolSpend = this.communityPoolSpend.bind(this);
+  }
+  setWithdrawAddress(request: DeepPartial<MsgSetWithdrawAddress>, metadata?: grpc.Metadata): Promise<MsgSetWithdrawAddressResponse> {
+    return this.rpc.unary(MsgSetWithdrawAddressDesc, MsgSetWithdrawAddress.fromPartial(request as any), metadata);
+  }
+  withdrawDelegatorReward(request: DeepPartial<MsgWithdrawDelegatorReward>, metadata?: grpc.Metadata): Promise<MsgWithdrawDelegatorRewardResponse> {
+    return this.rpc.unary(MsgWithdrawDelegatorRewardDesc, MsgWithdrawDelegatorReward.fromPartial(request as any), metadata);
+  }
+  withdrawValidatorCommission(request: DeepPartial<MsgWithdrawValidatorCommission>, metadata?: grpc.Metadata): Promise<MsgWithdrawValidatorCommissionResponse> {
+    return this.rpc.unary(MsgWithdrawValidatorCommissionDesc, MsgWithdrawValidatorCommission.fromPartial(request as any), metadata);
+  }
+  fundCommunityPool(request: DeepPartial<MsgFundCommunityPool>, metadata?: grpc.Metadata): Promise<MsgFundCommunityPoolResponse> {
+    return this.rpc.unary(MsgFundCommunityPoolDesc, MsgFundCommunityPool.fromPartial(request as any), metadata);
+  }
+  updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse> {
+    return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request as any), metadata);
+  }
+  communityPoolSpend(request: DeepPartial<MsgCommunityPoolSpend>, metadata?: grpc.Metadata): Promise<MsgCommunityPoolSpendResponse> {
+    return this.rpc.unary(MsgCommunityPoolSpendDesc, MsgCommunityPoolSpend.fromPartial(request as any), metadata);
+  }
+}
+export const MsgDesc = {
+  serviceName: "cosmos.distribution.v1beta1.Msg"
+};
+export const MsgSetWithdrawAddressDesc: UnaryMethodDefinitionish = {
+  methodName: "SetWithdrawAddress",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgSetWithdrawAddress.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgSetWithdrawAddressResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgWithdrawDelegatorRewardDesc: UnaryMethodDefinitionish = {
+  methodName: "WithdrawDelegatorReward",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgWithdrawDelegatorReward.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgWithdrawDelegatorRewardResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgWithdrawValidatorCommissionDesc: UnaryMethodDefinitionish = {
+  methodName: "WithdrawValidatorCommission",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgWithdrawValidatorCommission.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgWithdrawValidatorCommissionResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgFundCommunityPoolDesc: UnaryMethodDefinitionish = {
+  methodName: "FundCommunityPool",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgFundCommunityPool.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgFundCommunityPoolResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgUpdateParamsDesc: UnaryMethodDefinitionish = {
+  methodName: "UpdateParams",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgUpdateParams.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgUpdateParamsResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgCommunityPoolSpendDesc: UnaryMethodDefinitionish = {
+  methodName: "CommunityPoolSpend",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgCommunityPoolSpend.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgCommunityPoolSpendResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export interface Rpc {
+  unary<T extends UnaryMethodDefinitionish>(methodDesc: T, request: any, metadata: grpc.Metadata | undefined): Promise<any>;
+}
+export class GrpcWebImpl {
+  host: string;
+  options: {
+    transport?: grpc.TransportFactory;
+    debug?: boolean;
+    metadata?: grpc.Metadata;
+  };
+  constructor(host: string, options: {
+    transport?: grpc.TransportFactory;
+    debug?: boolean;
+    metadata?: grpc.Metadata;
+  }) {
+    this.host = host;
+    this.options = options;
+  }
+  unary<T extends UnaryMethodDefinitionish>(methodDesc: T, _request: any, metadata: grpc.Metadata | undefined) {
+    const request = {
+      ..._request,
+      ...methodDesc.requestType
+    };
+    const maybeCombinedMetadata = metadata && this.options.metadata ? new BrowserHeaders({
+      ...this.options?.metadata.headersMap,
+      ...metadata?.headersMap
+    }) : metadata || this.options.metadata;
+    return new Promise((resolve, reject) => {
+      grpc.unary(methodDesc, {
+        request,
+        host: this.host,
+        metadata: maybeCombinedMetadata,
+        transport: this.options.transport,
+        debug: this.options.debug,
+        onEnd: function (response) {
+          if (response.status === grpc.Code.OK) {
+            resolve(response.message);
+          } else {
+            const err = (new Error(response.statusMessage) as any);
+            err.code = response.status;
+            err.metadata = response.trailers;
+            reject(err);
+          }
+        }
+      });
+    });
+  }
+}
