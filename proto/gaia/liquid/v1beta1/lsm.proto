@@ -1,0 +1,29 @@
+syntax = "proto3";
+package gaia.liquid.v1beta1;
+
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos/msg/v1/msg.proto";
+import "amino/amino.proto";
+
+option go_package = "github.com/pryzm-finance/pryzm-core/x/icstaking/types";
+
+// MsgRedeemTokensForShares redeems a tokenized share back into a native
+// delegation
+message MsgRedeemTokensForShares {
+  option (cosmos.msg.v1.signer) = "delegator_address";
+  option (amino.name) = "gaia/MsgRedeemTokensForShares";
+
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
+
+  string delegator_address = 1
+  [ (gogoproto.moretags) = "yaml:\"delegator_address\"" ];
+  cosmos.base.v1beta1.Coin amount = 2 [ (gogoproto.nullable) = false ];
+}
+
+// MsgRedeemTokensForSharesResponse defines the Msg/MsgRedeemTokensForShares
+// response type.
+message MsgRedeemTokensForSharesResponse {
+  cosmos.base.v1beta1.Coin amount = 1 [ (gogoproto.nullable) = false ];
+}

@@ -1,47 +1,65 @@
-import { Coin, CoinAmino, CoinSDKType } from "../../base/v1beta1/coin";
+import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
-/** MsgRedeemTokensForShares redeems a tokenized share back into a native delegation */
+/**
+ * MsgRedeemTokensForShares redeems a tokenized share back into a native
+ * delegation
+ */
 export interface MsgRedeemTokensForShares {
   delegatorAddress: string;
   amount: Coin;
 }
 export interface MsgRedeemTokensForSharesProtoMsg {
-  typeUrl: "/cosmos.staking.v1beta1.MsgRedeemTokensForShares";
+  typeUrl: "/gaia.liquid.v1beta1.MsgRedeemTokensForShares";
   value: Uint8Array;
 }
-/** MsgRedeemTokensForShares redeems a tokenized share back into a native delegation */
+/**
+ * MsgRedeemTokensForShares redeems a tokenized share back into a native
+ * delegation
+ */
 export interface MsgRedeemTokensForSharesAmino {
   delegator_address?: string;
   amount?: CoinAmino;
 }
 export interface MsgRedeemTokensForSharesAminoMsg {
-  type: "cosmos-sdk/MsgRedeemTokensForShares";
+  type: "gaia/MsgRedeemTokensForShares";
   value: MsgRedeemTokensForSharesAmino;
 }
-/** MsgRedeemTokensForShares redeems a tokenized share back into a native delegation */
+/**
+ * MsgRedeemTokensForShares redeems a tokenized share back into a native
+ * delegation
+ */
 export interface MsgRedeemTokensForSharesSDKType {
   delegator_address: string;
   amount: CoinSDKType;
 }
-/** MsgRedeemTokensForSharesResponse defines the Msg/MsgRedeemTokensForShares response type. */
+/**
+ * MsgRedeemTokensForSharesResponse defines the Msg/MsgRedeemTokensForShares
+ * response type.
+ */
 export interface MsgRedeemTokensForSharesResponse {
   amount: Coin;
 }
 export interface MsgRedeemTokensForSharesResponseProtoMsg {
-  typeUrl: "/cosmos.staking.v1beta1.MsgRedeemTokensForSharesResponse";
+  typeUrl: "/gaia.liquid.v1beta1.MsgRedeemTokensForSharesResponse";
   value: Uint8Array;
 }
-/** MsgRedeemTokensForSharesResponse defines the Msg/MsgRedeemTokensForShares response type. */
+/**
+ * MsgRedeemTokensForSharesResponse defines the Msg/MsgRedeemTokensForShares
+ * response type.
+ */
 export interface MsgRedeemTokensForSharesResponseAmino {
   amount?: CoinAmino;
 }
 export interface MsgRedeemTokensForSharesResponseAminoMsg {
-  type: "cosmos-sdk/MsgRedeemTokensForSharesResponse";
+  type: "/gaia.liquid.v1beta1.MsgRedeemTokensForSharesResponse";
   value: MsgRedeemTokensForSharesResponseAmino;
 }
-/** MsgRedeemTokensForSharesResponse defines the Msg/MsgRedeemTokensForShares response type. */
+/**
+ * MsgRedeemTokensForSharesResponse defines the Msg/MsgRedeemTokensForShares
+ * response type.
+ */
 export interface MsgRedeemTokensForSharesResponseSDKType {
   amount: CoinSDKType;
 }
@@ -52,8 +70,8 @@ function createBaseMsgRedeemTokensForShares(): MsgRedeemTokensForShares {
   };
 }
 export const MsgRedeemTokensForShares = {
-  typeUrl: "/cosmos.staking.v1beta1.MsgRedeemTokensForShares",
-  aminoType: "cosmos-sdk/MsgRedeemTokensForShares",
+  typeUrl: "/gaia.liquid.v1beta1.MsgRedeemTokensForShares",
+  aminoType: "gaia/MsgRedeemTokensForShares",
   is(o: any): o is MsgRedeemTokensForShares {
     return o && (o.$typeUrl === MsgRedeemTokensForShares.typeUrl || typeof o.delegatorAddress === "string" && Coin.is(o.amount));
   },
@@ -131,7 +149,7 @@ export const MsgRedeemTokensForShares = {
   },
   toAminoMsg(message: MsgRedeemTokensForShares, useInterfaces: boolean = true): MsgRedeemTokensForSharesAminoMsg {
     return {
-      type: "cosmos-sdk/MsgRedeemTokensForShares",
+      type: "gaia/MsgRedeemTokensForShares",
       value: MsgRedeemTokensForShares.toAmino(message, useInterfaces)
     };
   },
@@ -143,7 +161,7 @@ export const MsgRedeemTokensForShares = {
   },
   toProtoMsg(message: MsgRedeemTokensForShares): MsgRedeemTokensForSharesProtoMsg {
     return {
-      typeUrl: "/cosmos.staking.v1beta1.MsgRedeemTokensForShares",
+      typeUrl: "/gaia.liquid.v1beta1.MsgRedeemTokensForShares",
       value: MsgRedeemTokensForShares.encode(message).finish()
     };
   }
@@ -156,8 +174,7 @@ function createBaseMsgRedeemTokensForSharesResponse(): MsgRedeemTokensForSharesR
   };
 }
 export const MsgRedeemTokensForSharesResponse = {
-  typeUrl: "/cosmos.staking.v1beta1.MsgRedeemTokensForSharesResponse",
-  aminoType: "cosmos-sdk/MsgRedeemTokensForSharesResponse",
+  typeUrl: "/gaia.liquid.v1beta1.MsgRedeemTokensForSharesResponse",
   is(o: any): o is MsgRedeemTokensForSharesResponse {
     return o && (o.$typeUrl === MsgRedeemTokensForSharesResponse.typeUrl || Coin.is(o.amount));
   },
@@ -220,12 +237,6 @@ export const MsgRedeemTokensForSharesResponse = {
   fromAminoMsg(object: MsgRedeemTokensForSharesResponseAminoMsg): MsgRedeemTokensForSharesResponse {
     return MsgRedeemTokensForSharesResponse.fromAmino(object.value);
   },
-  toAminoMsg(message: MsgRedeemTokensForSharesResponse, useInterfaces: boolean = true): MsgRedeemTokensForSharesResponseAminoMsg {
-    return {
-      type: "cosmos-sdk/MsgRedeemTokensForSharesResponse",
-      value: MsgRedeemTokensForSharesResponse.toAmino(message, useInterfaces)
-    };
-  },
   fromProtoMsg(message: MsgRedeemTokensForSharesResponseProtoMsg, useInterfaces: boolean = true): MsgRedeemTokensForSharesResponse {
     return MsgRedeemTokensForSharesResponse.decode(message.value, undefined, useInterfaces);
   },
@@ -234,10 +245,9 @@ export const MsgRedeemTokensForSharesResponse = {
   },
   toProtoMsg(message: MsgRedeemTokensForSharesResponse): MsgRedeemTokensForSharesResponseProtoMsg {
     return {
-      typeUrl: "/cosmos.staking.v1beta1.MsgRedeemTokensForSharesResponse",
+      typeUrl: "/gaia.liquid.v1beta1.MsgRedeemTokensForSharesResponse",
       value: MsgRedeemTokensForSharesResponse.encode(message).finish()
     };
   }
 };
 GlobalDecoderRegistry.register(MsgRedeemTokensForSharesResponse.typeUrl, MsgRedeemTokensForSharesResponse);
-GlobalDecoderRegistry.registerAminoProtoMapping(MsgRedeemTokensForSharesResponse.aminoType, MsgRedeemTokensForSharesResponse.typeUrl);

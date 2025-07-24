@@ -79,21 +79,20 @@ import * as _90 from "./slashing/module/v1/module";
 import * as _91 from "./staking/module/v1/module";
 import * as _92 from "./staking/v1beta1/authz";
 import * as _93 from "./staking/v1beta1/genesis";
-import * as _94 from "./staking/v1beta1/lsm";
-import * as _95 from "./staking/v1beta1/query";
-import * as _96 from "./staking/v1beta1/staking";
-import * as _97 from "./staking/v1beta1/tx";
-import * as _98 from "./tx/config/v1/config";
-import * as _99 from "./tx/signing/v1beta1/signing";
-import * as _100 from "./tx/v1beta1/service";
-import * as _101 from "./tx/v1beta1/tx";
-import * as _102 from "./upgrade/module/v1/module";
-import * as _103 from "./upgrade/v1beta1/query";
-import * as _104 from "./upgrade/v1beta1/tx";
-import * as _105 from "./upgrade/v1beta1/upgrade";
-import * as _106 from "./vesting/module/v1/module";
-import * as _107 from "./vesting/v1beta1/tx";
-import * as _108 from "./vesting/v1beta1/vesting";
+import * as _94 from "./staking/v1beta1/query";
+import * as _95 from "./staking/v1beta1/staking";
+import * as _96 from "./staking/v1beta1/tx";
+import * as _97 from "./tx/config/v1/config";
+import * as _98 from "./tx/signing/v1beta1/signing";
+import * as _99 from "./tx/v1beta1/service";
+import * as _100 from "./tx/v1beta1/tx";
+import * as _101 from "./upgrade/module/v1/module";
+import * as _102 from "./upgrade/v1beta1/query";
+import * as _103 from "./upgrade/v1beta1/tx";
+import * as _104 from "./upgrade/v1beta1/upgrade";
+import * as _105 from "./vesting/module/v1/module";
+import * as _106 from "./vesting/v1beta1/tx";
+import * as _107 from "./vesting/v1beta1/vesting";
 import * as _278 from "./auth/v1beta1/tx.amino";
 import * as _279 from "./authz/v1beta1/tx.amino";
 import * as _280 from "./bank/v1beta1/tx.amino";
@@ -502,7 +501,6 @@ export namespace cosmos {
       ..._94,
       ..._95,
       ..._96,
-      ..._97,
       ..._288,
       ..._301,
       ..._317,
@@ -513,17 +511,17 @@ export namespace cosmos {
   export namespace tx {
     export namespace config {
       export const v1 = {
-        ..._98
+        ..._97
       };
     }
     export namespace signing {
       export const v1beta1 = {
-        ..._99
+        ..._98
       };
     }
     export const v1beta1 = {
+      ..._99,
       ..._100,
-      ..._101,
       ..._318,
       ..._335
     };
@@ -531,13 +529,13 @@ export namespace cosmos {
   export namespace upgrade {
     export namespace module {
       export const v1 = {
-        ..._102
+        ..._101
       };
     }
     export const v1beta1 = {
+      ..._102,
       ..._103,
       ..._104,
-      ..._105,
       ..._289,
       ..._302,
       ..._319,
@@ -548,12 +546,12 @@ export namespace cosmos {
   export namespace vesting {
     export namespace module {
       export const v1 = {
-        ..._106
+        ..._105
       };
     }
     export const v1beta1 = {
+      ..._106,
       ..._107,
-      ..._108,
       ..._290,
       ..._303,
       ..._349
