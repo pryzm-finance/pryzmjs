@@ -15,8 +15,8 @@ importers:
         specifier: 0.32.4
         version: 0.32.4
       '@pryzm-finance/pryzmjs':
-        specifier: 0.27.0
-        version: 0.27.0(google-protobuf@3.21.2)(starknet@6.11.0)
+        specifier: 0.29.1
+        version: 0.29.1(google-protobuf@3.21.2)(starknet@6.11.0)
       '@refractedlabs/internal-js-utils':
         specifier: 0.6.5
         version: 0.6.5
@@ -151,8 +151,8 @@ packages:
   '@protobufjs/utf8@1.1.0':
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
 
-  '@pryzm-finance/pryzmjs@0.27.0':
-    resolution: {integrity: sha512-EJlm6/2lU5TuCWu/aAtXStvDZedlD7EG0bKmYGu5mqBzoM6YRHWTsCYtYj5Cme43kuaN4hMYP/ZIB1Yo5941nQ==}
+  '@pryzm-finance/pryzmjs@0.29.1':
+    resolution: {integrity: sha512-wQsniKhNpR/1rkTFN/fcZ5OLbW88dRBdF4isDhhuw2MZZ0IlX6IrMDlvzcW3Xbx9Lmus2g5ep2aIr/jJYk4T/w==}
 
   '@refractedlabs/cosmology-lcd-fork@0.13.7':
     resolution: {integrity: sha512-5DEQy8DHzSIsTfl+amlISteWCWmAokWC1pJkMit8H16Mx1ycaDfSrvREHHJlB5bfOkTkc3YHMmd8e8izihEHng==}
@@ -350,6 +350,7 @@ packages:
 
   get-starknet-core@4.0.0:
     resolution: {integrity: sha512-6pLmidQZkC3wZsrHY99grQHoGpuuXqkbSP65F8ov1/JsEI8DDLkhsAuLCKFzNOK56cJp+f1bWWfTJ57e9r5eqQ==}
+    deprecated: Package no longer supported. Please use @starknet-io/get-starknet-core
 
   globalthis@1.0.4:
     resolution: {integrity: sha512-DpLKbNU4WylpxJykQujfCcwYWiV/Jhm50Goo0wrVILAv5jOr9d+H+UR3PhSCD2rCCEIg0uc+G+muBTwD54JhDQ==}
@@ -850,7 +851,7 @@ snapshots:
 
   '@protobufjs/utf8@1.1.0': {}
 
-  '@pryzm-finance/pryzmjs@0.27.0(google-protobuf@3.21.2)(starknet@6.11.0)':
+  '@pryzm-finance/pryzmjs@0.29.1(google-protobuf@3.21.2)(starknet@6.11.0)':
     dependencies:
       '@cosmjs/math': 0.32.4
       '@cosmjs/proto-signing': 0.32.4
