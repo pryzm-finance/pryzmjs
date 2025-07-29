@@ -1,6 +1,7 @@
 import { GeneratedType, Registry, OfflineSigner } from "@cosmjs/proto-signing";
 import { AminoTypes, SigningStargateClient } from "@cosmjs/stargate";
 import { cosmosProtoRegistry as defaultRegistryTypes, cosmosAminoConverters } from "../cosmos/client";
+import { gaiaProtoRegistry, gaiaAminoConverters } from "../gaia/client";
 import { ibcAminoConverters, ibcProtoRegistry } from "../ibc/client";
 import { allianceAminoConverters, allianceProtoRegistry } from "../alliance/client";
 import { HttpEndpoint } from "@cosmjs/tendermint-rpc";
@@ -45,9 +46,10 @@ export const getSigningPryzmClientOptions = ({
   registry: Registry;
   aminoTypes: AminoTypes;
 } => {
-  const registry = new Registry([...defaultTypes, ...ibcProtoRegistry, ...pryzmProtoRegistry, ...allianceProtoRegistry]);
+  const registry = new Registry([...defaultTypes, ...ibcProtoRegistry, ...pryzmProtoRegistry, ...allianceProtoRegistry, ...gaiaProtoRegistry]);
   const aminoTypes = new AminoTypes({
     ...cosmosAminoConverters,
+    ...gaiaAminoConverters,
     ...ibcAminoConverters,
     ...allianceAminoConverters,
     ...pryzmAminoConverters
