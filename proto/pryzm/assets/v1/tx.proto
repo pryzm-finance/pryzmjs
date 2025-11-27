@@ -22,6 +22,7 @@ service Msg {
   rpc UpdateMaturityParams(MsgUpdateMaturityParams) returns (MsgUpdateMaturityParamsResponse);
   rpc UpdateFeeRatios(MsgUpdateFeeRatios) returns (MsgUpdateFeeRatiosResponse);
   rpc IntroduceMaturityLevel(MsgIntroduceMaturityLevel) returns (MsgIntroduceMaturityLevelResponse);
+  rpc DelistRefractableAsset(MsgDelistRefractableAsset) returns (MsgDelistRefractableAssetResponse);
   // this line is used by starport scaffolding # proto/tx/rpc
 }
 
@@ -88,6 +89,18 @@ message MsgUpdateParams {
 }
 
 message MsgUpdateParamsResponse {}
+
+message MsgDelistRefractableAsset {
+  option (cosmos.msg.v1.signer) = "authority";
+  option (amino.name) = "pryzm/assets/v1/DelistRefractableAsset";
+
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string asset_id = 2;
+  // list of all active maturity levels for the asset being delisted, to define p_asset price
+  repeated DelistedMaturityLevel maturity_levels = 3 [(gogoproto.nullable) = false];
+}
+
+message MsgDelistRefractableAssetResponse {}
 
 message MsgIntroduceMaturityLevel {
   option (cosmos.msg.v1.signer) = "creator";

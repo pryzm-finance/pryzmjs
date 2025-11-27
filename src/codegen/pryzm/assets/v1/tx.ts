@@ -1,5 +1,5 @@
 import { Params, ParamsAmino, ParamsSDKType } from "./params";
-import { RefractableAsset, RefractableAssetAmino, RefractableAssetSDKType, MaturityParams, MaturityParamsAmino, MaturityParamsSDKType, FeeRatios, FeeRatiosAmino, FeeRatiosSDKType } from "./refractable_asset";
+import { RefractableAsset, RefractableAssetAmino, RefractableAssetSDKType, MaturityParams, MaturityParamsAmino, MaturityParamsSDKType, FeeRatios, FeeRatiosAmino, FeeRatiosSDKType, DelistedMaturityLevel, DelistedMaturityLevelAmino, DelistedMaturityLevelSDKType } from "./refractable_asset";
 import { MaturityLevel, MaturityLevelAmino, MaturityLevelSDKType } from "./maturity_level";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet } from "../../../helpers";
@@ -165,6 +165,42 @@ export interface MsgUpdateParamsResponseAminoMsg {
   value: MsgUpdateParamsResponseAmino;
 }
 export interface MsgUpdateParamsResponseSDKType {}
+export interface MsgDelistRefractableAsset {
+  authority: string;
+  assetId: string;
+  /** list of all active maturity levels for the asset being delisted, to define p_asset price */
+  maturityLevels: DelistedMaturityLevel[];
+}
+export interface MsgDelistRefractableAssetProtoMsg {
+  typeUrl: "/pryzm.assets.v1.MsgDelistRefractableAsset";
+  value: Uint8Array;
+}
+export interface MsgDelistRefractableAssetAmino {
+  authority?: string;
+  asset_id?: string;
+  /** list of all active maturity levels for the asset being delisted, to define p_asset price */
+  maturity_levels?: DelistedMaturityLevelAmino[];
+}
+export interface MsgDelistRefractableAssetAminoMsg {
+  type: "pryzm/assets/v1/DelistRefractableAsset";
+  value: MsgDelistRefractableAssetAmino;
+}
+export interface MsgDelistRefractableAssetSDKType {
+  authority: string;
+  asset_id: string;
+  maturity_levels: DelistedMaturityLevelSDKType[];
+}
+export interface MsgDelistRefractableAssetResponse {}
+export interface MsgDelistRefractableAssetResponseProtoMsg {
+  typeUrl: "/pryzm.assets.v1.MsgDelistRefractableAssetResponse";
+  value: Uint8Array;
+}
+export interface MsgDelistRefractableAssetResponseAmino {}
+export interface MsgDelistRefractableAssetResponseAminoMsg {
+  type: "/pryzm.assets.v1.MsgDelistRefractableAssetResponse";
+  value: MsgDelistRefractableAssetResponseAmino;
+}
+export interface MsgDelistRefractableAssetResponseSDKType {}
 export interface MsgIntroduceMaturityLevel {
   creator: string;
   assetId: string;
@@ -1093,6 +1129,198 @@ export const MsgUpdateParamsResponse = {
   }
 };
 GlobalDecoderRegistry.register(MsgUpdateParamsResponse.typeUrl, MsgUpdateParamsResponse);
+function createBaseMsgDelistRefractableAsset(): MsgDelistRefractableAsset {
+  return {
+    authority: "",
+    assetId: "",
+    maturityLevels: []
+  };
+}
+export const MsgDelistRefractableAsset = {
+  typeUrl: "/pryzm.assets.v1.MsgDelistRefractableAsset",
+  aminoType: "pryzm/assets/v1/DelistRefractableAsset",
+  is(o: any): o is MsgDelistRefractableAsset {
+    return o && (o.$typeUrl === MsgDelistRefractableAsset.typeUrl || typeof o.authority === "string" && typeof o.assetId === "string" && Array.isArray(o.maturityLevels) && (!o.maturityLevels.length || DelistedMaturityLevel.is(o.maturityLevels[0])));
+  },
+  isSDK(o: any): o is MsgDelistRefractableAssetSDKType {
+    return o && (o.$typeUrl === MsgDelistRefractableAsset.typeUrl || typeof o.authority === "string" && typeof o.asset_id === "string" && Array.isArray(o.maturity_levels) && (!o.maturity_levels.length || DelistedMaturityLevel.isSDK(o.maturity_levels[0])));
+  },
+  isAmino(o: any): o is MsgDelistRefractableAssetAmino {
+    return o && (o.$typeUrl === MsgDelistRefractableAsset.typeUrl || typeof o.authority === "string" && typeof o.asset_id === "string" && Array.isArray(o.maturity_levels) && (!o.maturity_levels.length || DelistedMaturityLevel.isAmino(o.maturity_levels[0])));
+  },
+  encode(message: MsgDelistRefractableAsset, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.authority !== "") {
+      writer.uint32(10).string(message.authority);
+    }
+    if (message.assetId !== "") {
+      writer.uint32(18).string(message.assetId);
+    }
+    for (const v of message.maturityLevels) {
+      DelistedMaturityLevel.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgDelistRefractableAsset {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgDelistRefractableAsset();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.authority = reader.string();
+          break;
+        case 2:
+          message.assetId = reader.string();
+          break;
+        case 3:
+          message.maturityLevels.push(DelistedMaturityLevel.decode(reader, reader.uint32(), useInterfaces));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgDelistRefractableAsset {
+    return {
+      authority: isSet(object.authority) ? String(object.authority) : "",
+      assetId: isSet(object.assetId) ? String(object.assetId) : "",
+      maturityLevels: Array.isArray(object?.maturityLevels) ? object.maturityLevels.map((e: any) => DelistedMaturityLevel.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: MsgDelistRefractableAsset): unknown {
+    const obj: any = {};
+    message.authority !== undefined && (obj.authority = message.authority);
+    message.assetId !== undefined && (obj.assetId = message.assetId);
+    if (message.maturityLevels) {
+      obj.maturityLevels = message.maturityLevels.map(e => e ? DelistedMaturityLevel.toJSON(e) : undefined);
+    } else {
+      obj.maturityLevels = [];
+    }
+    return obj;
+  },
+  fromPartial(object: Partial<MsgDelistRefractableAsset>): MsgDelistRefractableAsset {
+    const message = createBaseMsgDelistRefractableAsset();
+    message.authority = object.authority ?? "";
+    message.assetId = object.assetId ?? "";
+    message.maturityLevels = object.maturityLevels?.map(e => DelistedMaturityLevel.fromPartial(e)) || [];
+    return message;
+  },
+  fromAmino(object: MsgDelistRefractableAssetAmino): MsgDelistRefractableAsset {
+    const message = createBaseMsgDelistRefractableAsset();
+    if (object.authority !== undefined && object.authority !== null) {
+      message.authority = object.authority;
+    }
+    if (object.asset_id !== undefined && object.asset_id !== null) {
+      message.assetId = object.asset_id;
+    }
+    message.maturityLevels = object.maturity_levels?.map(e => DelistedMaturityLevel.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: MsgDelistRefractableAsset, useInterfaces: boolean = true): MsgDelistRefractableAssetAmino {
+    const obj: any = {};
+    obj.authority = message.authority === "" ? undefined : message.authority;
+    obj.asset_id = message.assetId === "" ? undefined : message.assetId;
+    if (message.maturityLevels) {
+      obj.maturity_levels = message.maturityLevels.map(e => e ? DelistedMaturityLevel.toAmino(e, useInterfaces) : undefined);
+    } else {
+      obj.maturity_levels = message.maturityLevels;
+    }
+    return obj;
+  },
+  fromAminoMsg(object: MsgDelistRefractableAssetAminoMsg): MsgDelistRefractableAsset {
+    return MsgDelistRefractableAsset.fromAmino(object.value);
+  },
+  toAminoMsg(message: MsgDelistRefractableAsset, useInterfaces: boolean = true): MsgDelistRefractableAssetAminoMsg {
+    return {
+      type: "pryzm/assets/v1/DelistRefractableAsset",
+      value: MsgDelistRefractableAsset.toAmino(message, useInterfaces)
+    };
+  },
+  fromProtoMsg(message: MsgDelistRefractableAssetProtoMsg, useInterfaces: boolean = true): MsgDelistRefractableAsset {
+    return MsgDelistRefractableAsset.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: MsgDelistRefractableAsset): Uint8Array {
+    return MsgDelistRefractableAsset.encode(message).finish();
+  },
+  toProtoMsg(message: MsgDelistRefractableAsset): MsgDelistRefractableAssetProtoMsg {
+    return {
+      typeUrl: "/pryzm.assets.v1.MsgDelistRefractableAsset",
+      value: MsgDelistRefractableAsset.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(MsgDelistRefractableAsset.typeUrl, MsgDelistRefractableAsset);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgDelistRefractableAsset.aminoType, MsgDelistRefractableAsset.typeUrl);
+function createBaseMsgDelistRefractableAssetResponse(): MsgDelistRefractableAssetResponse {
+  return {};
+}
+export const MsgDelistRefractableAssetResponse = {
+  typeUrl: "/pryzm.assets.v1.MsgDelistRefractableAssetResponse",
+  is(o: any): o is MsgDelistRefractableAssetResponse {
+    return o && o.$typeUrl === MsgDelistRefractableAssetResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgDelistRefractableAssetResponseSDKType {
+    return o && o.$typeUrl === MsgDelistRefractableAssetResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgDelistRefractableAssetResponseAmino {
+    return o && o.$typeUrl === MsgDelistRefractableAssetResponse.typeUrl;
+  },
+  encode(_: MsgDelistRefractableAssetResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgDelistRefractableAssetResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgDelistRefractableAssetResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgDelistRefractableAssetResponse {
+    return {};
+  },
+  toJSON(_: MsgDelistRefractableAssetResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: Partial<MsgDelistRefractableAssetResponse>): MsgDelistRefractableAssetResponse {
+    const message = createBaseMsgDelistRefractableAssetResponse();
+    return message;
+  },
+  fromAmino(_: MsgDelistRefractableAssetResponseAmino): MsgDelistRefractableAssetResponse {
+    const message = createBaseMsgDelistRefractableAssetResponse();
+    return message;
+  },
+  toAmino(_: MsgDelistRefractableAssetResponse, useInterfaces: boolean = true): MsgDelistRefractableAssetResponseAmino {
+    const obj: any = {};
+    return obj;
+  },
+  fromAminoMsg(object: MsgDelistRefractableAssetResponseAminoMsg): MsgDelistRefractableAssetResponse {
+    return MsgDelistRefractableAssetResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgDelistRefractableAssetResponseProtoMsg, useInterfaces: boolean = true): MsgDelistRefractableAssetResponse {
+    return MsgDelistRefractableAssetResponse.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: MsgDelistRefractableAssetResponse): Uint8Array {
+    return MsgDelistRefractableAssetResponse.encode(message).finish();
+  },
+  toProtoMsg(message: MsgDelistRefractableAssetResponse): MsgDelistRefractableAssetResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.assets.v1.MsgDelistRefractableAssetResponse",
+      value: MsgDelistRefractableAssetResponse.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(MsgDelistRefractableAssetResponse.typeUrl, MsgDelistRefractableAssetResponse);
 function createBaseMsgIntroduceMaturityLevel(): MsgIntroduceMaturityLevel {
   return {
     creator: "",

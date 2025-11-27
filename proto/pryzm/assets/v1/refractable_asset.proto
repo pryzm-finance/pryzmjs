@@ -7,6 +7,17 @@ import "gogoproto/gogo.proto";
 
 option go_package = "github.com/pryzm-finance/pryzm-core/x/assets/types/v1";
 
+message DelistedMaturityLevel {
+  string symbol = 1;
+  // decimal number less than or equal to 1, representing how much of an asset's price is attributed to pAsset
+  // the rest would be attributed to yASSET.
+  string p_asset_price_underlying_terms = 2 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+}
+
 // The properties of a supported asset
 message RefractableAsset {
   // A unique user-provided identifier. Is used in the p/y token denom
@@ -31,6 +42,10 @@ message RefractableAsset {
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
+
+  bool delisted = 7;
+
+  repeated DelistedMaturityLevel delisted_maturities = 8 [(gogoproto.nullable) = false];
 }
 
 // The parameters based on which new maturities are introduced

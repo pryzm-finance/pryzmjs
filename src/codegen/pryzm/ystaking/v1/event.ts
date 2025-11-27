@@ -54,6 +54,7 @@ export interface EventYStakingExitPool {
   accountAddress: string;
   accruedReward: Coin;
   fee: Coin;
+  transferredYAmount: Coin;
 }
 export interface EventYStakingExitPoolProtoMsg {
   typeUrl: "/pryzm.ystaking.v1.EventYStakingExitPool";
@@ -63,6 +64,7 @@ export interface EventYStakingExitPoolAmino {
   account_address?: string;
   accrued_reward?: CoinAmino;
   fee?: CoinAmino;
+  transferred_y_amount?: CoinAmino;
 }
 export interface EventYStakingExitPoolAminoMsg {
   type: "/pryzm.ystaking.v1.EventYStakingExitPool";
@@ -72,6 +74,7 @@ export interface EventYStakingExitPoolSDKType {
   account_address: string;
   accrued_reward: CoinSDKType;
   fee: CoinSDKType;
+  transferred_y_amount: CoinSDKType;
 }
 export interface EventYStakingClaimReward {
   accountAddress: string;
@@ -456,19 +459,20 @@ function createBaseEventYStakingExitPool(): EventYStakingExitPool {
   return {
     accountAddress: "",
     accruedReward: Coin.fromPartial({}),
-    fee: Coin.fromPartial({})
+    fee: Coin.fromPartial({}),
+    transferredYAmount: Coin.fromPartial({})
   };
 }
 export const EventYStakingExitPool = {
   typeUrl: "/pryzm.ystaking.v1.EventYStakingExitPool",
   is(o: any): o is EventYStakingExitPool {
-    return o && (o.$typeUrl === EventYStakingExitPool.typeUrl || typeof o.accountAddress === "string" && Coin.is(o.accruedReward) && Coin.is(o.fee));
+    return o && (o.$typeUrl === EventYStakingExitPool.typeUrl || typeof o.accountAddress === "string" && Coin.is(o.accruedReward) && Coin.is(o.fee) && Coin.is(o.transferredYAmount));
   },
   isSDK(o: any): o is EventYStakingExitPoolSDKType {
-    return o && (o.$typeUrl === EventYStakingExitPool.typeUrl || typeof o.account_address === "string" && Coin.isSDK(o.accrued_reward) && Coin.isSDK(o.fee));
+    return o && (o.$typeUrl === EventYStakingExitPool.typeUrl || typeof o.account_address === "string" && Coin.isSDK(o.accrued_reward) && Coin.isSDK(o.fee) && Coin.isSDK(o.transferred_y_amount));
   },
   isAmino(o: any): o is EventYStakingExitPoolAmino {
-    return o && (o.$typeUrl === EventYStakingExitPool.typeUrl || typeof o.account_address === "string" && Coin.isAmino(o.accrued_reward) && Coin.isAmino(o.fee));
+    return o && (o.$typeUrl === EventYStakingExitPool.typeUrl || typeof o.account_address === "string" && Coin.isAmino(o.accrued_reward) && Coin.isAmino(o.fee) && Coin.isAmino(o.transferred_y_amount));
   },
   encode(message: EventYStakingExitPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.accountAddress !== "") {
@@ -479,6 +483,9 @@ export const EventYStakingExitPool = {
     }
     if (message.fee !== undefined) {
       Coin.encode(message.fee, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.transferredYAmount !== undefined) {
+      Coin.encode(message.transferredYAmount, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -498,6 +505,9 @@ export const EventYStakingExitPool = {
         case 3:
           message.fee = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
+        case 4:
+          message.transferredYAmount = Coin.decode(reader, reader.uint32(), useInterfaces);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -509,7 +519,8 @@ export const EventYStakingExitPool = {
     return {
       accountAddress: isSet(object.accountAddress) ? String(object.accountAddress) : "",
       accruedReward: isSet(object.accruedReward) ? Coin.fromJSON(object.accruedReward) : undefined,
-      fee: isSet(object.fee) ? Coin.fromJSON(object.fee) : undefined
+      fee: isSet(object.fee) ? Coin.fromJSON(object.fee) : undefined,
+      transferredYAmount: isSet(object.transferredYAmount) ? Coin.fromJSON(object.transferredYAmount) : undefined
     };
   },
   toJSON(message: EventYStakingExitPool): unknown {
@@ -517,6 +528,7 @@ export const EventYStakingExitPool = {
     message.accountAddress !== undefined && (obj.accountAddress = message.accountAddress);
     message.accruedReward !== undefined && (obj.accruedReward = message.accruedReward ? Coin.toJSON(message.accruedReward) : undefined);
     message.fee !== undefined && (obj.fee = message.fee ? Coin.toJSON(message.fee) : undefined);
+    message.transferredYAmount !== undefined && (obj.transferredYAmount = message.transferredYAmount ? Coin.toJSON(message.transferredYAmount) : undefined);
     return obj;
   },
   fromPartial(object: Partial<EventYStakingExitPool>): EventYStakingExitPool {
@@ -524,6 +536,7 @@ export const EventYStakingExitPool = {
     message.accountAddress = object.accountAddress ?? "";
     message.accruedReward = object.accruedReward !== undefined && object.accruedReward !== null ? Coin.fromPartial(object.accruedReward) : undefined;
     message.fee = object.fee !== undefined && object.fee !== null ? Coin.fromPartial(object.fee) : undefined;
+    message.transferredYAmount = object.transferredYAmount !== undefined && object.transferredYAmount !== null ? Coin.fromPartial(object.transferredYAmount) : undefined;
     return message;
   },
   fromAmino(object: EventYStakingExitPoolAmino): EventYStakingExitPool {
@@ -537,6 +550,9 @@ export const EventYStakingExitPool = {
     if (object.fee !== undefined && object.fee !== null) {
       message.fee = Coin.fromAmino(object.fee);
     }
+    if (object.transferred_y_amount !== undefined && object.transferred_y_amount !== null) {
+      message.transferredYAmount = Coin.fromAmino(object.transferred_y_amount);
+    }
     return message;
   },
   toAmino(message: EventYStakingExitPool, useInterfaces: boolean = true): EventYStakingExitPoolAmino {
@@ -544,6 +560,7 @@ export const EventYStakingExitPool = {
     obj.account_address = message.accountAddress === "" ? undefined : message.accountAddress;
     obj.accrued_reward = message.accruedReward ? Coin.toAmino(message.accruedReward, useInterfaces) : undefined;
     obj.fee = message.fee ? Coin.toAmino(message.fee, useInterfaces) : undefined;
+    obj.transferred_y_amount = message.transferredYAmount ? Coin.toAmino(message.transferredYAmount, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: EventYStakingExitPoolAminoMsg): EventYStakingExitPool {

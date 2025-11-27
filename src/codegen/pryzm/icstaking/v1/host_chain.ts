@@ -217,6 +217,7 @@ export interface HostChain {
   validators: Validator[];
   /** If true, Pryzm will allow users to stake using the LSM shares minted on the host chain. */
   allowLsmShares: boolean;
+  delisted: boolean;
 }
 export interface HostChainProtoMsg {
   typeUrl: "/pryzm.icstaking.v1.HostChain";
@@ -240,6 +241,7 @@ export interface HostChainAmino {
   validators?: ValidatorAmino[];
   /** If true, Pryzm will allow users to stake using the LSM shares minted on the host chain. */
   allow_lsm_shares?: boolean;
+  delisted?: boolean;
 }
 export interface HostChainAminoMsg {
   type: "/pryzm.icstaking.v1.HostChain";
@@ -255,6 +257,7 @@ export interface HostChainSDKType {
   params: StakingParamsSDKType;
   validators: ValidatorSDKType[];
   allow_lsm_shares: boolean;
+  delisted: boolean;
 }
 /** Properties of a transfer channel */
 export interface TransferChannel {
@@ -524,19 +527,20 @@ function createBaseHostChain(): HostChain {
     transferChannels: [],
     params: StakingParams.fromPartial({}),
     validators: [],
-    allowLsmShares: false
+    allowLsmShares: false,
+    delisted: false
   };
 }
 export const HostChain = {
   typeUrl: "/pryzm.icstaking.v1.HostChain",
   is(o: any): o is HostChain {
-    return o && (o.$typeUrl === HostChain.typeUrl || typeof o.id === "string" && isSet(o.connectionType) && typeof o.connectionId === "string" && typeof o.baseDenom === "string" && Array.isArray(o.transferChannels) && (!o.transferChannels.length || TransferChannel.is(o.transferChannels[0])) && StakingParams.is(o.params) && Array.isArray(o.validators) && (!o.validators.length || Validator.is(o.validators[0])) && typeof o.allowLsmShares === "boolean");
+    return o && (o.$typeUrl === HostChain.typeUrl || typeof o.id === "string" && isSet(o.connectionType) && typeof o.connectionId === "string" && typeof o.baseDenom === "string" && Array.isArray(o.transferChannels) && (!o.transferChannels.length || TransferChannel.is(o.transferChannels[0])) && StakingParams.is(o.params) && Array.isArray(o.validators) && (!o.validators.length || Validator.is(o.validators[0])) && typeof o.allowLsmShares === "boolean" && typeof o.delisted === "boolean");
   },
   isSDK(o: any): o is HostChainSDKType {
-    return o && (o.$typeUrl === HostChain.typeUrl || typeof o.id === "string" && isSet(o.connection_type) && typeof o.connection_id === "string" && typeof o.base_denom === "string" && Array.isArray(o.transfer_channels) && (!o.transfer_channels.length || TransferChannel.isSDK(o.transfer_channels[0])) && StakingParams.isSDK(o.params) && Array.isArray(o.validators) && (!o.validators.length || Validator.isSDK(o.validators[0])) && typeof o.allow_lsm_shares === "boolean");
+    return o && (o.$typeUrl === HostChain.typeUrl || typeof o.id === "string" && isSet(o.connection_type) && typeof o.connection_id === "string" && typeof o.base_denom === "string" && Array.isArray(o.transfer_channels) && (!o.transfer_channels.length || TransferChannel.isSDK(o.transfer_channels[0])) && StakingParams.isSDK(o.params) && Array.isArray(o.validators) && (!o.validators.length || Validator.isSDK(o.validators[0])) && typeof o.allow_lsm_shares === "boolean" && typeof o.delisted === "boolean");
   },
   isAmino(o: any): o is HostChainAmino {
-    return o && (o.$typeUrl === HostChain.typeUrl || typeof o.id === "string" && isSet(o.connection_type) && typeof o.connection_id === "string" && typeof o.base_denom === "string" && Array.isArray(o.transfer_channels) && (!o.transfer_channels.length || TransferChannel.isAmino(o.transfer_channels[0])) && StakingParams.isAmino(o.params) && Array.isArray(o.validators) && (!o.validators.length || Validator.isAmino(o.validators[0])) && typeof o.allow_lsm_shares === "boolean");
+    return o && (o.$typeUrl === HostChain.typeUrl || typeof o.id === "string" && isSet(o.connection_type) && typeof o.connection_id === "string" && typeof o.base_denom === "string" && Array.isArray(o.transfer_channels) && (!o.transfer_channels.length || TransferChannel.isAmino(o.transfer_channels[0])) && StakingParams.isAmino(o.params) && Array.isArray(o.validators) && (!o.validators.length || Validator.isAmino(o.validators[0])) && typeof o.allow_lsm_shares === "boolean" && typeof o.delisted === "boolean");
   },
   encode(message: HostChain, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== "") {
@@ -562,6 +566,9 @@ export const HostChain = {
     }
     if (message.allowLsmShares === true) {
       writer.uint32(64).bool(message.allowLsmShares);
+    }
+    if (message.delisted === true) {
+      writer.uint32(72).bool(message.delisted);
     }
     return writer;
   },
@@ -596,6 +603,9 @@ export const HostChain = {
         case 8:
           message.allowLsmShares = reader.bool();
           break;
+        case 9:
+          message.delisted = reader.bool();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -612,7 +622,8 @@ export const HostChain = {
       transferChannels: Array.isArray(object?.transferChannels) ? object.transferChannels.map((e: any) => TransferChannel.fromJSON(e)) : [],
       params: isSet(object.params) ? StakingParams.fromJSON(object.params) : undefined,
       validators: Array.isArray(object?.validators) ? object.validators.map((e: any) => Validator.fromJSON(e)) : [],
-      allowLsmShares: isSet(object.allowLsmShares) ? Boolean(object.allowLsmShares) : false
+      allowLsmShares: isSet(object.allowLsmShares) ? Boolean(object.allowLsmShares) : false,
+      delisted: isSet(object.delisted) ? Boolean(object.delisted) : false
     };
   },
   toJSON(message: HostChain): unknown {
@@ -633,6 +644,7 @@ export const HostChain = {
       obj.validators = [];
     }
     message.allowLsmShares !== undefined && (obj.allowLsmShares = message.allowLsmShares);
+    message.delisted !== undefined && (obj.delisted = message.delisted);
     return obj;
   },
   fromPartial(object: Partial<HostChain>): HostChain {
@@ -645,6 +657,7 @@ export const HostChain = {
     message.params = object.params !== undefined && object.params !== null ? StakingParams.fromPartial(object.params) : undefined;
     message.validators = object.validators?.map(e => Validator.fromPartial(e)) || [];
     message.allowLsmShares = object.allowLsmShares ?? false;
+    message.delisted = object.delisted ?? false;
     return message;
   },
   fromAmino(object: HostChainAmino): HostChain {
@@ -669,6 +682,9 @@ export const HostChain = {
     if (object.allow_lsm_shares !== undefined && object.allow_lsm_shares !== null) {
       message.allowLsmShares = object.allow_lsm_shares;
     }
+    if (object.delisted !== undefined && object.delisted !== null) {
+      message.delisted = object.delisted;
+    }
     return message;
   },
   toAmino(message: HostChain, useInterfaces: boolean = true): HostChainAmino {
@@ -689,6 +705,7 @@ export const HostChain = {
       obj.validators = message.validators;
     }
     obj.allow_lsm_shares = message.allowLsmShares === false ? undefined : message.allowLsmShares;
+    obj.delisted = message.delisted === false ? undefined : message.delisted;
     return obj;
   },
   fromAminoMsg(object: HostChainAminoMsg): HostChain {

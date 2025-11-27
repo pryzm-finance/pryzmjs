@@ -68,6 +68,7 @@ message QuerySimulateRefractResponse {
 }
 
 message QuerySimulateRedeemRequest {
+  // set p_amount to zero coin if you want to redeem only y_amount (for delisted assets)
   cosmos.base.v1beta1.Coin p_amount = 1 [(gogoproto.nullable) = false];
   cosmos.base.v1beta1.Coin y_amount = 2;
 }

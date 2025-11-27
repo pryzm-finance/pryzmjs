@@ -681,6 +681,111 @@ export interface MsgRetryFailedLsmTransferResponseAminoMsg {
   value: MsgRetryFailedLsmTransferResponseAmino;
 }
 export interface MsgRetryFailedLsmTransferResponseSDKType {}
+export interface MsgDelistHostChain {
+  creator: string;
+  hostChain: string;
+}
+export interface MsgDelistHostChainProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.MsgDelistHostChain";
+  value: Uint8Array;
+}
+export interface MsgDelistHostChainAmino {
+  creator?: string;
+  host_chain?: string;
+}
+export interface MsgDelistHostChainAminoMsg {
+  type: "pryzm/icstaking/v1/DelistHostChain";
+  value: MsgDelistHostChainAmino;
+}
+export interface MsgDelistHostChainSDKType {
+  creator: string;
+  host_chain: string;
+}
+export interface MsgDelistHostChainResponse {}
+export interface MsgDelistHostChainResponseProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.MsgDelistHostChainResponse";
+  value: Uint8Array;
+}
+export interface MsgDelistHostChainResponseAmino {}
+export interface MsgDelistHostChainResponseAminoMsg {
+  type: "/pryzm.icstaking.v1.MsgDelistHostChainResponse";
+  value: MsgDelistHostChainResponseAmino;
+}
+export interface MsgDelistHostChainResponseSDKType {}
+export interface MsgUndelegateDelistedHostChain {
+  creator: string;
+  hostChain: string;
+}
+export interface MsgUndelegateDelistedHostChainProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.MsgUndelegateDelistedHostChain";
+  value: Uint8Array;
+}
+export interface MsgUndelegateDelistedHostChainAmino {
+  creator?: string;
+  host_chain?: string;
+}
+export interface MsgUndelegateDelistedHostChainAminoMsg {
+  type: "pryzm/icstaking/v1/UndelegateDelisted";
+  value: MsgUndelegateDelistedHostChainAmino;
+}
+export interface MsgUndelegateDelistedHostChainSDKType {
+  creator: string;
+  host_chain: string;
+}
+export interface MsgUndelegateDelistedHostChainResponse {}
+export interface MsgUndelegateDelistedHostChainResponseProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.MsgUndelegateDelistedHostChainResponse";
+  value: Uint8Array;
+}
+export interface MsgUndelegateDelistedHostChainResponseAmino {}
+export interface MsgUndelegateDelistedHostChainResponseAminoMsg {
+  type: "/pryzm.icstaking.v1.MsgUndelegateDelistedHostChainResponse";
+  value: MsgUndelegateDelistedHostChainResponseAmino;
+}
+export interface MsgUndelegateDelistedHostChainResponseSDKType {}
+export interface MsgRedeemDelisted {
+  creator: string;
+  hostChain: string;
+  cAmount: string;
+}
+export interface MsgRedeemDelistedProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.MsgRedeemDelisted";
+  value: Uint8Array;
+}
+export interface MsgRedeemDelistedAmino {
+  creator?: string;
+  host_chain?: string;
+  c_amount: string;
+}
+export interface MsgRedeemDelistedAminoMsg {
+  type: "pryzm/icstaking/v1/RedeemDelisted";
+  value: MsgRedeemDelistedAmino;
+}
+export interface MsgRedeemDelistedSDKType {
+  creator: string;
+  host_chain: string;
+  c_amount: string;
+}
+export interface MsgRedeemDelistedResponse {
+  amount: Coin;
+  fee: Coin;
+}
+export interface MsgRedeemDelistedResponseProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.MsgRedeemDelistedResponse";
+  value: Uint8Array;
+}
+export interface MsgRedeemDelistedResponseAmino {
+  amount?: CoinAmino;
+  fee?: CoinAmino;
+}
+export interface MsgRedeemDelistedResponseAminoMsg {
+  type: "/pryzm.icstaking.v1.MsgRedeemDelistedResponse";
+  value: MsgRedeemDelistedResponseAmino;
+}
+export interface MsgRedeemDelistedResponseSDKType {
+  amount: CoinSDKType;
+  fee: CoinSDKType;
+}
 function createBaseMsgUpdateParams(): MsgUpdateParams {
   return {
     authority: "",
@@ -3987,3 +4092,563 @@ export const MsgRetryFailedLsmTransferResponse = {
   }
 };
 GlobalDecoderRegistry.register(MsgRetryFailedLsmTransferResponse.typeUrl, MsgRetryFailedLsmTransferResponse);
+function createBaseMsgDelistHostChain(): MsgDelistHostChain {
+  return {
+    creator: "",
+    hostChain: ""
+  };
+}
+export const MsgDelistHostChain = {
+  typeUrl: "/pryzm.icstaking.v1.MsgDelistHostChain",
+  aminoType: "pryzm/icstaking/v1/DelistHostChain",
+  is(o: any): o is MsgDelistHostChain {
+    return o && (o.$typeUrl === MsgDelistHostChain.typeUrl || typeof o.creator === "string" && typeof o.hostChain === "string");
+  },
+  isSDK(o: any): o is MsgDelistHostChainSDKType {
+    return o && (o.$typeUrl === MsgDelistHostChain.typeUrl || typeof o.creator === "string" && typeof o.host_chain === "string");
+  },
+  isAmino(o: any): o is MsgDelistHostChainAmino {
+    return o && (o.$typeUrl === MsgDelistHostChain.typeUrl || typeof o.creator === "string" && typeof o.host_chain === "string");
+  },
+  encode(message: MsgDelistHostChain, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.hostChain !== "") {
+      writer.uint32(18).string(message.hostChain);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgDelistHostChain {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgDelistHostChain();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.hostChain = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgDelistHostChain {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      hostChain: isSet(object.hostChain) ? String(object.hostChain) : ""
+    };
+  },
+  toJSON(message: MsgDelistHostChain): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.hostChain !== undefined && (obj.hostChain = message.hostChain);
+    return obj;
+  },
+  fromPartial(object: Partial<MsgDelistHostChain>): MsgDelistHostChain {
+    const message = createBaseMsgDelistHostChain();
+    message.creator = object.creator ?? "";
+    message.hostChain = object.hostChain ?? "";
+    return message;
+  },
+  fromAmino(object: MsgDelistHostChainAmino): MsgDelistHostChain {
+    const message = createBaseMsgDelistHostChain();
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    }
+    if (object.host_chain !== undefined && object.host_chain !== null) {
+      message.hostChain = object.host_chain;
+    }
+    return message;
+  },
+  toAmino(message: MsgDelistHostChain, useInterfaces: boolean = true): MsgDelistHostChainAmino {
+    const obj: any = {};
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
+    return obj;
+  },
+  fromAminoMsg(object: MsgDelistHostChainAminoMsg): MsgDelistHostChain {
+    return MsgDelistHostChain.fromAmino(object.value);
+  },
+  toAminoMsg(message: MsgDelistHostChain, useInterfaces: boolean = true): MsgDelistHostChainAminoMsg {
+    return {
+      type: "pryzm/icstaking/v1/DelistHostChain",
+      value: MsgDelistHostChain.toAmino(message, useInterfaces)
+    };
+  },
+  fromProtoMsg(message: MsgDelistHostChainProtoMsg, useInterfaces: boolean = true): MsgDelistHostChain {
+    return MsgDelistHostChain.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: MsgDelistHostChain): Uint8Array {
+    return MsgDelistHostChain.encode(message).finish();
+  },
+  toProtoMsg(message: MsgDelistHostChain): MsgDelistHostChainProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.MsgDelistHostChain",
+      value: MsgDelistHostChain.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(MsgDelistHostChain.typeUrl, MsgDelistHostChain);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgDelistHostChain.aminoType, MsgDelistHostChain.typeUrl);
+function createBaseMsgDelistHostChainResponse(): MsgDelistHostChainResponse {
+  return {};
+}
+export const MsgDelistHostChainResponse = {
+  typeUrl: "/pryzm.icstaking.v1.MsgDelistHostChainResponse",
+  is(o: any): o is MsgDelistHostChainResponse {
+    return o && o.$typeUrl === MsgDelistHostChainResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgDelistHostChainResponseSDKType {
+    return o && o.$typeUrl === MsgDelistHostChainResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgDelistHostChainResponseAmino {
+    return o && o.$typeUrl === MsgDelistHostChainResponse.typeUrl;
+  },
+  encode(_: MsgDelistHostChainResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgDelistHostChainResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgDelistHostChainResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgDelistHostChainResponse {
+    return {};
+  },
+  toJSON(_: MsgDelistHostChainResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: Partial<MsgDelistHostChainResponse>): MsgDelistHostChainResponse {
+    const message = createBaseMsgDelistHostChainResponse();
+    return message;
+  },
+  fromAmino(_: MsgDelistHostChainResponseAmino): MsgDelistHostChainResponse {
+    const message = createBaseMsgDelistHostChainResponse();
+    return message;
+  },
+  toAmino(_: MsgDelistHostChainResponse, useInterfaces: boolean = true): MsgDelistHostChainResponseAmino {
+    const obj: any = {};
+    return obj;
+  },
+  fromAminoMsg(object: MsgDelistHostChainResponseAminoMsg): MsgDelistHostChainResponse {
+    return MsgDelistHostChainResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgDelistHostChainResponseProtoMsg, useInterfaces: boolean = true): MsgDelistHostChainResponse {
+    return MsgDelistHostChainResponse.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: MsgDelistHostChainResponse): Uint8Array {
+    return MsgDelistHostChainResponse.encode(message).finish();
+  },
+  toProtoMsg(message: MsgDelistHostChainResponse): MsgDelistHostChainResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.MsgDelistHostChainResponse",
+      value: MsgDelistHostChainResponse.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(MsgDelistHostChainResponse.typeUrl, MsgDelistHostChainResponse);
+function createBaseMsgUndelegateDelistedHostChain(): MsgUndelegateDelistedHostChain {
+  return {
+    creator: "",
+    hostChain: ""
+  };
+}
+export const MsgUndelegateDelistedHostChain = {
+  typeUrl: "/pryzm.icstaking.v1.MsgUndelegateDelistedHostChain",
+  aminoType: "pryzm/icstaking/v1/UndelegateDelisted",
+  is(o: any): o is MsgUndelegateDelistedHostChain {
+    return o && (o.$typeUrl === MsgUndelegateDelistedHostChain.typeUrl || typeof o.creator === "string" && typeof o.hostChain === "string");
+  },
+  isSDK(o: any): o is MsgUndelegateDelistedHostChainSDKType {
+    return o && (o.$typeUrl === MsgUndelegateDelistedHostChain.typeUrl || typeof o.creator === "string" && typeof o.host_chain === "string");
+  },
+  isAmino(o: any): o is MsgUndelegateDelistedHostChainAmino {
+    return o && (o.$typeUrl === MsgUndelegateDelistedHostChain.typeUrl || typeof o.creator === "string" && typeof o.host_chain === "string");
+  },
+  encode(message: MsgUndelegateDelistedHostChain, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.hostChain !== "") {
+      writer.uint32(18).string(message.hostChain);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUndelegateDelistedHostChain {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUndelegateDelistedHostChain();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.hostChain = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgUndelegateDelistedHostChain {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      hostChain: isSet(object.hostChain) ? String(object.hostChain) : ""
+    };
+  },
+  toJSON(message: MsgUndelegateDelistedHostChain): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.hostChain !== undefined && (obj.hostChain = message.hostChain);
+    return obj;
+  },
+  fromPartial(object: Partial<MsgUndelegateDelistedHostChain>): MsgUndelegateDelistedHostChain {
+    const message = createBaseMsgUndelegateDelistedHostChain();
+    message.creator = object.creator ?? "";
+    message.hostChain = object.hostChain ?? "";
+    return message;
+  },
+  fromAmino(object: MsgUndelegateDelistedHostChainAmino): MsgUndelegateDelistedHostChain {
+    const message = createBaseMsgUndelegateDelistedHostChain();
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    }
+    if (object.host_chain !== undefined && object.host_chain !== null) {
+      message.hostChain = object.host_chain;
+    }
+    return message;
+  },
+  toAmino(message: MsgUndelegateDelistedHostChain, useInterfaces: boolean = true): MsgUndelegateDelistedHostChainAmino {
+    const obj: any = {};
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
+    return obj;
+  },
+  fromAminoMsg(object: MsgUndelegateDelistedHostChainAminoMsg): MsgUndelegateDelistedHostChain {
+    return MsgUndelegateDelistedHostChain.fromAmino(object.value);
+  },
+  toAminoMsg(message: MsgUndelegateDelistedHostChain, useInterfaces: boolean = true): MsgUndelegateDelistedHostChainAminoMsg {
+    return {
+      type: "pryzm/icstaking/v1/UndelegateDelisted",
+      value: MsgUndelegateDelistedHostChain.toAmino(message, useInterfaces)
+    };
+  },
+  fromProtoMsg(message: MsgUndelegateDelistedHostChainProtoMsg, useInterfaces: boolean = true): MsgUndelegateDelistedHostChain {
+    return MsgUndelegateDelistedHostChain.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: MsgUndelegateDelistedHostChain): Uint8Array {
+    return MsgUndelegateDelistedHostChain.encode(message).finish();
+  },
+  toProtoMsg(message: MsgUndelegateDelistedHostChain): MsgUndelegateDelistedHostChainProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.MsgUndelegateDelistedHostChain",
+      value: MsgUndelegateDelistedHostChain.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(MsgUndelegateDelistedHostChain.typeUrl, MsgUndelegateDelistedHostChain);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgUndelegateDelistedHostChain.aminoType, MsgUndelegateDelistedHostChain.typeUrl);
+function createBaseMsgUndelegateDelistedHostChainResponse(): MsgUndelegateDelistedHostChainResponse {
+  return {};
+}
+export const MsgUndelegateDelistedHostChainResponse = {
+  typeUrl: "/pryzm.icstaking.v1.MsgUndelegateDelistedHostChainResponse",
+  is(o: any): o is MsgUndelegateDelistedHostChainResponse {
+    return o && o.$typeUrl === MsgUndelegateDelistedHostChainResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgUndelegateDelistedHostChainResponseSDKType {
+    return o && o.$typeUrl === MsgUndelegateDelistedHostChainResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgUndelegateDelistedHostChainResponseAmino {
+    return o && o.$typeUrl === MsgUndelegateDelistedHostChainResponse.typeUrl;
+  },
+  encode(_: MsgUndelegateDelistedHostChainResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgUndelegateDelistedHostChainResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUndelegateDelistedHostChainResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgUndelegateDelistedHostChainResponse {
+    return {};
+  },
+  toJSON(_: MsgUndelegateDelistedHostChainResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: Partial<MsgUndelegateDelistedHostChainResponse>): MsgUndelegateDelistedHostChainResponse {
+    const message = createBaseMsgUndelegateDelistedHostChainResponse();
+    return message;
+  },
+  fromAmino(_: MsgUndelegateDelistedHostChainResponseAmino): MsgUndelegateDelistedHostChainResponse {
+    const message = createBaseMsgUndelegateDelistedHostChainResponse();
+    return message;
+  },
+  toAmino(_: MsgUndelegateDelistedHostChainResponse, useInterfaces: boolean = true): MsgUndelegateDelistedHostChainResponseAmino {
+    const obj: any = {};
+    return obj;
+  },
+  fromAminoMsg(object: MsgUndelegateDelistedHostChainResponseAminoMsg): MsgUndelegateDelistedHostChainResponse {
+    return MsgUndelegateDelistedHostChainResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgUndelegateDelistedHostChainResponseProtoMsg, useInterfaces: boolean = true): MsgUndelegateDelistedHostChainResponse {
+    return MsgUndelegateDelistedHostChainResponse.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: MsgUndelegateDelistedHostChainResponse): Uint8Array {
+    return MsgUndelegateDelistedHostChainResponse.encode(message).finish();
+  },
+  toProtoMsg(message: MsgUndelegateDelistedHostChainResponse): MsgUndelegateDelistedHostChainResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.MsgUndelegateDelistedHostChainResponse",
+      value: MsgUndelegateDelistedHostChainResponse.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(MsgUndelegateDelistedHostChainResponse.typeUrl, MsgUndelegateDelistedHostChainResponse);
+function createBaseMsgRedeemDelisted(): MsgRedeemDelisted {
+  return {
+    creator: "",
+    hostChain: "",
+    cAmount: ""
+  };
+}
+export const MsgRedeemDelisted = {
+  typeUrl: "/pryzm.icstaking.v1.MsgRedeemDelisted",
+  aminoType: "pryzm/icstaking/v1/RedeemDelisted",
+  is(o: any): o is MsgRedeemDelisted {
+    return o && (o.$typeUrl === MsgRedeemDelisted.typeUrl || typeof o.creator === "string" && typeof o.hostChain === "string" && typeof o.cAmount === "string");
+  },
+  isSDK(o: any): o is MsgRedeemDelistedSDKType {
+    return o && (o.$typeUrl === MsgRedeemDelisted.typeUrl || typeof o.creator === "string" && typeof o.host_chain === "string" && typeof o.c_amount === "string");
+  },
+  isAmino(o: any): o is MsgRedeemDelistedAmino {
+    return o && (o.$typeUrl === MsgRedeemDelisted.typeUrl || typeof o.creator === "string" && typeof o.host_chain === "string" && typeof o.c_amount === "string");
+  },
+  encode(message: MsgRedeemDelisted, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.hostChain !== "") {
+      writer.uint32(18).string(message.hostChain);
+    }
+    if (message.cAmount !== "") {
+      writer.uint32(26).string(message.cAmount);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgRedeemDelisted {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgRedeemDelisted();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.hostChain = reader.string();
+          break;
+        case 3:
+          message.cAmount = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgRedeemDelisted {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      hostChain: isSet(object.hostChain) ? String(object.hostChain) : "",
+      cAmount: isSet(object.cAmount) ? String(object.cAmount) : ""
+    };
+  },
+  toJSON(message: MsgRedeemDelisted): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.hostChain !== undefined && (obj.hostChain = message.hostChain);
+    message.cAmount !== undefined && (obj.cAmount = message.cAmount);
+    return obj;
+  },
+  fromPartial(object: Partial<MsgRedeemDelisted>): MsgRedeemDelisted {
+    const message = createBaseMsgRedeemDelisted();
+    message.creator = object.creator ?? "";
+    message.hostChain = object.hostChain ?? "";
+    message.cAmount = object.cAmount ?? "";
+    return message;
+  },
+  fromAmino(object: MsgRedeemDelistedAmino): MsgRedeemDelisted {
+    const message = createBaseMsgRedeemDelisted();
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    }
+    if (object.host_chain !== undefined && object.host_chain !== null) {
+      message.hostChain = object.host_chain;
+    }
+    if (object.c_amount !== undefined && object.c_amount !== null) {
+      message.cAmount = object.c_amount;
+    }
+    return message;
+  },
+  toAmino(message: MsgRedeemDelisted, useInterfaces: boolean = true): MsgRedeemDelistedAmino {
+    const obj: any = {};
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
+    obj.c_amount = message.cAmount === "" ? undefined : message.cAmount;
+    return obj;
+  },
+  fromAminoMsg(object: MsgRedeemDelistedAminoMsg): MsgRedeemDelisted {
+    return MsgRedeemDelisted.fromAmino(object.value);
+  },
+  toAminoMsg(message: MsgRedeemDelisted, useInterfaces: boolean = true): MsgRedeemDelistedAminoMsg {
+    return {
+      type: "pryzm/icstaking/v1/RedeemDelisted",
+      value: MsgRedeemDelisted.toAmino(message, useInterfaces)
+    };
+  },
+  fromProtoMsg(message: MsgRedeemDelistedProtoMsg, useInterfaces: boolean = true): MsgRedeemDelisted {
+    return MsgRedeemDelisted.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: MsgRedeemDelisted): Uint8Array {
+    return MsgRedeemDelisted.encode(message).finish();
+  },
+  toProtoMsg(message: MsgRedeemDelisted): MsgRedeemDelistedProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.MsgRedeemDelisted",
+      value: MsgRedeemDelisted.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(MsgRedeemDelisted.typeUrl, MsgRedeemDelisted);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgRedeemDelisted.aminoType, MsgRedeemDelisted.typeUrl);
+function createBaseMsgRedeemDelistedResponse(): MsgRedeemDelistedResponse {
+  return {
+    amount: Coin.fromPartial({}),
+    fee: Coin.fromPartial({})
+  };
+}
+export const MsgRedeemDelistedResponse = {
+  typeUrl: "/pryzm.icstaking.v1.MsgRedeemDelistedResponse",
+  is(o: any): o is MsgRedeemDelistedResponse {
+    return o && (o.$typeUrl === MsgRedeemDelistedResponse.typeUrl || Coin.is(o.amount) && Coin.is(o.fee));
+  },
+  isSDK(o: any): o is MsgRedeemDelistedResponseSDKType {
+    return o && (o.$typeUrl === MsgRedeemDelistedResponse.typeUrl || Coin.isSDK(o.amount) && Coin.isSDK(o.fee));
+  },
+  isAmino(o: any): o is MsgRedeemDelistedResponseAmino {
+    return o && (o.$typeUrl === MsgRedeemDelistedResponse.typeUrl || Coin.isAmino(o.amount) && Coin.isAmino(o.fee));
+  },
+  encode(message: MsgRedeemDelistedResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.amount !== undefined) {
+      Coin.encode(message.amount, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.fee !== undefined) {
+      Coin.encode(message.fee, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): MsgRedeemDelistedResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgRedeemDelistedResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.amount = Coin.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        case 2:
+          message.fee = Coin.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgRedeemDelistedResponse {
+    return {
+      amount: isSet(object.amount) ? Coin.fromJSON(object.amount) : undefined,
+      fee: isSet(object.fee) ? Coin.fromJSON(object.fee) : undefined
+    };
+  },
+  toJSON(message: MsgRedeemDelistedResponse): unknown {
+    const obj: any = {};
+    message.amount !== undefined && (obj.amount = message.amount ? Coin.toJSON(message.amount) : undefined);
+    message.fee !== undefined && (obj.fee = message.fee ? Coin.toJSON(message.fee) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<MsgRedeemDelistedResponse>): MsgRedeemDelistedResponse {
+    const message = createBaseMsgRedeemDelistedResponse();
+    message.amount = object.amount !== undefined && object.amount !== null ? Coin.fromPartial(object.amount) : undefined;
+    message.fee = object.fee !== undefined && object.fee !== null ? Coin.fromPartial(object.fee) : undefined;
+    return message;
+  },
+  fromAmino(object: MsgRedeemDelistedResponseAmino): MsgRedeemDelistedResponse {
+    const message = createBaseMsgRedeemDelistedResponse();
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = Coin.fromAmino(object.amount);
+    }
+    if (object.fee !== undefined && object.fee !== null) {
+      message.fee = Coin.fromAmino(object.fee);
+    }
+    return message;
+  },
+  toAmino(message: MsgRedeemDelistedResponse, useInterfaces: boolean = true): MsgRedeemDelistedResponseAmino {
+    const obj: any = {};
+    obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
+    obj.fee = message.fee ? Coin.toAmino(message.fee, useInterfaces) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: MsgRedeemDelistedResponseAminoMsg): MsgRedeemDelistedResponse {
+    return MsgRedeemDelistedResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgRedeemDelistedResponseProtoMsg, useInterfaces: boolean = true): MsgRedeemDelistedResponse {
+    return MsgRedeemDelistedResponse.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: MsgRedeemDelistedResponse): Uint8Array {
+    return MsgRedeemDelistedResponse.encode(message).finish();
+  },
+  toProtoMsg(message: MsgRedeemDelistedResponse): MsgRedeemDelistedResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.MsgRedeemDelistedResponse",
+      value: MsgRedeemDelistedResponse.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(MsgRedeemDelistedResponse.typeUrl, MsgRedeemDelistedResponse);

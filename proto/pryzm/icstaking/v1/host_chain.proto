@@ -51,6 +51,8 @@ message HostChain {
 
   // If true, Pryzm will allow users to stake using the LSM shares minted on the host chain.
   bool allow_lsm_shares = 8;
+
+  bool delisted = 9;
 }
 
 // Types of transfer channels

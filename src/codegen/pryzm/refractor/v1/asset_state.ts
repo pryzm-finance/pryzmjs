@@ -4,8 +4,20 @@ import { isSet, padDecimal } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 export interface AssetState {
   assetId: string;
+  /**
+   * deprecated: replaced by total_redeemable_underlying, for delisted assets this will not be a
+   * correct representation of the redeemable underlying assets
+   */
+  /** @deprecated */
   totalPAmount: string;
   lastSeenExchangeRate: string;
+  delisted: boolean;
+  /**
+   * this is the total number of pASSET tokens for a refractable asset, however, for delisted assets
+   * since we allow redemption using yASSETs as well as pASSETS, we won't always have equal number of p/y tokens,
+   * in that case, this would be a weighted sum of total p, and y tokens.
+   */
+  totalRedeemableUnderlying?: string;
 }
 export interface AssetStateProtoMsg {
   typeUrl: "/pryzm.refractor.v1.AssetState";
@@ -13,8 +25,20 @@ export interface AssetStateProtoMsg {
 }
 export interface AssetStateAmino {
   asset_id?: string;
+  /**
+   * deprecated: replaced by total_redeemable_underlying, for delisted assets this will not be a
+   * correct representation of the redeemable underlying assets
+   */
+  /** @deprecated */
   total_p_amount?: string;
   last_seen_exchange_rate?: string;
+  delisted?: boolean;
+  /**
+   * this is the total number of pASSET tokens for a refractable asset, however, for delisted assets
+   * since we allow redemption using yASSETs as well as pASSETS, we won't always have equal number of p/y tokens,
+   * in that case, this would be a weighted sum of total p, and y tokens.
+   */
+  total_redeemable_underlying?: string;
 }
 export interface AssetStateAminoMsg {
   type: "/pryzm.refractor.v1.AssetState";
@@ -22,26 +46,31 @@ export interface AssetStateAminoMsg {
 }
 export interface AssetStateSDKType {
   asset_id: string;
+  /** @deprecated */
   total_p_amount: string;
   last_seen_exchange_rate: string;
+  delisted: boolean;
+  total_redeemable_underlying?: string;
 }
 function createBaseAssetState(): AssetState {
   return {
     assetId: "",
     totalPAmount: "",
-    lastSeenExchangeRate: ""
+    lastSeenExchangeRate: "",
+    delisted: false,
+    totalRedeemableUnderlying: undefined
   };
 }
 export const AssetState = {
   typeUrl: "/pryzm.refractor.v1.AssetState",
   is(o: any): o is AssetState {
-    return o && (o.$typeUrl === AssetState.typeUrl || typeof o.assetId === "string" && typeof o.totalPAmount === "string" && typeof o.lastSeenExchangeRate === "string");
+    return o && (o.$typeUrl === AssetState.typeUrl || typeof o.assetId === "string" && typeof o.totalPAmount === "string" && typeof o.lastSeenExchangeRate === "string" && typeof o.delisted === "boolean");
   },
   isSDK(o: any): o is AssetStateSDKType {
-    return o && (o.$typeUrl === AssetState.typeUrl || typeof o.asset_id === "string" && typeof o.total_p_amount === "string" && typeof o.last_seen_exchange_rate === "string");
+    return o && (o.$typeUrl === AssetState.typeUrl || typeof o.asset_id === "string" && typeof o.total_p_amount === "string" && typeof o.last_seen_exchange_rate === "string" && typeof o.delisted === "boolean");
   },
   isAmino(o: any): o is AssetStateAmino {
-    return o && (o.$typeUrl === AssetState.typeUrl || typeof o.asset_id === "string" && typeof o.total_p_amount === "string" && typeof o.last_seen_exchange_rate === "string");
+    return o && (o.$typeUrl === AssetState.typeUrl || typeof o.asset_id === "string" && typeof o.total_p_amount === "string" && typeof o.last_seen_exchange_rate === "string" && typeof o.delisted === "boolean");
   },
   encode(message: AssetState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.assetId !== "") {
@@ -52,6 +81,12 @@ export const AssetState = {
     }
     if (message.lastSeenExchangeRate !== "") {
       writer.uint32(26).string(Decimal.fromUserInput(message.lastSeenExchangeRate, 18).atomics);
+    }
+    if (message.delisted === true) {
+      writer.uint32(32).bool(message.delisted);
+    }
+    if (message.totalRedeemableUnderlying !== undefined) {
+      writer.uint32(42).string(Decimal.fromUserInput(message.totalRedeemableUnderlying, 18).atomics);
     }
     return writer;
   },
@@ -71,6 +106,12 @@ export const AssetState = {
         case 3:
           message.lastSeenExchangeRate = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
+        case 4:
+          message.delisted = reader.bool();
+          break;
+        case 5:
+          message.totalRedeemableUnderlying = Decimal.fromAtomics(reader.string(), 18).toString();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -82,7 +123,9 @@ export const AssetState = {
     return {
       assetId: isSet(object.assetId) ? String(object.assetId) : "",
       totalPAmount: isSet(object.totalPAmount) ? String(object.totalPAmount) : "",
-      lastSeenExchangeRate: isSet(object.lastSeenExchangeRate) ? String(object.lastSeenExchangeRate) : ""
+      lastSeenExchangeRate: isSet(object.lastSeenExchangeRate) ? String(object.lastSeenExchangeRate) : "",
+      delisted: isSet(object.delisted) ? Boolean(object.delisted) : false,
+      totalRedeemableUnderlying: isSet(object.totalRedeemableUnderlying) ? String(object.totalRedeemableUnderlying) : undefined
     };
   },
   toJSON(message: AssetState): unknown {
@@ -90,6 +133,8 @@ export const AssetState = {
     message.assetId !== undefined && (obj.assetId = message.assetId);
     message.totalPAmount !== undefined && (obj.totalPAmount = message.totalPAmount);
     message.lastSeenExchangeRate !== undefined && (obj.lastSeenExchangeRate = message.lastSeenExchangeRate);
+    message.delisted !== undefined && (obj.delisted = message.delisted);
+    message.totalRedeemableUnderlying !== undefined && (obj.totalRedeemableUnderlying = message.totalRedeemableUnderlying);
     return obj;
   },
   fromPartial(object: Partial<AssetState>): AssetState {
@@ -97,6 +142,8 @@ export const AssetState = {
     message.assetId = object.assetId ?? "";
     message.totalPAmount = object.totalPAmount ?? "";
     message.lastSeenExchangeRate = object.lastSeenExchangeRate ?? "";
+    message.delisted = object.delisted ?? false;
+    message.totalRedeemableUnderlying = object.totalRedeemableUnderlying ?? undefined;
     return message;
   },
   fromAmino(object: AssetStateAmino): AssetState {
@@ -110,6 +157,12 @@ export const AssetState = {
     if (object.last_seen_exchange_rate !== undefined && object.last_seen_exchange_rate !== null) {
       message.lastSeenExchangeRate = object.last_seen_exchange_rate;
     }
+    if (object.delisted !== undefined && object.delisted !== null) {
+      message.delisted = object.delisted;
+    }
+    if (object.total_redeemable_underlying !== undefined && object.total_redeemable_underlying !== null) {
+      message.totalRedeemableUnderlying = object.total_redeemable_underlying;
+    }
     return message;
   },
   toAmino(message: AssetState, useInterfaces: boolean = true): AssetStateAmino {
@@ -117,6 +170,8 @@ export const AssetState = {
     obj.asset_id = message.assetId === "" ? undefined : message.assetId;
     obj.total_p_amount = message.totalPAmount === "" ? undefined : message.totalPAmount;
     obj.last_seen_exchange_rate = padDecimal(message.lastSeenExchangeRate) === "" ? undefined : padDecimal(message.lastSeenExchangeRate);
+    obj.delisted = message.delisted === false ? undefined : message.delisted;
+    obj.total_redeemable_underlying = padDecimal(message.totalRedeemableUnderlying) === null ? undefined : padDecimal(message.totalRedeemableUnderlying);
     return obj;
   },
   fromAminoMsg(object: AssetStateAminoMsg): AssetState {

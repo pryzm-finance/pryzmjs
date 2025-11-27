@@ -145,6 +145,7 @@ export interface MsgExitPoolSDKType {
 export interface MsgExitPoolResponse {
   accruedReward: Coin;
   fee: Coin;
+  transferredYAmount: Coin;
 }
 export interface MsgExitPoolResponseProtoMsg {
   typeUrl: "/pryzm.ystaking.v1.MsgExitPoolResponse";
@@ -153,6 +154,7 @@ export interface MsgExitPoolResponseProtoMsg {
 export interface MsgExitPoolResponseAmino {
   accrued_reward?: CoinAmino;
   fee?: CoinAmino;
+  transferred_y_amount?: CoinAmino;
 }
 export interface MsgExitPoolResponseAminoMsg {
   type: "/pryzm.ystaking.v1.MsgExitPoolResponse";
@@ -161,6 +163,7 @@ export interface MsgExitPoolResponseAminoMsg {
 export interface MsgExitPoolResponseSDKType {
   accrued_reward: CoinSDKType;
   fee: CoinSDKType;
+  transferred_y_amount: CoinSDKType;
 }
 function createBaseMsgBond(): MsgBond {
   return {
@@ -876,19 +879,20 @@ GlobalDecoderRegistry.registerAminoProtoMapping(MsgExitPool.aminoType, MsgExitPo
 function createBaseMsgExitPoolResponse(): MsgExitPoolResponse {
   return {
     accruedReward: Coin.fromPartial({}),
-    fee: Coin.fromPartial({})
+    fee: Coin.fromPartial({}),
+    transferredYAmount: Coin.fromPartial({})
   };
 }
 export const MsgExitPoolResponse = {
   typeUrl: "/pryzm.ystaking.v1.MsgExitPoolResponse",
   is(o: any): o is MsgExitPoolResponse {
-    return o && (o.$typeUrl === MsgExitPoolResponse.typeUrl || Coin.is(o.accruedReward) && Coin.is(o.fee));
+    return o && (o.$typeUrl === MsgExitPoolResponse.typeUrl || Coin.is(o.accruedReward) && Coin.is(o.fee) && Coin.is(o.transferredYAmount));
   },
   isSDK(o: any): o is MsgExitPoolResponseSDKType {
-    return o && (o.$typeUrl === MsgExitPoolResponse.typeUrl || Coin.isSDK(o.accrued_reward) && Coin.isSDK(o.fee));
+    return o && (o.$typeUrl === MsgExitPoolResponse.typeUrl || Coin.isSDK(o.accrued_reward) && Coin.isSDK(o.fee) && Coin.isSDK(o.transferred_y_amount));
   },
   isAmino(o: any): o is MsgExitPoolResponseAmino {
-    return o && (o.$typeUrl === MsgExitPoolResponse.typeUrl || Coin.isAmino(o.accrued_reward) && Coin.isAmino(o.fee));
+    return o && (o.$typeUrl === MsgExitPoolResponse.typeUrl || Coin.isAmino(o.accrued_reward) && Coin.isAmino(o.fee) && Coin.isAmino(o.transferred_y_amount));
   },
   encode(message: MsgExitPoolResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.accruedReward !== undefined) {
@@ -896,6 +900,9 @@ export const MsgExitPoolResponse = {
     }
     if (message.fee !== undefined) {
       Coin.encode(message.fee, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.transferredYAmount !== undefined) {
+      Coin.encode(message.transferredYAmount, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -912,6 +919,9 @@ export const MsgExitPoolResponse = {
         case 2:
           message.fee = Coin.decode(reader, reader.uint32(), useInterfaces);
           break;
+        case 3:
+          message.transferredYAmount = Coin.decode(reader, reader.uint32(), useInterfaces);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -922,19 +932,22 @@ export const MsgExitPoolResponse = {
   fromJSON(object: any): MsgExitPoolResponse {
     return {
       accruedReward: isSet(object.accruedReward) ? Coin.fromJSON(object.accruedReward) : undefined,
-      fee: isSet(object.fee) ? Coin.fromJSON(object.fee) : undefined
+      fee: isSet(object.fee) ? Coin.fromJSON(object.fee) : undefined,
+      transferredYAmount: isSet(object.transferredYAmount) ? Coin.fromJSON(object.transferredYAmount) : undefined
     };
   },
   toJSON(message: MsgExitPoolResponse): unknown {
     const obj: any = {};
     message.accruedReward !== undefined && (obj.accruedReward = message.accruedReward ? Coin.toJSON(message.accruedReward) : undefined);
     message.fee !== undefined && (obj.fee = message.fee ? Coin.toJSON(message.fee) : undefined);
+    message.transferredYAmount !== undefined && (obj.transferredYAmount = message.transferredYAmount ? Coin.toJSON(message.transferredYAmount) : undefined);
     return obj;
   },
   fromPartial(object: Partial<MsgExitPoolResponse>): MsgExitPoolResponse {
     const message = createBaseMsgExitPoolResponse();
     message.accruedReward = object.accruedReward !== undefined && object.accruedReward !== null ? Coin.fromPartial(object.accruedReward) : undefined;
     message.fee = object.fee !== undefined && object.fee !== null ? Coin.fromPartial(object.fee) : undefined;
+    message.transferredYAmount = object.transferredYAmount !== undefined && object.transferredYAmount !== null ? Coin.fromPartial(object.transferredYAmount) : undefined;
     return message;
   },
   fromAmino(object: MsgExitPoolResponseAmino): MsgExitPoolResponse {
@@ -945,12 +958,16 @@ export const MsgExitPoolResponse = {
     if (object.fee !== undefined && object.fee !== null) {
       message.fee = Coin.fromAmino(object.fee);
     }
+    if (object.transferred_y_amount !== undefined && object.transferred_y_amount !== null) {
+      message.transferredYAmount = Coin.fromAmino(object.transferred_y_amount);
+    }
     return message;
   },
   toAmino(message: MsgExitPoolResponse, useInterfaces: boolean = true): MsgExitPoolResponseAmino {
     const obj: any = {};
     obj.accrued_reward = message.accruedReward ? Coin.toAmino(message.accruedReward, useInterfaces) : undefined;
     obj.fee = message.fee ? Coin.toAmino(message.fee, useInterfaces) : undefined;
+    obj.transferred_y_amount = message.transferredYAmount ? Coin.toAmino(message.transferredYAmount, useInterfaces) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgExitPoolResponseAminoMsg): MsgExitPoolResponse {

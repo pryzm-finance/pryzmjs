@@ -117,6 +117,7 @@ export interface QuerySimulateRefractResponseSDKType {
   fee: CoinSDKType;
 }
 export interface QuerySimulateRedeemRequest {
+  /** set p_amount to zero coin if you want to redeem only y_amount (for delisted assets) */
   pAmount: Coin;
   yAmount?: Coin;
 }
@@ -125,6 +126,7 @@ export interface QuerySimulateRedeemRequestProtoMsg {
   value: Uint8Array;
 }
 export interface QuerySimulateRedeemRequestAmino {
+  /** set p_amount to zero coin if you want to redeem only y_amount (for delisted assets) */
   p_amount?: CoinAmino;
   y_amount?: CoinAmino;
 }

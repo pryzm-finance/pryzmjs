@@ -8,14 +8,26 @@ option go_package = "github.com/pryzm-finance/pryzm-core/x/refractor/types/v1";
 
 message AssetState {
   string asset_id = 1;
+  // deprecated: replaced by total_redeemable_underlying, for delisted assets this will not be a
+  // correct representation of the redeemable underlying assets
   string total_p_amount = 2 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
-    (gogoproto.nullable) = false
+    (gogoproto.nullable) = false,
+    deprecated = true
   ];
   string last_seen_exchange_rate = 3 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = false
+  ];
+  bool delisted = 4;
+  // this is the total number of pASSET tokens for a refractable asset, however, for delisted assets
+  // since we allow redemption using yASSETs as well as pASSETS, we won't always have equal number of p/y tokens,
+  // in that case, this would be a weighted sum of total p, and y tokens.
+  string total_redeemable_underlying = 5 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = true
   ];
 }

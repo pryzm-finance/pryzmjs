@@ -222,6 +222,41 @@ export interface EventRedeemUnstakedSDKType {
   amount: CoinSDKType;
   fee: CoinSDKType;
 }
+export interface EventRedeemDelisted {
+  creator: string;
+  hostChain: string;
+  transferChannel: string;
+  epoch: bigint;
+  cAmount: string;
+  amount: Coin;
+  fee: Coin;
+}
+export interface EventRedeemDelistedProtoMsg {
+  typeUrl: "/pryzm.icstaking.v1.EventRedeemDelisted";
+  value: Uint8Array;
+}
+export interface EventRedeemDelistedAmino {
+  creator?: string;
+  host_chain?: string;
+  transfer_channel?: string;
+  epoch?: string;
+  c_amount?: string;
+  amount?: CoinAmino;
+  fee?: CoinAmino;
+}
+export interface EventRedeemDelistedAminoMsg {
+  type: "/pryzm.icstaking.v1.EventRedeemDelisted";
+  value: EventRedeemDelistedAmino;
+}
+export interface EventRedeemDelistedSDKType {
+  creator: string;
+  host_chain: string;
+  transfer_channel: string;
+  epoch: bigint;
+  c_amount: string;
+  amount: CoinSDKType;
+  fee: CoinSDKType;
+}
 export interface EventInstantUnstake {
   creator: string;
   hostChain: string;
@@ -1361,6 +1396,173 @@ export const EventRedeemUnstaked = {
   }
 };
 GlobalDecoderRegistry.register(EventRedeemUnstaked.typeUrl, EventRedeemUnstaked);
+function createBaseEventRedeemDelisted(): EventRedeemDelisted {
+  return {
+    creator: "",
+    hostChain: "",
+    transferChannel: "",
+    epoch: BigInt(0),
+    cAmount: "",
+    amount: Coin.fromPartial({}),
+    fee: Coin.fromPartial({})
+  };
+}
+export const EventRedeemDelisted = {
+  typeUrl: "/pryzm.icstaking.v1.EventRedeemDelisted",
+  is(o: any): o is EventRedeemDelisted {
+    return o && (o.$typeUrl === EventRedeemDelisted.typeUrl || typeof o.creator === "string" && typeof o.hostChain === "string" && typeof o.transferChannel === "string" && typeof o.epoch === "bigint" && typeof o.cAmount === "string" && Coin.is(o.amount) && Coin.is(o.fee));
+  },
+  isSDK(o: any): o is EventRedeemDelistedSDKType {
+    return o && (o.$typeUrl === EventRedeemDelisted.typeUrl || typeof o.creator === "string" && typeof o.host_chain === "string" && typeof o.transfer_channel === "string" && typeof o.epoch === "bigint" && typeof o.c_amount === "string" && Coin.isSDK(o.amount) && Coin.isSDK(o.fee));
+  },
+  isAmino(o: any): o is EventRedeemDelistedAmino {
+    return o && (o.$typeUrl === EventRedeemDelisted.typeUrl || typeof o.creator === "string" && typeof o.host_chain === "string" && typeof o.transfer_channel === "string" && typeof o.epoch === "bigint" && typeof o.c_amount === "string" && Coin.isAmino(o.amount) && Coin.isAmino(o.fee));
+  },
+  encode(message: EventRedeemDelisted, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.hostChain !== "") {
+      writer.uint32(18).string(message.hostChain);
+    }
+    if (message.transferChannel !== "") {
+      writer.uint32(26).string(message.transferChannel);
+    }
+    if (message.epoch !== BigInt(0)) {
+      writer.uint32(32).uint64(message.epoch);
+    }
+    if (message.cAmount !== "") {
+      writer.uint32(42).string(message.cAmount);
+    }
+    if (message.amount !== undefined) {
+      Coin.encode(message.amount, writer.uint32(50).fork()).ldelim();
+    }
+    if (message.fee !== undefined) {
+      Coin.encode(message.fee, writer.uint32(58).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): EventRedeemDelisted {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEventRedeemDelisted();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.hostChain = reader.string();
+          break;
+        case 3:
+          message.transferChannel = reader.string();
+          break;
+        case 4:
+          message.epoch = reader.uint64();
+          break;
+        case 5:
+          message.cAmount = reader.string();
+          break;
+        case 6:
+          message.amount = Coin.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        case 7:
+          message.fee = Coin.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): EventRedeemDelisted {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      hostChain: isSet(object.hostChain) ? String(object.hostChain) : "",
+      transferChannel: isSet(object.transferChannel) ? String(object.transferChannel) : "",
+      epoch: isSet(object.epoch) ? BigInt(object.epoch.toString()) : BigInt(0),
+      cAmount: isSet(object.cAmount) ? String(object.cAmount) : "",
+      amount: isSet(object.amount) ? Coin.fromJSON(object.amount) : undefined,
+      fee: isSet(object.fee) ? Coin.fromJSON(object.fee) : undefined
+    };
+  },
+  toJSON(message: EventRedeemDelisted): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.hostChain !== undefined && (obj.hostChain = message.hostChain);
+    message.transferChannel !== undefined && (obj.transferChannel = message.transferChannel);
+    message.epoch !== undefined && (obj.epoch = (message.epoch || BigInt(0)).toString());
+    message.cAmount !== undefined && (obj.cAmount = message.cAmount);
+    message.amount !== undefined && (obj.amount = message.amount ? Coin.toJSON(message.amount) : undefined);
+    message.fee !== undefined && (obj.fee = message.fee ? Coin.toJSON(message.fee) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<EventRedeemDelisted>): EventRedeemDelisted {
+    const message = createBaseEventRedeemDelisted();
+    message.creator = object.creator ?? "";
+    message.hostChain = object.hostChain ?? "";
+    message.transferChannel = object.transferChannel ?? "";
+    message.epoch = object.epoch !== undefined && object.epoch !== null ? BigInt(object.epoch.toString()) : BigInt(0);
+    message.cAmount = object.cAmount ?? "";
+    message.amount = object.amount !== undefined && object.amount !== null ? Coin.fromPartial(object.amount) : undefined;
+    message.fee = object.fee !== undefined && object.fee !== null ? Coin.fromPartial(object.fee) : undefined;
+    return message;
+  },
+  fromAmino(object: EventRedeemDelistedAmino): EventRedeemDelisted {
+    const message = createBaseEventRedeemDelisted();
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    }
+    if (object.host_chain !== undefined && object.host_chain !== null) {
+      message.hostChain = object.host_chain;
+    }
+    if (object.transfer_channel !== undefined && object.transfer_channel !== null) {
+      message.transferChannel = object.transfer_channel;
+    }
+    if (object.epoch !== undefined && object.epoch !== null) {
+      message.epoch = BigInt(object.epoch);
+    }
+    if (object.c_amount !== undefined && object.c_amount !== null) {
+      message.cAmount = object.c_amount;
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = Coin.fromAmino(object.amount);
+    }
+    if (object.fee !== undefined && object.fee !== null) {
+      message.fee = Coin.fromAmino(object.fee);
+    }
+    return message;
+  },
+  toAmino(message: EventRedeemDelisted, useInterfaces: boolean = true): EventRedeemDelistedAmino {
+    const obj: any = {};
+    obj.creator = message.creator === "" ? undefined : message.creator;
+    obj.host_chain = message.hostChain === "" ? undefined : message.hostChain;
+    obj.transfer_channel = message.transferChannel === "" ? undefined : message.transferChannel;
+    obj.epoch = message.epoch ? message.epoch.toString() : undefined;
+    obj.c_amount = message.cAmount === "" ? undefined : message.cAmount;
+    obj.amount = message.amount ? Coin.toAmino(message.amount, useInterfaces) : undefined;
+    obj.fee = message.fee ? Coin.toAmino(message.fee, useInterfaces) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: EventRedeemDelistedAminoMsg): EventRedeemDelisted {
+    return EventRedeemDelisted.fromAmino(object.value);
+  },
+  fromProtoMsg(message: EventRedeemDelistedProtoMsg, useInterfaces: boolean = true): EventRedeemDelisted {
+    return EventRedeemDelisted.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: EventRedeemDelisted): Uint8Array {
+    return EventRedeemDelisted.encode(message).finish();
+  },
+  toProtoMsg(message: EventRedeemDelisted): EventRedeemDelistedProtoMsg {
+    return {
+      typeUrl: "/pryzm.icstaking.v1.EventRedeemDelisted",
+      value: EventRedeemDelisted.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(EventRedeemDelisted.typeUrl, EventRedeemDelisted);
 function createBaseEventInstantUnstake(): EventInstantUnstake {
   return {
     creator: "",

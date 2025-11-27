@@ -959,6 +959,46 @@ export interface QuerySimulateExitExactTokensResponseSDKType {
   protocol_fee: CoinSDKType;
   swap_fee: CoinSDKType[];
 }
+export interface QuerySimulateRecoveryExitRequest {
+  poolId: bigint;
+  lptIn: string;
+}
+export interface QuerySimulateRecoveryExitRequestProtoMsg {
+  typeUrl: "/pryzm.amm.v1.QuerySimulateRecoveryExitRequest";
+  value: Uint8Array;
+}
+export interface QuerySimulateRecoveryExitRequestAmino {
+  pool_id?: string;
+  lpt_in?: string;
+}
+export interface QuerySimulateRecoveryExitRequestAminoMsg {
+  type: "/pryzm.amm.v1.QuerySimulateRecoveryExitRequest";
+  value: QuerySimulateRecoveryExitRequestAmino;
+}
+export interface QuerySimulateRecoveryExitRequestSDKType {
+  pool_id: bigint;
+  lpt_in: string;
+}
+export interface QuerySimulateRecoveryExitResponse {
+  lptIn: Coin;
+  amountsOut: Coin[];
+}
+export interface QuerySimulateRecoveryExitResponseProtoMsg {
+  typeUrl: "/pryzm.amm.v1.QuerySimulateRecoveryExitResponse";
+  value: Uint8Array;
+}
+export interface QuerySimulateRecoveryExitResponseAmino {
+  lpt_in?: CoinAmino;
+  amounts_out?: CoinAmino[];
+}
+export interface QuerySimulateRecoveryExitResponseAminoMsg {
+  type: "/pryzm.amm.v1.QuerySimulateRecoveryExitResponse";
+  value: QuerySimulateRecoveryExitResponseAmino;
+}
+export interface QuerySimulateRecoveryExitResponseSDKType {
+  lpt_in: CoinSDKType;
+  amounts_out: CoinSDKType[];
+}
 export interface QuerySimulateExitAllTokensExactLptRequest {
   poolId: bigint;
   lptIn: string;
@@ -6397,6 +6437,206 @@ export const QuerySimulateExitExactTokensResponse = {
   }
 };
 GlobalDecoderRegistry.register(QuerySimulateExitExactTokensResponse.typeUrl, QuerySimulateExitExactTokensResponse);
+function createBaseQuerySimulateRecoveryExitRequest(): QuerySimulateRecoveryExitRequest {
+  return {
+    poolId: BigInt(0),
+    lptIn: ""
+  };
+}
+export const QuerySimulateRecoveryExitRequest = {
+  typeUrl: "/pryzm.amm.v1.QuerySimulateRecoveryExitRequest",
+  is(o: any): o is QuerySimulateRecoveryExitRequest {
+    return o && (o.$typeUrl === QuerySimulateRecoveryExitRequest.typeUrl || typeof o.poolId === "bigint" && typeof o.lptIn === "string");
+  },
+  isSDK(o: any): o is QuerySimulateRecoveryExitRequestSDKType {
+    return o && (o.$typeUrl === QuerySimulateRecoveryExitRequest.typeUrl || typeof o.pool_id === "bigint" && typeof o.lpt_in === "string");
+  },
+  isAmino(o: any): o is QuerySimulateRecoveryExitRequestAmino {
+    return o && (o.$typeUrl === QuerySimulateRecoveryExitRequest.typeUrl || typeof o.pool_id === "bigint" && typeof o.lpt_in === "string");
+  },
+  encode(message: QuerySimulateRecoveryExitRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== BigInt(0)) {
+      writer.uint32(8).uint64(message.poolId);
+    }
+    if (message.lptIn !== "") {
+      writer.uint32(18).string(message.lptIn);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QuerySimulateRecoveryExitRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQuerySimulateRecoveryExitRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.poolId = reader.uint64();
+          break;
+        case 2:
+          message.lptIn = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QuerySimulateRecoveryExitRequest {
+    return {
+      poolId: isSet(object.poolId) ? BigInt(object.poolId.toString()) : BigInt(0),
+      lptIn: isSet(object.lptIn) ? String(object.lptIn) : ""
+    };
+  },
+  toJSON(message: QuerySimulateRecoveryExitRequest): unknown {
+    const obj: any = {};
+    message.poolId !== undefined && (obj.poolId = (message.poolId || BigInt(0)).toString());
+    message.lptIn !== undefined && (obj.lptIn = message.lptIn);
+    return obj;
+  },
+  fromPartial(object: Partial<QuerySimulateRecoveryExitRequest>): QuerySimulateRecoveryExitRequest {
+    const message = createBaseQuerySimulateRecoveryExitRequest();
+    message.poolId = object.poolId !== undefined && object.poolId !== null ? BigInt(object.poolId.toString()) : BigInt(0);
+    message.lptIn = object.lptIn ?? "";
+    return message;
+  },
+  fromAmino(object: QuerySimulateRecoveryExitRequestAmino): QuerySimulateRecoveryExitRequest {
+    const message = createBaseQuerySimulateRecoveryExitRequest();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = BigInt(object.pool_id);
+    }
+    if (object.lpt_in !== undefined && object.lpt_in !== null) {
+      message.lptIn = object.lpt_in;
+    }
+    return message;
+  },
+  toAmino(message: QuerySimulateRecoveryExitRequest, useInterfaces: boolean = true): QuerySimulateRecoveryExitRequestAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId ? message.poolId.toString() : undefined;
+    obj.lpt_in = message.lptIn === "" ? undefined : message.lptIn;
+    return obj;
+  },
+  fromAminoMsg(object: QuerySimulateRecoveryExitRequestAminoMsg): QuerySimulateRecoveryExitRequest {
+    return QuerySimulateRecoveryExitRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QuerySimulateRecoveryExitRequestProtoMsg, useInterfaces: boolean = true): QuerySimulateRecoveryExitRequest {
+    return QuerySimulateRecoveryExitRequest.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QuerySimulateRecoveryExitRequest): Uint8Array {
+    return QuerySimulateRecoveryExitRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QuerySimulateRecoveryExitRequest): QuerySimulateRecoveryExitRequestProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.QuerySimulateRecoveryExitRequest",
+      value: QuerySimulateRecoveryExitRequest.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QuerySimulateRecoveryExitRequest.typeUrl, QuerySimulateRecoveryExitRequest);
+function createBaseQuerySimulateRecoveryExitResponse(): QuerySimulateRecoveryExitResponse {
+  return {
+    lptIn: Coin.fromPartial({}),
+    amountsOut: []
+  };
+}
+export const QuerySimulateRecoveryExitResponse = {
+  typeUrl: "/pryzm.amm.v1.QuerySimulateRecoveryExitResponse",
+  is(o: any): o is QuerySimulateRecoveryExitResponse {
+    return o && (o.$typeUrl === QuerySimulateRecoveryExitResponse.typeUrl || Coin.is(o.lptIn) && Array.isArray(o.amountsOut) && (!o.amountsOut.length || Coin.is(o.amountsOut[0])));
+  },
+  isSDK(o: any): o is QuerySimulateRecoveryExitResponseSDKType {
+    return o && (o.$typeUrl === QuerySimulateRecoveryExitResponse.typeUrl || Coin.isSDK(o.lpt_in) && Array.isArray(o.amounts_out) && (!o.amounts_out.length || Coin.isSDK(o.amounts_out[0])));
+  },
+  isAmino(o: any): o is QuerySimulateRecoveryExitResponseAmino {
+    return o && (o.$typeUrl === QuerySimulateRecoveryExitResponse.typeUrl || Coin.isAmino(o.lpt_in) && Array.isArray(o.amounts_out) && (!o.amounts_out.length || Coin.isAmino(o.amounts_out[0])));
+  },
+  encode(message: QuerySimulateRecoveryExitResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.lptIn !== undefined) {
+      Coin.encode(message.lptIn, writer.uint32(10).fork()).ldelim();
+    }
+    for (const v of message.amountsOut) {
+      Coin.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): QuerySimulateRecoveryExitResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQuerySimulateRecoveryExitResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.lptIn = Coin.decode(reader, reader.uint32(), useInterfaces);
+          break;
+        case 2:
+          message.amountsOut.push(Coin.decode(reader, reader.uint32(), useInterfaces));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QuerySimulateRecoveryExitResponse {
+    return {
+      lptIn: isSet(object.lptIn) ? Coin.fromJSON(object.lptIn) : undefined,
+      amountsOut: Array.isArray(object?.amountsOut) ? object.amountsOut.map((e: any) => Coin.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: QuerySimulateRecoveryExitResponse): unknown {
+    const obj: any = {};
+    message.lptIn !== undefined && (obj.lptIn = message.lptIn ? Coin.toJSON(message.lptIn) : undefined);
+    if (message.amountsOut) {
+      obj.amountsOut = message.amountsOut.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.amountsOut = [];
+    }
+    return obj;
+  },
+  fromPartial(object: Partial<QuerySimulateRecoveryExitResponse>): QuerySimulateRecoveryExitResponse {
+    const message = createBaseQuerySimulateRecoveryExitResponse();
+    message.lptIn = object.lptIn !== undefined && object.lptIn !== null ? Coin.fromPartial(object.lptIn) : undefined;
+    message.amountsOut = object.amountsOut?.map(e => Coin.fromPartial(e)) || [];
+    return message;
+  },
+  fromAmino(object: QuerySimulateRecoveryExitResponseAmino): QuerySimulateRecoveryExitResponse {
+    const message = createBaseQuerySimulateRecoveryExitResponse();
+    if (object.lpt_in !== undefined && object.lpt_in !== null) {
+      message.lptIn = Coin.fromAmino(object.lpt_in);
+    }
+    message.amountsOut = object.amounts_out?.map(e => Coin.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: QuerySimulateRecoveryExitResponse, useInterfaces: boolean = true): QuerySimulateRecoveryExitResponseAmino {
+    const obj: any = {};
+    obj.lpt_in = message.lptIn ? Coin.toAmino(message.lptIn, useInterfaces) : undefined;
+    if (message.amountsOut) {
+      obj.amounts_out = message.amountsOut.map(e => e ? Coin.toAmino(e, useInterfaces) : undefined);
+    } else {
+      obj.amounts_out = message.amountsOut;
+    }
+    return obj;
+  },
+  fromAminoMsg(object: QuerySimulateRecoveryExitResponseAminoMsg): QuerySimulateRecoveryExitResponse {
+    return QuerySimulateRecoveryExitResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QuerySimulateRecoveryExitResponseProtoMsg, useInterfaces: boolean = true): QuerySimulateRecoveryExitResponse {
+    return QuerySimulateRecoveryExitResponse.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: QuerySimulateRecoveryExitResponse): Uint8Array {
+    return QuerySimulateRecoveryExitResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QuerySimulateRecoveryExitResponse): QuerySimulateRecoveryExitResponseProtoMsg {
+    return {
+      typeUrl: "/pryzm.amm.v1.QuerySimulateRecoveryExitResponse",
+      value: QuerySimulateRecoveryExitResponse.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(QuerySimulateRecoveryExitResponse.typeUrl, QuerySimulateRecoveryExitResponse);
 function createBaseQuerySimulateExitAllTokensExactLptRequest(): QuerySimulateExitAllTokensExactLptRequest {
   return {
     poolId: BigInt(0),

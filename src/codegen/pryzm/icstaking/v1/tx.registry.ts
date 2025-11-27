@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { GeneratedType, Registry } from "@cosmjs/proto-signing";
-import { MsgUpdateParams, MsgRegisterHostChain, MsgUpdateHostChain, MsgStake, MsgStakeLsmShares, MsgUnstake, MsgRedeemUnstaked, MsgInstantUnstake, MsgRebalanceDelegations, MsgRedelegate, MsgRegisterInterchainAccount, MsgCreateMultiSigConnection, MsgUpdateMultiSigConnection, MsgAcknowledgeMultiSigPacket, MsgRegisterHostAccounts, MsgRetryFailedLsmTransfer } from "./tx";
-export const registry: ReadonlyArray<[string, GeneratedType]> = [["/pryzm.icstaking.v1.MsgUpdateParams", MsgUpdateParams], ["/pryzm.icstaking.v1.MsgRegisterHostChain", MsgRegisterHostChain], ["/pryzm.icstaking.v1.MsgUpdateHostChain", MsgUpdateHostChain], ["/pryzm.icstaking.v1.MsgStake", MsgStake], ["/pryzm.icstaking.v1.MsgStakeLsmShares", MsgStakeLsmShares], ["/pryzm.icstaking.v1.MsgUnstake", MsgUnstake], ["/pryzm.icstaking.v1.MsgRedeemUnstaked", MsgRedeemUnstaked], ["/pryzm.icstaking.v1.MsgInstantUnstake", MsgInstantUnstake], ["/pryzm.icstaking.v1.MsgRebalanceDelegations", MsgRebalanceDelegations], ["/pryzm.icstaking.v1.MsgRedelegate", MsgRedelegate], ["/pryzm.icstaking.v1.MsgRegisterInterchainAccount", MsgRegisterInterchainAccount], ["/pryzm.icstaking.v1.MsgCreateMultiSigConnection", MsgCreateMultiSigConnection], ["/pryzm.icstaking.v1.MsgUpdateMultiSigConnection", MsgUpdateMultiSigConnection], ["/pryzm.icstaking.v1.MsgAcknowledgeMultiSigPacket", MsgAcknowledgeMultiSigPacket], ["/pryzm.icstaking.v1.MsgRegisterHostAccounts", MsgRegisterHostAccounts], ["/pryzm.icstaking.v1.MsgRetryFailedLsmTransfer", MsgRetryFailedLsmTransfer]];
+import { MsgUpdateParams, MsgRegisterHostChain, MsgUpdateHostChain, MsgStake, MsgStakeLsmShares, MsgUnstake, MsgRedeemUnstaked, MsgInstantUnstake, MsgRebalanceDelegations, MsgRedelegate, MsgRegisterInterchainAccount, MsgCreateMultiSigConnection, MsgUpdateMultiSigConnection, MsgAcknowledgeMultiSigPacket, MsgRegisterHostAccounts, MsgRetryFailedLsmTransfer, MsgDelistHostChain, MsgUndelegateDelistedHostChain, MsgRedeemDelisted } from "./tx";
+export const registry: ReadonlyArray<[string, GeneratedType]> = [["/pryzm.icstaking.v1.MsgUpdateParams", MsgUpdateParams], ["/pryzm.icstaking.v1.MsgRegisterHostChain", MsgRegisterHostChain], ["/pryzm.icstaking.v1.MsgUpdateHostChain", MsgUpdateHostChain], ["/pryzm.icstaking.v1.MsgStake", MsgStake], ["/pryzm.icstaking.v1.MsgStakeLsmShares", MsgStakeLsmShares], ["/pryzm.icstaking.v1.MsgUnstake", MsgUnstake], ["/pryzm.icstaking.v1.MsgRedeemUnstaked", MsgRedeemUnstaked], ["/pryzm.icstaking.v1.MsgInstantUnstake", MsgInstantUnstake], ["/pryzm.icstaking.v1.MsgRebalanceDelegations", MsgRebalanceDelegations], ["/pryzm.icstaking.v1.MsgRedelegate", MsgRedelegate], ["/pryzm.icstaking.v1.MsgRegisterInterchainAccount", MsgRegisterInterchainAccount], ["/pryzm.icstaking.v1.MsgCreateMultiSigConnection", MsgCreateMultiSigConnection], ["/pryzm.icstaking.v1.MsgUpdateMultiSigConnection", MsgUpdateMultiSigConnection], ["/pryzm.icstaking.v1.MsgAcknowledgeMultiSigPacket", MsgAcknowledgeMultiSigPacket], ["/pryzm.icstaking.v1.MsgRegisterHostAccounts", MsgRegisterHostAccounts], ["/pryzm.icstaking.v1.MsgRetryFailedLsmTransfer", MsgRetryFailedLsmTransfer], ["/pryzm.icstaking.v1.MsgDelistHostChain", MsgDelistHostChain], ["/pryzm.icstaking.v1.MsgUndelegateDelistedHostChain", MsgUndelegateDelistedHostChain], ["/pryzm.icstaking.v1.MsgRedeemDelisted", MsgRedeemDelisted]];
 export const load = (protoRegistry: Registry) => {
   registry.forEach(([typeUrl, mod]) => {
     protoRegistry.register(typeUrl, mod);
@@ -104,6 +104,24 @@ export const MessageComposer = {
         typeUrl: "/pryzm.icstaking.v1.MsgRetryFailedLsmTransfer",
         value: MsgRetryFailedLsmTransfer.encode(value).finish()
       };
+    },
+    delistHostChain(value: MsgDelistHostChain) {
+      return {
+        typeUrl: "/pryzm.icstaking.v1.MsgDelistHostChain",
+        value: MsgDelistHostChain.encode(value).finish()
+      };
+    },
+    undelegateDelistedHostChain(value: MsgUndelegateDelistedHostChain) {
+      return {
+        typeUrl: "/pryzm.icstaking.v1.MsgUndelegateDelistedHostChain",
+        value: MsgUndelegateDelistedHostChain.encode(value).finish()
+      };
+    },
+    redeemDelisted(value: MsgRedeemDelisted) {
+      return {
+        typeUrl: "/pryzm.icstaking.v1.MsgRedeemDelisted",
+        value: MsgRedeemDelisted.encode(value).finish()
+      };
     }
   },
   withTypeUrl: {
@@ -200,6 +218,24 @@ export const MessageComposer = {
     retryFailedLsmTransfer(value: MsgRetryFailedLsmTransfer) {
       return {
         typeUrl: "/pryzm.icstaking.v1.MsgRetryFailedLsmTransfer",
+        value
+      };
+    },
+    delistHostChain(value: MsgDelistHostChain) {
+      return {
+        typeUrl: "/pryzm.icstaking.v1.MsgDelistHostChain",
+        value
+      };
+    },
+    undelegateDelistedHostChain(value: MsgUndelegateDelistedHostChain) {
+      return {
+        typeUrl: "/pryzm.icstaking.v1.MsgUndelegateDelistedHostChain",
+        value
+      };
+    },
+    redeemDelisted(value: MsgRedeemDelisted) {
+      return {
+        typeUrl: "/pryzm.icstaking.v1.MsgRedeemDelisted",
         value
       };
     }
@@ -300,6 +336,24 @@ export const MessageComposer = {
         typeUrl: "/pryzm.icstaking.v1.MsgRetryFailedLsmTransfer",
         value: MsgRetryFailedLsmTransfer.toJSON(value)
       };
+    },
+    delistHostChain(value: MsgDelistHostChain) {
+      return {
+        typeUrl: "/pryzm.icstaking.v1.MsgDelistHostChain",
+        value: MsgDelistHostChain.toJSON(value)
+      };
+    },
+    undelegateDelistedHostChain(value: MsgUndelegateDelistedHostChain) {
+      return {
+        typeUrl: "/pryzm.icstaking.v1.MsgUndelegateDelistedHostChain",
+        value: MsgUndelegateDelistedHostChain.toJSON(value)
+      };
+    },
+    redeemDelisted(value: MsgRedeemDelisted) {
+      return {
+        typeUrl: "/pryzm.icstaking.v1.MsgRedeemDelisted",
+        value: MsgRedeemDelisted.toJSON(value)
+      };
     }
   },
   fromJSON: {
@@ -398,6 +452,24 @@ export const MessageComposer = {
         typeUrl: "/pryzm.icstaking.v1.MsgRetryFailedLsmTransfer",
         value: MsgRetryFailedLsmTransfer.fromJSON(value)
       };
+    },
+    delistHostChain(value: any) {
+      return {
+        typeUrl: "/pryzm.icstaking.v1.MsgDelistHostChain",
+        value: MsgDelistHostChain.fromJSON(value)
+      };
+    },
+    undelegateDelistedHostChain(value: any) {
+      return {
+        typeUrl: "/pryzm.icstaking.v1.MsgUndelegateDelistedHostChain",
+        value: MsgUndelegateDelistedHostChain.fromJSON(value)
+      };
+    },
+    redeemDelisted(value: any) {
+      return {
+        typeUrl: "/pryzm.icstaking.v1.MsgRedeemDelisted",
+        value: MsgRedeemDelisted.fromJSON(value)
+      };
     }
   },
   fromPartial: {
@@ -495,6 +567,24 @@ export const MessageComposer = {
       return {
         typeUrl: "/pryzm.icstaking.v1.MsgRetryFailedLsmTransfer",
         value: MsgRetryFailedLsmTransfer.fromPartial(value)
+      };
+    },
+    delistHostChain(value: MsgDelistHostChain) {
+      return {
+        typeUrl: "/pryzm.icstaking.v1.MsgDelistHostChain",
+        value: MsgDelistHostChain.fromPartial(value)
+      };
+    },
+    undelegateDelistedHostChain(value: MsgUndelegateDelistedHostChain) {
+      return {
+        typeUrl: "/pryzm.icstaking.v1.MsgUndelegateDelistedHostChain",
+        value: MsgUndelegateDelistedHostChain.fromPartial(value)
+      };
+    },
+    redeemDelisted(value: MsgRedeemDelisted) {
+      return {
+        typeUrl: "/pryzm.icstaking.v1.MsgRedeemDelisted",
+        value: MsgRedeemDelisted.fromPartial(value)
       };
     }
   }

@@ -1,7 +1,35 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
+import { Decimal } from "@cosmjs/math";
 import { isSet, padDecimal } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
-import { Decimal } from "@cosmjs/math";
+export interface DelistedMaturityLevel {
+  symbol: string;
+  /**
+   * decimal number less than or equal to 1, representing how much of an asset's price is attributed to pAsset
+   * the rest would be attributed to yASSET.
+   */
+  pAssetPriceUnderlyingTerms: string;
+}
+export interface DelistedMaturityLevelProtoMsg {
+  typeUrl: "/pryzm.assets.v1.DelistedMaturityLevel";
+  value: Uint8Array;
+}
+export interface DelistedMaturityLevelAmino {
+  symbol?: string;
+  /**
+   * decimal number less than or equal to 1, representing how much of an asset's price is attributed to pAsset
+   * the rest would be attributed to yASSET.
+   */
+  p_asset_price_underlying_terms?: string;
+}
+export interface DelistedMaturityLevelAminoMsg {
+  type: "/pryzm.assets.v1.DelistedMaturityLevel";
+  value: DelistedMaturityLevelAmino;
+}
+export interface DelistedMaturityLevelSDKType {
+  symbol: string;
+  p_asset_price_underlying_terms: string;
+}
 /** The properties of a supported asset */
 export interface RefractableAsset {
   /** A unique user-provided identifier. Is used in the p/y token denom */
@@ -15,6 +43,8 @@ export interface RefractableAsset {
   maturityParams: MaturityParams;
   /** The amount of fee for each operation on the asset. */
   feeRatios: FeeRatios;
+  delisted: boolean;
+  delistedMaturities: DelistedMaturityLevel[];
 }
 export interface RefractableAssetProtoMsg {
   typeUrl: "/pryzm.assets.v1.RefractableAsset";
@@ -33,6 +63,8 @@ export interface RefractableAssetAmino {
   maturity_params: MaturityParamsAmino;
   /** The amount of fee for each operation on the asset. */
   fee_ratios: FeeRatiosAmino;
+  delisted?: boolean;
+  delisted_maturities?: DelistedMaturityLevelAmino[];
 }
 export interface RefractableAssetAminoMsg {
   type: "/pryzm.assets.v1.RefractableAsset";
@@ -46,6 +78,8 @@ export interface RefractableAssetSDKType {
   disabled: boolean;
   maturity_params: MaturityParamsSDKType;
   fee_ratios: FeeRatiosSDKType;
+  delisted: boolean;
+  delisted_maturities: DelistedMaturityLevelSDKType[];
 }
 /** The parameters based on which new maturities are introduced */
 export interface MaturityParams {
@@ -118,6 +152,103 @@ export interface FeeRatiosSDKType {
   refractor_redeem?: string;
   y_staking_claim_reward?: string;
 }
+function createBaseDelistedMaturityLevel(): DelistedMaturityLevel {
+  return {
+    symbol: "",
+    pAssetPriceUnderlyingTerms: ""
+  };
+}
+export const DelistedMaturityLevel = {
+  typeUrl: "/pryzm.assets.v1.DelistedMaturityLevel",
+  is(o: any): o is DelistedMaturityLevel {
+    return o && (o.$typeUrl === DelistedMaturityLevel.typeUrl || typeof o.symbol === "string" && typeof o.pAssetPriceUnderlyingTerms === "string");
+  },
+  isSDK(o: any): o is DelistedMaturityLevelSDKType {
+    return o && (o.$typeUrl === DelistedMaturityLevel.typeUrl || typeof o.symbol === "string" && typeof o.p_asset_price_underlying_terms === "string");
+  },
+  isAmino(o: any): o is DelistedMaturityLevelAmino {
+    return o && (o.$typeUrl === DelistedMaturityLevel.typeUrl || typeof o.symbol === "string" && typeof o.p_asset_price_underlying_terms === "string");
+  },
+  encode(message: DelistedMaturityLevel, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.symbol !== "") {
+      writer.uint32(10).string(message.symbol);
+    }
+    if (message.pAssetPriceUnderlyingTerms !== "") {
+      writer.uint32(18).string(Decimal.fromUserInput(message.pAssetPriceUnderlyingTerms, 18).atomics);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number, useInterfaces: boolean = true): DelistedMaturityLevel {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseDelistedMaturityLevel();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.symbol = reader.string();
+          break;
+        case 2:
+          message.pAssetPriceUnderlyingTerms = Decimal.fromAtomics(reader.string(), 18).toString();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): DelistedMaturityLevel {
+    return {
+      symbol: isSet(object.symbol) ? String(object.symbol) : "",
+      pAssetPriceUnderlyingTerms: isSet(object.pAssetPriceUnderlyingTerms) ? String(object.pAssetPriceUnderlyingTerms) : ""
+    };
+  },
+  toJSON(message: DelistedMaturityLevel): unknown {
+    const obj: any = {};
+    message.symbol !== undefined && (obj.symbol = message.symbol);
+    message.pAssetPriceUnderlyingTerms !== undefined && (obj.pAssetPriceUnderlyingTerms = message.pAssetPriceUnderlyingTerms);
+    return obj;
+  },
+  fromPartial(object: Partial<DelistedMaturityLevel>): DelistedMaturityLevel {
+    const message = createBaseDelistedMaturityLevel();
+    message.symbol = object.symbol ?? "";
+    message.pAssetPriceUnderlyingTerms = object.pAssetPriceUnderlyingTerms ?? "";
+    return message;
+  },
+  fromAmino(object: DelistedMaturityLevelAmino): DelistedMaturityLevel {
+    const message = createBaseDelistedMaturityLevel();
+    if (object.symbol !== undefined && object.symbol !== null) {
+      message.symbol = object.symbol;
+    }
+    if (object.p_asset_price_underlying_terms !== undefined && object.p_asset_price_underlying_terms !== null) {
+      message.pAssetPriceUnderlyingTerms = object.p_asset_price_underlying_terms;
+    }
+    return message;
+  },
+  toAmino(message: DelistedMaturityLevel, useInterfaces: boolean = true): DelistedMaturityLevelAmino {
+    const obj: any = {};
+    obj.symbol = message.symbol === "" ? undefined : message.symbol;
+    obj.p_asset_price_underlying_terms = padDecimal(message.pAssetPriceUnderlyingTerms) === "" ? undefined : padDecimal(message.pAssetPriceUnderlyingTerms);
+    return obj;
+  },
+  fromAminoMsg(object: DelistedMaturityLevelAminoMsg): DelistedMaturityLevel {
+    return DelistedMaturityLevel.fromAmino(object.value);
+  },
+  fromProtoMsg(message: DelistedMaturityLevelProtoMsg, useInterfaces: boolean = true): DelistedMaturityLevel {
+    return DelistedMaturityLevel.decode(message.value, undefined, useInterfaces);
+  },
+  toProto(message: DelistedMaturityLevel): Uint8Array {
+    return DelistedMaturityLevel.encode(message).finish();
+  },
+  toProtoMsg(message: DelistedMaturityLevel): DelistedMaturityLevelProtoMsg {
+    return {
+      typeUrl: "/pryzm.assets.v1.DelistedMaturityLevel",
+      value: DelistedMaturityLevel.encode(message).finish()
+    };
+  }
+};
+GlobalDecoderRegistry.register(DelistedMaturityLevel.typeUrl, DelistedMaturityLevel);
 function createBaseRefractableAsset(): RefractableAsset {
   return {
     id: "",
@@ -125,19 +256,21 @@ function createBaseRefractableAsset(): RefractableAsset {
     hostChainId: "",
     disabled: false,
     maturityParams: MaturityParams.fromPartial({}),
-    feeRatios: FeeRatios.fromPartial({})
+    feeRatios: FeeRatios.fromPartial({}),
+    delisted: false,
+    delistedMaturities: []
   };
 }
 export const RefractableAsset = {
   typeUrl: "/pryzm.assets.v1.RefractableAsset",
   is(o: any): o is RefractableAsset {
-    return o && (o.$typeUrl === RefractableAsset.typeUrl || typeof o.id === "string" && typeof o.tokenDenom === "string" && typeof o.hostChainId === "string" && typeof o.disabled === "boolean" && MaturityParams.is(o.maturityParams) && FeeRatios.is(o.feeRatios));
+    return o && (o.$typeUrl === RefractableAsset.typeUrl || typeof o.id === "string" && typeof o.tokenDenom === "string" && typeof o.hostChainId === "string" && typeof o.disabled === "boolean" && MaturityParams.is(o.maturityParams) && FeeRatios.is(o.feeRatios) && typeof o.delisted === "boolean" && Array.isArray(o.delistedMaturities) && (!o.delistedMaturities.length || DelistedMaturityLevel.is(o.delistedMaturities[0])));
   },
   isSDK(o: any): o is RefractableAssetSDKType {
-    return o && (o.$typeUrl === RefractableAsset.typeUrl || typeof o.id === "string" && typeof o.token_denom === "string" && typeof o.host_chain_id === "string" && typeof o.disabled === "boolean" && MaturityParams.isSDK(o.maturity_params) && FeeRatios.isSDK(o.fee_ratios));
+    return o && (o.$typeUrl === RefractableAsset.typeUrl || typeof o.id === "string" && typeof o.token_denom === "string" && typeof o.host_chain_id === "string" && typeof o.disabled === "boolean" && MaturityParams.isSDK(o.maturity_params) && FeeRatios.isSDK(o.fee_ratios) && typeof o.delisted === "boolean" && Array.isArray(o.delisted_maturities) && (!o.delisted_maturities.length || DelistedMaturityLevel.isSDK(o.delisted_maturities[0])));
   },
   isAmino(o: any): o is RefractableAssetAmino {
-    return o && (o.$typeUrl === RefractableAsset.typeUrl || typeof o.id === "string" && typeof o.token_denom === "string" && typeof o.host_chain_id === "string" && typeof o.disabled === "boolean" && MaturityParams.isAmino(o.maturity_params) && FeeRatios.isAmino(o.fee_ratios));
+    return o && (o.$typeUrl === RefractableAsset.typeUrl || typeof o.id === "string" && typeof o.token_denom === "string" && typeof o.host_chain_id === "string" && typeof o.disabled === "boolean" && MaturityParams.isAmino(o.maturity_params) && FeeRatios.isAmino(o.fee_ratios) && typeof o.delisted === "boolean" && Array.isArray(o.delisted_maturities) && (!o.delisted_maturities.length || DelistedMaturityLevel.isAmino(o.delisted_maturities[0])));
   },
   encode(message: RefractableAsset, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== "") {
@@ -157,6 +290,12 @@ export const RefractableAsset = {
     }
     if (message.feeRatios !== undefined) {
       FeeRatios.encode(message.feeRatios, writer.uint32(50).fork()).ldelim();
+    }
+    if (message.delisted === true) {
+      writer.uint32(56).bool(message.delisted);
+    }
+    for (const v of message.delistedMaturities) {
+      DelistedMaturityLevel.encode(v!, writer.uint32(66).fork()).ldelim();
     }
     return writer;
   },
@@ -185,6 +324,12 @@ export const RefractableAsset = {
         case 6:
           message.feeRatios = FeeRatios.decode(reader, reader.uint32(), useInterfaces);
           break;
+        case 7:
+          message.delisted = reader.bool();
+          break;
+        case 8:
+          message.delistedMaturities.push(DelistedMaturityLevel.decode(reader, reader.uint32(), useInterfaces));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -199,7 +344,9 @@ export const RefractableAsset = {
       hostChainId: isSet(object.hostChainId) ? String(object.hostChainId) : "",
       disabled: isSet(object.disabled) ? Boolean(object.disabled) : false,
       maturityParams: isSet(object.maturityParams) ? MaturityParams.fromJSON(object.maturityParams) : undefined,
-      feeRatios: isSet(object.feeRatios) ? FeeRatios.fromJSON(object.feeRatios) : undefined
+      feeRatios: isSet(object.feeRatios) ? FeeRatios.fromJSON(object.feeRatios) : undefined,
+      delisted: isSet(object.delisted) ? Boolean(object.delisted) : false,
+      delistedMaturities: Array.isArray(object?.delistedMaturities) ? object.delistedMaturities.map((e: any) => DelistedMaturityLevel.fromJSON(e)) : []
     };
   },
   toJSON(message: RefractableAsset): unknown {
@@ -210,6 +357,12 @@ export const RefractableAsset = {
     message.disabled !== undefined && (obj.disabled = message.disabled);
     message.maturityParams !== undefined && (obj.maturityParams = message.maturityParams ? MaturityParams.toJSON(message.maturityParams) : undefined);
     message.feeRatios !== undefined && (obj.feeRatios = message.feeRatios ? FeeRatios.toJSON(message.feeRatios) : undefined);
+    message.delisted !== undefined && (obj.delisted = message.delisted);
+    if (message.delistedMaturities) {
+      obj.delistedMaturities = message.delistedMaturities.map(e => e ? DelistedMaturityLevel.toJSON(e) : undefined);
+    } else {
+      obj.delistedMaturities = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<RefractableAsset>): RefractableAsset {
@@ -220,6 +373,8 @@ export const RefractableAsset = {
     message.disabled = object.disabled ?? false;
     message.maturityParams = object.maturityParams !== undefined && object.maturityParams !== null ? MaturityParams.fromPartial(object.maturityParams) : undefined;
     message.feeRatios = object.feeRatios !== undefined && object.feeRatios !== null ? FeeRatios.fromPartial(object.feeRatios) : undefined;
+    message.delisted = object.delisted ?? false;
+    message.delistedMaturities = object.delistedMaturities?.map(e => DelistedMaturityLevel.fromPartial(e)) || [];
     return message;
   },
   fromAmino(object: RefractableAssetAmino): RefractableAsset {
@@ -242,6 +397,10 @@ export const RefractableAsset = {
     if (object.fee_ratios !== undefined && object.fee_ratios !== null) {
       message.feeRatios = FeeRatios.fromAmino(object.fee_ratios);
     }
+    if (object.delisted !== undefined && object.delisted !== null) {
+      message.delisted = object.delisted;
+    }
+    message.delistedMaturities = object.delisted_maturities?.map(e => DelistedMaturityLevel.fromAmino(e)) || [];
     return message;
   },
   toAmino(message: RefractableAsset, useInterfaces: boolean = true): RefractableAssetAmino {
@@ -252,6 +411,12 @@ export const RefractableAsset = {
     obj.disabled = message.disabled === false ? undefined : message.disabled;
     obj.maturity_params = message.maturityParams ? MaturityParams.toAmino(message.maturityParams, useInterfaces) : undefined;
     obj.fee_ratios = message.feeRatios ? FeeRatios.toAmino(message.feeRatios, useInterfaces) : undefined;
+    obj.delisted = message.delisted === false ? undefined : message.delisted;
+    if (message.delistedMaturities) {
+      obj.delisted_maturities = message.delistedMaturities.map(e => e ? DelistedMaturityLevel.toAmino(e, useInterfaces) : undefined);
+    } else {
+      obj.delisted_maturities = message.delistedMaturities;
+    }
     return obj;
   },
   fromAminoMsg(object: RefractableAssetAminoMsg): RefractableAsset {

@@ -2,7 +2,7 @@ import { UnaryMethodDefinitionish } from "../../../grpc-web";
 import { DeepPartial } from "../../../helpers";
 import { grpc } from "@improbable-eng/grpc-web";
 import { BrowserHeaders } from "browser-headers";
-import { MsgUpdateParams, MsgUpdateParamsResponse, MsgRegisterHostChain, MsgRegisterHostChainResponse, MsgUpdateHostChain, MsgUpdateHostChainResponse, MsgStake, MsgStakeResponse, MsgStakeLsmShares, MsgStakeLsmSharesResponse, MsgUnstake, MsgUnstakeResponse, MsgRedeemUnstaked, MsgRedeemUnstakedResponse, MsgInstantUnstake, MsgInstantUnstakeResponse, MsgRebalanceDelegations, MsgRebalanceDelegationsResponse, MsgRedelegate, MsgRedelegateResponse, MsgRegisterInterchainAccount, MsgRegisterInterchainAccountResponse, MsgCreateMultiSigConnection, MsgCreateMultiSigConnectionResponse, MsgUpdateMultiSigConnection, MsgUpdateMultiSigConnectionResponse, MsgAcknowledgeMultiSigPacket, MsgAcknowledgeMultiSigPacketResponse, MsgRegisterHostAccounts, MsgRegisterHostAccountsResponse, MsgRetryFailedLsmTransfer, MsgRetryFailedLsmTransferResponse } from "./tx";
+import { MsgUpdateParams, MsgUpdateParamsResponse, MsgRegisterHostChain, MsgRegisterHostChainResponse, MsgUpdateHostChain, MsgUpdateHostChainResponse, MsgStake, MsgStakeResponse, MsgStakeLsmShares, MsgStakeLsmSharesResponse, MsgUnstake, MsgUnstakeResponse, MsgRedeemUnstaked, MsgRedeemUnstakedResponse, MsgInstantUnstake, MsgInstantUnstakeResponse, MsgRebalanceDelegations, MsgRebalanceDelegationsResponse, MsgRedelegate, MsgRedelegateResponse, MsgRegisterInterchainAccount, MsgRegisterInterchainAccountResponse, MsgCreateMultiSigConnection, MsgCreateMultiSigConnectionResponse, MsgUpdateMultiSigConnection, MsgUpdateMultiSigConnectionResponse, MsgAcknowledgeMultiSigPacket, MsgAcknowledgeMultiSigPacketResponse, MsgRegisterHostAccounts, MsgRegisterHostAccountsResponse, MsgRetryFailedLsmTransfer, MsgRetryFailedLsmTransferResponse, MsgDelistHostChain, MsgDelistHostChainResponse, MsgUndelegateDelistedHostChain, MsgUndelegateDelistedHostChainResponse, MsgRedeemDelisted, MsgRedeemDelistedResponse } from "./tx";
 /** Msg defines the Msg service. */
 export interface Msg {
   updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse>;
@@ -21,6 +21,9 @@ export interface Msg {
   acknowledgeMultiSigPacket(request: DeepPartial<MsgAcknowledgeMultiSigPacket>, metadata?: grpc.Metadata): Promise<MsgAcknowledgeMultiSigPacketResponse>;
   registerHostAccounts(request: DeepPartial<MsgRegisterHostAccounts>, metadata?: grpc.Metadata): Promise<MsgRegisterHostAccountsResponse>;
   retryFailedLsmTransfer(request: DeepPartial<MsgRetryFailedLsmTransfer>, metadata?: grpc.Metadata): Promise<MsgRetryFailedLsmTransferResponse>;
+  delistHostChain(request: DeepPartial<MsgDelistHostChain>, metadata?: grpc.Metadata): Promise<MsgDelistHostChainResponse>;
+  undelegateDelistedHostChain(request: DeepPartial<MsgUndelegateDelistedHostChain>, metadata?: grpc.Metadata): Promise<MsgUndelegateDelistedHostChainResponse>;
+  redeemDelisted(request: DeepPartial<MsgRedeemDelisted>, metadata?: grpc.Metadata): Promise<MsgRedeemDelistedResponse>;
 }
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
@@ -42,6 +45,9 @@ export class MsgClientImpl implements Msg {
     this.acknowledgeMultiSigPacket = this.acknowledgeMultiSigPacket.bind(this);
     this.registerHostAccounts = this.registerHostAccounts.bind(this);
     this.retryFailedLsmTransfer = this.retryFailedLsmTransfer.bind(this);
+    this.delistHostChain = this.delistHostChain.bind(this);
+    this.undelegateDelistedHostChain = this.undelegateDelistedHostChain.bind(this);
+    this.redeemDelisted = this.redeemDelisted.bind(this);
   }
   updateParams(request: DeepPartial<MsgUpdateParams>, metadata?: grpc.Metadata): Promise<MsgUpdateParamsResponse> {
     return this.rpc.unary(MsgUpdateParamsDesc, MsgUpdateParams.fromPartial(request as any), metadata);
@@ -90,6 +96,15 @@ export class MsgClientImpl implements Msg {
   }
   retryFailedLsmTransfer(request: DeepPartial<MsgRetryFailedLsmTransfer>, metadata?: grpc.Metadata): Promise<MsgRetryFailedLsmTransferResponse> {
     return this.rpc.unary(MsgRetryFailedLsmTransferDesc, MsgRetryFailedLsmTransfer.fromPartial(request as any), metadata);
+  }
+  delistHostChain(request: DeepPartial<MsgDelistHostChain>, metadata?: grpc.Metadata): Promise<MsgDelistHostChainResponse> {
+    return this.rpc.unary(MsgDelistHostChainDesc, MsgDelistHostChain.fromPartial(request as any), metadata);
+  }
+  undelegateDelistedHostChain(request: DeepPartial<MsgUndelegateDelistedHostChain>, metadata?: grpc.Metadata): Promise<MsgUndelegateDelistedHostChainResponse> {
+    return this.rpc.unary(MsgUndelegateDelistedHostChainDesc, MsgUndelegateDelistedHostChain.fromPartial(request as any), metadata);
+  }
+  redeemDelisted(request: DeepPartial<MsgRedeemDelisted>, metadata?: grpc.Metadata): Promise<MsgRedeemDelistedResponse> {
+    return this.rpc.unary(MsgRedeemDelistedDesc, MsgRedeemDelisted.fromPartial(request as any), metadata);
   }
 }
 export const MsgDesc = {
@@ -424,6 +439,69 @@ export const MsgRetryFailedLsmTransferDesc: UnaryMethodDefinitionish = {
     deserializeBinary(data: Uint8Array) {
       return {
         ...MsgRetryFailedLsmTransferResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgDelistHostChainDesc: UnaryMethodDefinitionish = {
+  methodName: "DelistHostChain",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgDelistHostChain.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgDelistHostChainResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgUndelegateDelistedHostChainDesc: UnaryMethodDefinitionish = {
+  methodName: "UndelegateDelistedHostChain",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgUndelegateDelistedHostChain.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgUndelegateDelistedHostChainResponse.decode(data),
+        toObject() {
+          return this;
+        }
+      };
+    }
+  } as any)
+};
+export const MsgRedeemDelistedDesc: UnaryMethodDefinitionish = {
+  methodName: "RedeemDelisted",
+  service: MsgDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: ({
+    serializeBinary() {
+      return MsgRedeemDelisted.encode(this).finish();
+    }
+  } as any),
+  responseType: ({
+    deserializeBinary(data: Uint8Array) {
+      return {
+        ...MsgRedeemDelistedResponse.decode(data),
         toObject() {
           return this;
         }

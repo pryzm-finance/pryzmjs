@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { MsgUpdateParams, MsgRegisterHostChain, MsgUpdateHostChain, MsgStake, MsgStakeLsmShares, MsgUnstake, MsgRedeemUnstaked, MsgInstantUnstake, MsgRebalanceDelegations, MsgRedelegate, MsgRegisterInterchainAccount, MsgCreateMultiSigConnection, MsgUpdateMultiSigConnection, MsgAcknowledgeMultiSigPacket, MsgRegisterHostAccounts, MsgRetryFailedLsmTransfer } from "./tx";
+import { MsgUpdateParams, MsgRegisterHostChain, MsgUpdateHostChain, MsgStake, MsgStakeLsmShares, MsgUnstake, MsgRedeemUnstaked, MsgInstantUnstake, MsgRebalanceDelegations, MsgRedelegate, MsgRegisterInterchainAccount, MsgCreateMultiSigConnection, MsgUpdateMultiSigConnection, MsgAcknowledgeMultiSigPacket, MsgRegisterHostAccounts, MsgRetryFailedLsmTransfer, MsgDelistHostChain, MsgUndelegateDelistedHostChain, MsgRedeemDelisted } from "./tx";
 export const AminoConverter = {
   "/pryzm.icstaking.v1.MsgUpdateParams": {
     aminoType: "pryzm/icstaking/v1/UpdateParams",
@@ -80,5 +80,20 @@ export const AminoConverter = {
     aminoType: "pryzm/icstaking/v1/RetryFailLsmTransfer",
     toAmino: MsgRetryFailedLsmTransfer.toAmino,
     fromAmino: MsgRetryFailedLsmTransfer.fromAmino
+  },
+  "/pryzm.icstaking.v1.MsgDelistHostChain": {
+    aminoType: "pryzm/icstaking/v1/DelistHostChain",
+    toAmino: MsgDelistHostChain.toAmino,
+    fromAmino: MsgDelistHostChain.fromAmino
+  },
+  "/pryzm.icstaking.v1.MsgUndelegateDelistedHostChain": {
+    aminoType: "pryzm/icstaking/v1/UndelegateDelisted",
+    toAmino: MsgUndelegateDelistedHostChain.toAmino,
+    fromAmino: MsgUndelegateDelistedHostChain.fromAmino
+  },
+  "/pryzm.icstaking.v1.MsgRedeemDelisted": {
+    aminoType: "pryzm/icstaking/v1/RedeemDelisted",
+    toAmino: MsgRedeemDelisted.toAmino,
+    fromAmino: MsgRedeemDelisted.fromAmino
   }
 };

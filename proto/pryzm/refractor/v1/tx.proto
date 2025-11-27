@@ -41,6 +41,7 @@ message MsgRedeem {
   option (amino.name) = "pryzm/refractor/v1/Redeem";
 
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  // set p_amount to zero coin if you want to redeem only y_amount (for delisted assets)
   cosmos.base.v1beta1.Coin p_amount = 2 [(gogoproto.nullable) = false];
   cosmos.base.v1beta1.Coin y_amount = 3;
 }

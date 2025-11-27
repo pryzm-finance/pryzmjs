@@ -129,6 +129,10 @@ service Query {
     option (google.api.http).get = "/pryzm/amm/v1/simulate_zero_impact_join_yamm";
   }
 
+  rpc SimulateRecoveryExit(QuerySimulateRecoveryExitRequest) returns (QuerySimulateRecoveryExitResponse) {
+    option (google.api.http).get = "/pryzm/amm/v1/simulate_recovery_exit";
+  }
+
   // Queries a list of SimulateJoinTokenExactLpt items.
   rpc SimulateJoinTokenExactLpt(QuerySimulateJoinTokenExactLptRequest) returns (QuerySimulateJoinTokenExactLptResponse) {
     option (google.api.http).get = "/pryzm/amm/v1/simulate_join_token_exact_lpt/{pool_id}";
@@ -583,6 +587,23 @@ message QuerySimulateExitExactTokensResponse {
   ];
   cosmos.base.v1beta1.Coin protocol_fee = 3 [(gogoproto.nullable) = false];
   repeated cosmos.base.v1beta1.Coin swap_fee = 4 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+}
+
+message QuerySimulateRecoveryExitRequest {
+  uint64 pool_id = 1;
+  string lpt_in = 2 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+}
+
+message QuerySimulateRecoveryExitResponse {
+  cosmos.base.v1beta1.Coin lpt_in = 1 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin amounts_out = 2 [
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
